@@ -929,12 +929,12 @@
       <span>April 2026</span>
     </div>
     <h1 class="display">The Claude Code<span class="br-wide"><br></span> Power <em>Stack.</em></h1>
-    <p class="lede">A working directory of the MCPs, skills, agents, and workflow tools that actually move the needle — and the five that matter most.</p>
+    <p class="lede">A working directory of the MCPs, skills, agents, SaaS services, and workflow tools that actually move the needle — and the five that matter most.</p>
     <button class="hero-cta" id="enter-app" type="button">Start exploring <span class="arrow">→</span></button>
     <div class="landing-meta">
       <span><strong>5</strong> essentials</span>
-      <span><strong>234</strong> indexed</span>
-      <span><strong>16</strong> categories</span>
+      <span><strong id="lm-count">284</strong> indexed</span>
+      <span><strong>17</strong> categories</span>
       <span><strong>★</strong> save your stack</span>
     </div>
   </div>
@@ -956,7 +956,7 @@
   <div class="searchbar-inner">
     <div class="search-field">
       <span class="icon">⌕</span>
-      <input id="search" type="text" placeholder="Search — try 'browser', 'postgres', 'hooks'…" autocomplete="off" />
+      <input id="search" type="text" placeholder="Search — try 'video', 'higgsfield', 'postgres', 'voice'…" autocomplete="off" />
       <kbd class="kbd-hint">⌘K</kbd>
     </div>
     <div class="chips" id="chips"></div>
@@ -1055,6 +1055,7 @@ const CATS = [
   { id: 'agent',  label: 'Agents' },
   { id: 'auto',   label: 'Hooks & Obs' },
   { id: 'tool',   label: 'Editors & Tools' },
+  { id: 'saas',   label: 'Web & SaaS' },
   { id: 'res',    label: 'Research' },
   { id: 'saved',  label: '★ My stack' },
 ];
@@ -1063,8 +1064,24 @@ const CATS = [
 const SYNONYMS = {
   voice: ['audio', 'speech', 'tts', 'stt', 'whisper', 'transcript', 'podcast', 'spoken', 'briefing', 'record'],
   audio: ['voice', 'sound', 'music', 'podcast', 'briefing', 'playback', 'spotify'],
-  video: ['youtube', 'transcript', 'playback', 'stream', 'record'],
-  image: ['picture', 'vision', 'visual', 'design', 'screenshot', 'figma'],
+  video: ['youtube', 'transcript', 'playback', 'stream', 'record', 'runway', 'pika', 'luma', 'higgsfield', 'heygen', 'synthesia', 'd-id', 'kling', 'avatar', 'film', 'cinematic'],
+  image: ['picture', 'vision', 'visual', 'design', 'screenshot', 'figma', 'midjourney', 'flux', 'krea', 'ideogram', 'leonardo', 'pixlr', 'photopea', 'topaz', 'clipdrop', 'remove.bg', 'photo'],
+  avatar: ['heygen', 'synthesia', 'd-id', 'talking head'],
+  music: ['suno', 'udio', 'audio', 'sound', 'song'],
+  '3d': ['meshy', 'spline', 'luma', 'model', 'blender'],
+  model: ['3d', 'meshy', 'spline', 'hugging face', 'replicate'],
+  gateway: ['openrouter', 'portkey', 'helicone'],
+  inference: ['groq', 'together', 'replicate', 'fireworks', 'modal', 'hosting'],
+  chatbot: ['chatgpt', 'claude.ai', 'gemini', 'poe', 'perplexity'],
+  llm: ['chatgpt', 'claude.ai', 'gemini', 'openrouter', 'groq', 'together', 'replicate', 'huggingface'],
+  serverless: ['neon', 'planetscale', 'upstash', 'modal', 'vercel', 'firebase'],
+  backend: ['firebase', 'supabase', 'neon', 'planetscale', 'upstash'],
+  builder: ['v0', 'lovable', 'bolt', 'replit', 'framer'],
+  diagram: ['drawio', 'draw.io', 'diagrams.net'],
+  transparent: ['remove.bg', 'clipdrop', 'background'],
+  background: ['remove.bg', 'clipdrop', 'transparent'],
+  upscale: ['topaz', 'upscaling', 'enhance'],
+  canva: ['design', 'freepik', 'figma', 'canva'],
   design: ['figma', 'ui', 'visual', 'frontend', 'aesthetic', 'layout'],
   chat: ['message', 'conversation', 'slack', 'discord', 'intercom', 'comment'],
   payment: ['stripe', 'billing', 'subscription', 'card', 'ramp', 'money'],
@@ -1115,6 +1132,7 @@ const CAT_MAP = {
   'hook':'auto', 'obs':'auto', 'usage':'auto',
   'companion':'tool', 'local':'tool', 'terminal':'tool',
   'knowledge':'res', 'marketplace':'res',
+  'saas':'saas',
 };
 
 // Display groups (used inside filtered views)
@@ -1146,6 +1164,9 @@ const GROUPS = {
   res: [
     { id:'knowledge', title:'Knowledge, research & PKM', sub:'Fill Claude Code\'s sourced-research gap.' },
     { id:'marketplace', title:'Marketplaces & directories', sub:'Discover faster than blog posts can publish.' },
+  ],
+  saas: [
+    { id:'saas', title:'Web apps & SaaS services', sub:'The actual products — AI, creative, and backend services your stack runs on (distinct from their MCP wrappers). Great for tracking the accounts, passwords, and API keys that live in your project command center.' },
   ],
 };
 
@@ -1384,6 +1405,71 @@ const TOOLS = [
   { id:232, name:'Composio Awesome Claude Plugins', cat:'marketplace', tag:'GitHub', blurb:'Curated plugin list with custom commands, agents, hooks, MCPs.', url:'https://github.com/ComposioHQ/awesome-claude-plugins' },
   { id:233, name:'MCP Playground Online', cat:'marketplace', tag:'Directory', blurb:'50+ best MCP servers with reviews.', url:'https://mcpplaygroundonline.com/blog/awesome-mcp-servers' },
   { id:234, name:'mcp-awesome.com', cat:'marketplace', tag:'Directory', blurb:'1,200+ quality-verified servers.', url:'https://mcp-awesome.com/' },
+
+  // ============= Web & SaaS services (the actual products) =============
+  // AI chat & LLM access
+  { id:235, name:'ChatGPT', cat:'saas', tag:'AI Chat', blurb:'OpenAI\'s flagship chat app with GPT-4o, o1, voice, vision.', url:'https://chat.openai.com/' },
+  { id:236, name:'Claude.ai', cat:'saas', tag:'AI Chat', blurb:'Anthropic\'s web chat — Projects, Artifacts, Computer Use.', url:'https://claude.ai/' },
+  { id:237, name:'Gemini', cat:'saas', tag:'AI Chat', blurb:'Google\'s consumer AI chat — Gems, Deep Research, long context.', url:'https://gemini.google.com/' },
+  { id:238, name:'Google AI Studio', cat:'saas', tag:'AI Dev', blurb:'Free prompt playground for the Gemini API. 2M-token context.', url:'https://aistudio.google.com/' },
+  { id:239, name:'Perplexity', cat:'saas', tag:'AI Search', blurb:'Sourced AI search with citations. Pro tier unlocks model choice.', url:'https://www.perplexity.ai/' },
+  { id:240, name:'Poe', cat:'saas', tag:'AI Aggregator', blurb:'One UI for GPT, Claude, Gemini, Mistral, and hundreds of bots.', url:'https://poe.com/' },
+  // Gateways & inference
+  { id:241, name:'OpenRouter', cat:'saas', tag:'LLM Gateway', blurb:'One API for 200+ models — GPT, Claude, open-source. Pay per token.', url:'https://openrouter.ai/' },
+  { id:242, name:'Groq', cat:'saas', tag:'Inference', blurb:'Ultra-fast LPU inference — 500+ tok/s on Llama and Mixtral.', url:'https://groq.com/' },
+  { id:243, name:'Together AI', cat:'saas', tag:'Inference', blurb:'Serverless open-source model hosting + fine-tuning.', url:'https://www.together.ai/' },
+  { id:244, name:'Replicate', cat:'saas', tag:'Model Hosting', blurb:'Run any ML model via API, no infra. Per-second billing.', url:'https://replicate.com/' },
+  { id:245, name:'Hugging Face', cat:'saas', tag:'Model Hub', blurb:'The GitHub of ML — models, datasets, Spaces, Inference Endpoints.', url:'https://huggingface.co/' },
+  // Image generation
+  { id:246, name:'Midjourney', cat:'saas', tag:'Image Gen', blurb:'Best-in-class AI image generation. Discord + web app.', url:'https://www.midjourney.com/' },
+  { id:247, name:'Flux (Black Forest Labs)', cat:'saas', tag:'Image Gen', blurb:'State-of-art open image model. Access via Replicate, Krea, fal.', url:'https://blackforestlabs.ai/' },
+  { id:248, name:'Ideogram', cat:'saas', tag:'Image Gen', blurb:'Image gen specialized in readable in-image text.', url:'https://ideogram.ai/' },
+  { id:249, name:'Krea', cat:'saas', tag:'Image Gen', blurb:'Realtime image gen with aesthetic controls and style references.', url:'https://www.krea.ai/' },
+  { id:250, name:'Leonardo.ai', cat:'saas', tag:'Image Gen', blurb:'Game-asset-oriented AI image gen with motion + 3D texture tools.', url:'https://leonardo.ai/' },
+  // Video generation
+  { id:251, name:'Runway', cat:'saas', tag:'AI Video', blurb:'Gen-3 text/image-to-video. Industry default for pro AI video.', url:'https://runwayml.com/' },
+  { id:252, name:'Pika Labs', cat:'saas', tag:'AI Video', blurb:'Accessible AI video gen. Strong motion, character consistency.', url:'https://pika.art/' },
+  { id:253, name:'Luma Dream Machine', cat:'saas', tag:'AI Video', blurb:'Photoreal AI video from text or image.', url:'https://lumalabs.ai/dream-machine' },
+  { id:254, name:'Higgsfield', cat:'saas', tag:'AI Video', blurb:'Cinematic motion AI — camera moves, effects, narrative video.', url:'https://higgsfield.ai/' },
+  { id:255, name:'Kling', cat:'saas', tag:'AI Video', blurb:'Long-clip AI video with strong physics. Chinese.', url:'https://klingai.com/' },
+  // AI avatars
+  { id:256, name:'HeyGen', cat:'saas', tag:'AI Avatar', blurb:'Talking-head AI video with custom avatars in 175+ languages.', url:'https://www.heygen.com/' },
+  { id:257, name:'Synthesia', cat:'saas', tag:'AI Avatar', blurb:'Enterprise AI avatars for training and explainer videos.', url:'https://www.synthesia.io/' },
+  { id:258, name:'D-ID', cat:'saas', tag:'AI Avatar', blurb:'Make still photos talk. Cheap HeyGen alternative.', url:'https://www.d-id.com/' },
+  // Audio / voice / music
+  { id:259, name:'ElevenLabs', cat:'saas', tag:'Voice AI', blurb:'Best-in-class voice synthesis + voice cloning. API + web app.', url:'https://elevenlabs.io/' },
+  { id:260, name:'Suno', cat:'saas', tag:'Music AI', blurb:'AI music generation from text prompts — full songs with vocals.', url:'https://suno.com/' },
+  { id:261, name:'Udio', cat:'saas', tag:'Music AI', blurb:'High-fidelity AI music. Strong vocal synthesis.', url:'https://www.udio.com/' },
+  // 3D
+  { id:262, name:'Meshy', cat:'saas', tag:'AI 3D', blurb:'Text/image to 3D model. Export to Blender, Unity, Unreal.', url:'https://www.meshy.ai/' },
+  { id:263, name:'Spline', cat:'saas', tag:'3D Design', blurb:'Browser-based 3D design — export to web, React, or image.', url:'https://spline.design/' },
+  // Design & assets
+  { id:264, name:'Figma', cat:'saas', tag:'Design', blurb:'Industry-standard collaborative design. Plus Figma Slides + Dev Mode.', url:'https://www.figma.com/' },
+  { id:265, name:'Canva', cat:'saas', tag:'Design', blurb:'Drag-drop design. Great templates, video, and Magic Studio AI tools.', url:'https://www.canva.com/' },
+  { id:266, name:'Framer', cat:'saas', tag:'Web Design', blurb:'Design and publish responsive sites visually. CMS + animations.', url:'https://www.framer.com/' },
+  { id:267, name:'Freepik', cat:'saas', tag:'Assets', blurb:'Stock photos, vectors, icons, and AI tools — design asset hub.', url:'https://www.freepik.com/' },
+  // Image editing
+  { id:268, name:'Pixlr', cat:'saas', tag:'Image Edit', blurb:'Browser photo editor with AI features. Free tier available.', url:'https://pixlr.com/' },
+  { id:269, name:'Photopea', cat:'saas', tag:'Image Edit', blurb:'Free Photoshop in the browser. PSD, RAW, Sketch compatible.', url:'https://www.photopea.com/' },
+  { id:270, name:'Topaz Labs', cat:'saas', tag:'Upscaling', blurb:'Photo/video AI upscaling, denoising, frame interpolation.', url:'https://www.topazlabs.com/' },
+  { id:271, name:'Remove.bg', cat:'saas', tag:'Image Tool', blurb:'One-click transparent background removal. API + web.', url:'https://www.remove.bg/' },
+  { id:272, name:'Clipdrop', cat:'saas', tag:'Image Tool', blurb:'Image toolkit — relight, uncrop, cleanup, replace. By Stability AI.', url:'https://clipdrop.co/' },
+  // Writing / notes
+  { id:273, name:'Grammarly', cat:'saas', tag:'Writing', blurb:'Grammar + style + tone suggestions everywhere you type.', url:'https://www.grammarly.com/' },
+  { id:274, name:'NoteGPT', cat:'saas', tag:'Summarization', blurb:'AI video/PDF summaries and note-taking from YouTube, lectures, calls.', url:'https://notegpt.io/' },
+  // Diagramming / automation products
+  { id:275, name:'draw.io / diagrams.net', cat:'saas', tag:'Diagrams', blurb:'Free diagram editor — UML, flowcharts, architecture. Self-hostable.', url:'https://app.diagrams.net/' },
+  { id:276, name:'n8n', cat:'saas', tag:'Automation', blurb:'Self-hostable workflow automation. 1,500+ nodes, fair-code license.', url:'https://n8n.io/' },
+  // AI app builders
+  { id:277, name:'v0 (Vercel)', cat:'saas', tag:'AI Builder', blurb:'Prompt-to-UI generator. React + shadcn output, one-click deploy.', url:'https://v0.dev/' },
+  { id:278, name:'Lovable', cat:'saas', tag:'AI Builder', blurb:'Prompt-to-app — full-stack with Supabase wiring.', url:'https://lovable.dev/' },
+  { id:279, name:'Bolt.new', cat:'saas', tag:'AI Builder', blurb:'StackBlitz\'s prompt-to-app. Runs in browser sandbox.', url:'https://bolt.new/' },
+  // Backend services
+  { id:280, name:'Google Firebase', cat:'saas', tag:'Backend', blurb:'Auth, DB, storage, hosting, functions — Google\'s BaaS.', url:'https://firebase.google.com/' },
+  { id:281, name:'Neon', cat:'saas', tag:'Database', blurb:'Serverless Postgres with branching. Free tier for side projects.', url:'https://neon.tech/' },
+  { id:282, name:'PlanetScale', cat:'saas', tag:'Database', blurb:'Serverless MySQL with zero-downtime migrations and branching.', url:'https://planetscale.com/' },
+  { id:283, name:'Upstash', cat:'saas', tag:'Database', blurb:'Serverless Redis, Kafka, Vector, QStash. Per-request billing.', url:'https://upstash.com/' },
+  { id:284, name:'Modal', cat:'saas', tag:'Compute', blurb:'Serverless GPU/CPU compute for Python. Per-second billing.', url:'https://modal.com/' },
 ];
 
 const TOP5_IDS = [1, 2, 31, 4, 177]; // GitHub, Filesystem, Context7, Sentry, ccusage
@@ -1646,7 +1732,7 @@ function renderDirectory() {
       secLede.style.maxWidth = '920px';
     } else {
       secNum.textContent = '02 — The full directory';
-      secTitle.innerHTML = `Two hundred and thirty-four, <em>categorised.</em>`;
+      secTitle.innerHTML = `${TOOLS.length}, <em>categorised.</em>`;
       secLede.innerHTML = `Click any card for install instructions and official docs. Search ranks results; category chips filter the view.`;
       secLede.style.maxWidth = '';
     }
@@ -1681,7 +1767,7 @@ function renderDirectory() {
     const savedScope = activeCat === 'saved';
     const headerText = savedScope ? `"${esc(q)}" — in your stack` : `Results for "${esc(q)}"`;
     const sublineText = savedScope
-      ? `Searching only tools saved across your projects. <button class="link-btn" id="browse-all">Search all 234 instead →</button>`
+      ? `Searching only tools saved across your projects. <button class="link-btn" id="browse-all">Search all ${TOOLS.length} instead →</button>`
       : `Ranked by relevance. Searches expand to related concepts — "voice" finds audio / podcast / transcript tools.`;
     html = `
       <div class="dir-group">
@@ -2363,6 +2449,13 @@ const isApplePlatform = /Mac|iPhone|iPad|iPod/.test(navigator.platform || naviga
 if (!isApplePlatform) {
   document.querySelectorAll('.kbd-hint').forEach(k => { k.textContent = 'Ctrl K'; });
 }
+
+// Landing metadata count reflects real tool total (minus chip 'all'/'saved')
+const lmCount = document.getElementById('lm-count');
+if (lmCount) lmCount.textContent = TOOLS.length;
+// Update category count too — primary chips minus 'all' and 'saved'
+const catCountEl = document.querySelector('.landing-meta span:nth-child(3) strong');
+if (catCountEl) catCountEl.textContent = CATS.filter(c => c.id !== 'all' && c.id !== 'saved').length;
 
 // ============= VIEW TOGGLE (Landing ⇄ App) =============
 function enterApp() {
