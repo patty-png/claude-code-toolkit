@@ -44,30 +44,103 @@
   .container { max-width: 920px; margin: 0 auto; padding: 0 32px; }
   .wide { max-width: 1200px; }
 
-  /* -------- HERO -------- */
-  header.hero {
-    padding: 44px 32px 32px;
-    border-bottom: 1px solid var(--rule);
+  /* -------- LANDING (splash screen) -------- */
+  .view-landing {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
     position: relative;
     overflow: hidden;
   }
-  .hero::before {
+  .view-landing::before {
     content: '&';
     position: absolute;
-    top: -20px;
-    right: 40px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -52%);
     font-family: 'Fraunces', serif;
-    font-size: 18rem;
-    font-weight: 200;
-    color: rgba(154,52,18,0.08);
-    line-height: 0.8;
     font-style: italic;
+    font-size: clamp(22rem, 55vw, 42rem);
+    font-weight: 200;
+    color: rgba(154,52,18,0.07);
+    line-height: 0.7;
     pointer-events: none;
     user-select: none;
-    font-variation-settings: "opsz" 144, "SOFT" 100;
+    z-index: 0;
+    font-variation-settings: "opsz" 144;
+  }
+  .landing-content {
+    max-width: 640px;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .landing-content .eyebrow { justify-content: center; margin-bottom: 22px; }
+  .landing-content .lede { max-width: 540px; margin: 0 auto 26px; }
+  .landing-meta {
+    margin-top: 46px;
+    display: flex;
+    gap: 28px;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .landing-meta strong {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 1.35em;
+    color: var(--accent);
+    margin-right: 7px;
+    letter-spacing: 0;
+    text-transform: none;
+    vertical-align: -1px;
   }
   @media (max-width: 640px) {
-    .hero::before { font-size: 10rem; top: 0; right: 20px; }
+    .landing-meta { gap: 16px; font-size: 0.66rem; margin-top: 32px; }
+    .view-landing::before { transform: translate(-50%, -48%); }
+  }
+
+  /* App view — revealed when user clicks into directory */
+  .view-app { min-height: 100vh; }
+  .app-topbar {
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    padding: 14px 32px;
+  }
+  .app-topbar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .app-home {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.88rem;
+    color: var(--ink-2);
+    padding: 4px 10px;
+    margin-left: -10px;
+    border-radius: 3px;
+    transition: background 0.15s;
+  }
+  .app-home:hover { background: var(--paper-3); color: var(--accent-ink); }
+  .app-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.02rem;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+  }
+  .app-title em { font-style: italic; color: var(--accent); font-weight: 400; }
+  @media (max-width: 640px) {
+    .app-topbar { padding: 10px 20px; }
+    .app-title { font-size: 0.92rem; }
   }
   .eyebrow {
     font-family: 'JetBrains Mono', monospace;
@@ -198,25 +271,25 @@
   .chip .n { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; opacity: 0.6; margin-left: 5px; }
 
   /* -------- SECTIONS -------- */
-  main { padding: 28px 0 64px; }
-  section { margin-bottom: 56px; scroll-margin-top: 100px; }
-  .section-head { margin-bottom: 22px; padding: 0 32px; max-width: 1200px; margin-left: auto; margin-right: auto; }
+  main { padding: 20px 0 56px; }
+  section { margin-bottom: 48px; scroll-margin-top: 110px; }
+  .section-head { margin-bottom: 14px; padding: 0 32px; max-width: 1200px; margin-left: auto; margin-right: auto; }
   .section-num {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     color: var(--muted);
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
   }
   h2.serif {
     font-family: 'Fraunces', serif;
     font-weight: 400;
-    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    font-size: clamp(1.5rem, 2.6vw, 1.85rem);
     line-height: 1.1;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.015em;
     color: var(--ink);
-    margin-bottom: 12px;
+    margin-bottom: 6px;
     font-variation-settings: "opsz" 60;
   }
   h2.serif em { font-style: italic; color: var(--accent); }
@@ -237,11 +310,11 @@
     gap: 0;
   }
   .pick {
-    padding: 32px 0;
+    padding: 22px 0;
     border-top: 1px solid var(--rule);
     display: grid;
-    grid-template-columns: 60px 1fr;
-    gap: 24px;
+    grid-template-columns: 56px 1fr;
+    gap: 22px;
     align-items: start;
   }
   .pick:last-child { border-bottom: 1px solid var(--rule); }
@@ -535,17 +608,33 @@
 </head>
 <body>
 
-<!-- ============== HERO ============== -->
-<header class="hero">
-  <div class="container wide">
+<!-- ============== LANDING ============== -->
+<div class="view-landing" id="view-landing">
+  <div class="landing-content">
     <div class="eyebrow">
       <span>A curated guide</span>
       <span>April 2026</span>
-      <span>234 tools reviewed</span>
     </div>
     <h1 class="display">The Claude Code<span class="br-wide"><br></span> Power <em>Stack.</em></h1>
-    <p class="lede">A working directory of the MCPs, skills, agents, and workflow tools that actually move the needle — and the ten that matter most. Search, filter, or browse.</p>
-    <a href="#top5" class="hero-cta">Start with the top 5 <span class="arrow">→</span></a>
+    <p class="lede">A working directory of the MCPs, skills, agents, and workflow tools that actually move the needle — and the five that matter most.</p>
+    <button class="hero-cta" id="enter-app" type="button">Start exploring <span class="arrow">→</span></button>
+    <div class="landing-meta">
+      <span><strong>5</strong> essentials</span>
+      <span><strong>234</strong> indexed</span>
+      <span><strong>16</strong> categories</span>
+      <span><strong>★</strong> save your stack</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============== APP VIEW ============== -->
+<div class="view-app" id="view-app" hidden>
+
+<header class="app-topbar">
+  <div class="app-topbar-inner">
+    <button class="app-home" id="back-home" type="button">← Home</button>
+    <div class="app-title">Claude Code Power <em>Stack</em></div>
+    <div style="width: 60px;"></div>
   </div>
 </header>
 
@@ -640,6 +729,8 @@
     <div>Source: <a href="https://github.com/patty-png/claude-code-toolkit">github.com/patty-png/claude-code-toolkit</a></div>
   </div>
 </footer>
+
+</div><!-- /.view-app -->
 
 <script>
 // ============= DATA =============
@@ -1286,6 +1377,17 @@ document.addEventListener('click', (e) => {
     return;
   }
 
+  // Landing → App transition
+  if (e.target.id === 'enter-app' || e.target.closest('#enter-app')) {
+    enterApp();
+    return;
+  }
+  // App → Landing (Home)
+  if (e.target.id === 'back-home' || e.target.closest('#back-home')) {
+    leaveApp();
+    return;
+  }
+
   const copyBtn = e.target.closest('.copy-btn');
   if (copyBtn) {
     e.preventDefault();
@@ -1349,6 +1451,25 @@ document.addEventListener('keydown', (e) => {
 const isApplePlatform = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent);
 if (!isApplePlatform) {
   document.querySelectorAll('.kbd-hint').forEach(k => { k.textContent = 'Ctrl K'; });
+}
+
+// ============= VIEW TOGGLE (Landing ⇄ App) =============
+function enterApp() {
+  $('view-landing').style.display = 'none';
+  $('view-app').hidden = false;
+  window.scrollTo(0, 0);
+  try { history.replaceState(null, '', '#explore'); } catch (_) {}
+}
+function leaveApp() {
+  $('view-app').hidden = true;
+  $('view-landing').style.display = '';
+  window.scrollTo(0, 0);
+  try { history.replaceState(null, '', location.pathname); } catch (_) {}
+}
+
+// Deep-link: arriving with #explore opens the app view directly
+if (location.hash === '#explore') {
+  enterApp();
 }
 
 // Boot
