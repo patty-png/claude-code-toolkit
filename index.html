@@ -1642,11 +1642,13 @@ function renderDirectory() {
     if (activeCat === 'saved' && !q) {
       secNum.textContent = '02 — Your command center';
       secTitle.innerHTML = `A <em>living database</em> of your stack.`;
-      secLede.innerHTML = `Group tools by project, pin the email / API key / notes for each, and keep everything you need to run a project in one place. Click <strong>+ New project</strong> to spin up a workspace (e.g. "Higgsfield video"), <strong>+ Add tool from directory</strong> to pull in anything from the 234, or <strong>+ Add custom tool</strong> for things outside the index. Expand any tool card to fill in its credentials — secrets hide by default, and everything auto-saves locally.`;
+      secLede.innerHTML = `Group tools by project · attach email, API key, and notes to each · add custom tools for anything off-index · secrets hide by default · auto-saves locally.`;
+      secLede.style.maxWidth = '920px';
     } else {
       secNum.textContent = '02 — The full directory';
       secTitle.innerHTML = `Two hundred and thirty-four, <em>categorised.</em>`;
       secLede.innerHTML = `Click any card for install instructions and official docs. Search ranks results; category chips filter the view.`;
+      secLede.style.maxWidth = '';
     }
   }
 
