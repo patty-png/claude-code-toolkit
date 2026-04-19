@@ -52,16 +52,22 @@
     overflow: hidden;
   }
   .hero::before {
-    content: '';
+    content: '&';
     position: absolute;
-    top: 24px; right: 32px;
+    top: -20px;
+    right: 40px;
     font-family: 'Fraunces', serif;
-    font-size: 7rem;
-    font-weight: 300;
+    font-size: 18rem;
+    font-weight: 200;
     color: rgba(154,52,18,0.08);
-    line-height: 1;
+    line-height: 0.8;
     font-style: italic;
     pointer-events: none;
+    user-select: none;
+    font-variation-settings: "opsz" 144, "SOFT" 100;
+  }
+  @media (max-width: 640px) {
+    .hero::before { font-size: 10rem; top: 0; right: 20px; }
   }
   .eyebrow {
     font-family: 'JetBrains Mono', monospace;
@@ -90,6 +96,10 @@
     font-style: italic;
     color: var(--accent);
     font-weight: 300;
+  }
+  .br-wide { display: inline; }
+  @media (max-width: 640px) {
+    .br-wide { display: none; }
   }
   .hero .lede {
     font-size: 1.22rem;
@@ -189,7 +199,7 @@
 
   /* -------- SECTIONS -------- */
   main { padding: 64px 0 80px; }
-  section { margin-bottom: 72px; }
+  section { margin-bottom: 72px; scroll-margin-top: 100px; }
   .section-head { margin-bottom: 32px; padding: 0 32px; max-width: 1200px; margin-left: auto; margin-right: auto; }
   .section-num {
     font-family: 'JetBrains Mono', monospace;
@@ -357,25 +367,27 @@
   /* Save (★) button on each card */
   .save-btn {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 28px;
-    height: 28px;
+    top: 8px;
+    right: 8px;
+    width: 30px;
+    height: 30px;
     padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.05rem;
-    color: var(--rule);
+    font-size: 1.2rem;
+    color: var(--muted);
     background: transparent;
+    border: 1px solid transparent;
     border-radius: 3px;
-    transition: all 0.15s;
+    transition: all 0.12s;
     line-height: 1;
     z-index: 2;
   }
-  .save-btn:hover { color: var(--accent); background: var(--paper-3); }
+  .save-btn:hover { color: var(--accent); background: var(--paper-3); border-color: var(--rule); }
   .save-btn.saved { color: var(--accent); }
-  .dir-card.is-saved { background: #f0e6d4; }
+  .save-btn.saved:hover { color: var(--accent-ink); }
+  .dir-card.is-saved { background: #efe4d2; }
   .dir-card.is-saved::before {
     content: '';
     position: absolute;
@@ -383,6 +395,20 @@
     width: 3px;
     background: var(--accent);
   }
+
+  /* Focus-visible outlines — keyboard navigation */
+  .dir-card:focus-visible,
+  .chip:focus-visible,
+  .save-btn:focus-visible,
+  .copy-btn:focus-visible,
+  .link-btn:focus-visible,
+  .hero-cta:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .dir-card:focus-visible { outline-offset: -2px; }
+  .search-field:has(input:focus-visible) { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(154,52,18,0.2); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-bottom-color: transparent; }
 
   /* ★ My stack chip — distinct from regular chips */
   .chip.chip-saved { border-color: var(--accent); color: var(--accent); }
@@ -517,7 +543,7 @@
       <span>April 2026</span>
       <span>234 tools reviewed</span>
     </div>
-    <h1 class="display">The Claude Code<br>Power <em>Stack.</em></h1>
+    <h1 class="display">The Claude Code<span class="br-wide"><br></span> Power <em>Stack.</em></h1>
     <p class="lede">A working directory of the MCPs, skills, agents, and workflow tools that actually move the needle — and the ten that matter most. Search, filter, or browse.</p>
     <a href="#top5" class="hero-cta">Start with the top 5 <span class="arrow">→</span></a>
   </div>
@@ -1076,7 +1102,7 @@ function renderDirectory() {
           <h3 class="dir-group-title">Your stack is empty</h3>
           <span class="dir-group-count">0 saved</span>
         </div>
-        <div class="dir-group-sub">Star the ☆ on any tool card to add it to your stack. Saved here until you clear your browser data.</div>
+        <div class="dir-group-sub">Star the ☆ on any tool card to add it to your stack. Saved to your browser until cleared. <button class="link-btn" id="browse-all">Browse all tools →</button></div>
       </div>
     `;
     $('empty').style.display = 'none';
@@ -1094,13 +1120,18 @@ function renderDirectory() {
 
   if (q) {
     scored.sort((a, b) => b.s - a.s || a.t.id - b.t.id);
+    const savedScope = activeCat === 'saved';
+    const headerText = savedScope ? `"${esc(q)}" — in your stack` : `Results for "${esc(q)}"`;
+    const sublineText = savedScope
+      ? `Searching only your ${savedIds.size} saved tools. <button class="link-btn" id="browse-all">Search all 234 instead →</button>`
+      : `Ranked by relevance. Searches expand to related concepts — "voice" finds audio / podcast / transcript tools.`;
     html = `
       <div class="dir-group">
         <div class="dir-group-head">
-          <h3 class="dir-group-title">Results for "${esc(q)}"</h3>
+          <h3 class="dir-group-title">${headerText}</h3>
           <span class="dir-group-count">${scored.length} match${scored.length === 1 ? '' : 'es'}</span>
         </div>
-        <div class="dir-group-sub">Ranked by relevance. Searches expand to related concepts — "voice" finds audio / podcast / transcript tools.</div>
+        <div class="dir-group-sub">${sublineText}</div>
         <div class="dir-grid">
           ${scored.map(({ t }) => cardHtml(t, q)).join('')}
         </div>
@@ -1162,8 +1193,8 @@ function cardHtml(t, q) {
   const installSnippet = t.install || inferInstall(t);
   const isSaved = savedIds.has(t.id);
   return `
-    <div class="dir-card ${isSaved ? 'is-saved' : ''}" data-id="${t.id}">
-      <button class="save-btn ${isSaved ? 'saved' : ''}" data-save="${t.id}" aria-label="${isSaved ? 'Remove from stack' : 'Add to stack'}" title="${isSaved ? 'Remove from stack' : 'Add to stack'}">${isSaved ? '★' : '☆'}</button>
+    <div class="dir-card ${isSaved ? 'is-saved' : ''}" data-id="${t.id}" tabindex="0" role="button" aria-expanded="false" aria-label="${esc(t.name)} — press Enter to see install details">
+      <button class="save-btn ${isSaved ? 'saved' : ''}" data-save="${t.id}" aria-label="${isSaved ? 'Remove from stack' : 'Add to stack'}" aria-pressed="${isSaved}" title="${isSaved ? 'Remove from stack' : 'Add to stack'}">${isSaved ? '★' : '☆'}</button>
       <div class="dir-card-num">#${String(t.id).padStart(3, '0')}</div>
       <div class="dir-card-name">${highlight(t.name, q)}</div>
       <div class="dir-card-tag">${esc(t.tag)}</div>
@@ -1247,6 +1278,14 @@ document.addEventListener('click', (e) => {
     return;
   }
 
+  if (e.target.id === 'browse-all') {
+    activeCat = 'all';
+    renderChips();
+    renderDirectory();
+    document.getElementById('directory').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+
   const copyBtn = e.target.closest('.copy-btn');
   if (copyBtn) {
     e.preventDefault();
@@ -1262,7 +1301,13 @@ document.addEventListener('click', (e) => {
 
   const card = e.target.closest('.dir-card');
   if (card) {
+    // Only toggle when click is on card chrome, not inside expanded area, not on links/buttons
+    if (e.target.closest('.dir-card-expand')) return;
+    if (e.target.closest('a')) return;
+    if (e.target.closest('button')) return;
+    const willOpen = !card.classList.contains('open');
     card.classList.toggle('open');
+    card.setAttribute('aria-expanded', String(willOpen));
     return;
   }
 });
@@ -1275,18 +1320,36 @@ $('search').addEventListener('input', (e) => {
 });
 
 document.addEventListener('keydown', (e) => {
+  // ⌘K / Ctrl+K — focus search
   if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
     e.preventDefault();
     $('search').focus();
     $('search').select();
+    return;
   }
+  // Esc — clear search if focused
   if (e.key === 'Escape' && document.activeElement === $('search')) {
     $('search').value = '';
     query = '';
     renderDirectory();
     $('search').blur();
+    return;
+  }
+  // Enter/Space on a focused card — toggle expand
+  if ((e.key === 'Enter' || e.key === ' ') && document.activeElement?.classList?.contains('dir-card')) {
+    e.preventDefault();
+    const card = document.activeElement;
+    const willOpen = !card.classList.contains('open');
+    card.classList.toggle('open');
+    card.setAttribute('aria-expanded', String(willOpen));
   }
 });
+
+// Platform-aware keyboard hint — show "Ctrl K" on non-Apple
+const isApplePlatform = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent);
+if (!isApplePlatform) {
+  document.querySelectorAll('.kbd-hint').forEach(k => { k.textContent = 'Ctrl K'; });
+}
 
 // Boot
 renderTop5();
