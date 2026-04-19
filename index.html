@@ -502,6 +502,319 @@
   }
   .link-btn:hover { border-bottom-color: var(--accent); }
 
+  /* =============== MY STACK — project management =============== */
+  .stack-warn {
+    background: #fef3c7;
+    border: 1px solid #e4c86b;
+    border-left: 3px solid #b45309;
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    font-size: 0.85rem;
+    color: #6b3d09;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  .stack-warn strong { color: #451a03; }
+
+  .proj-tabs {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    border-bottom: 1.5px solid var(--ink);
+    margin-bottom: 24px;
+    padding-bottom: 0;
+    scrollbar-width: thin;
+  }
+  .proj-tab {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.9rem;
+    padding: 10px 16px;
+    border: 1px solid var(--rule);
+    border-bottom: none;
+    border-radius: var(--radius) var(--radius) 0 0;
+    background: var(--paper);
+    color: var(--ink-2);
+    transition: all 0.15s;
+    white-space: nowrap;
+    margin-bottom: -1.5px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .proj-tab:hover { background: var(--paper-2); color: var(--ink); }
+  .proj-tab.active {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+    font-weight: 500;
+  }
+  .proj-tab .tab-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    opacity: 0.7;
+  }
+  .proj-tab-new {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.88rem;
+    padding: 10px 14px;
+    border: 1px dashed var(--rule);
+    border-bottom: none;
+    border-radius: var(--radius) var(--radius) 0 0;
+    background: transparent;
+    color: var(--muted);
+    margin-bottom: -1.5px;
+  }
+  .proj-tab-new:hover { color: var(--accent); border-color: var(--accent); }
+
+  .proj-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+  }
+  .proj-header h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.55rem;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin: 0;
+  }
+  .proj-header-actions {
+    display: flex;
+    gap: 14px;
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+  }
+  .proj-desc {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin: 0 0 18px;
+  }
+
+  .proj-toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+    padding: 12px;
+    background: var(--paper-2);
+    border-radius: var(--radius);
+    border: 1px solid var(--rule);
+  }
+  .btn {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.86rem;
+    font-weight: 500;
+    padding: 7px 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    color: var(--ink-2);
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .btn-primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .btn-primary:hover { background: var(--accent); border-color: var(--accent); }
+  .btn-danger { color: var(--accent); border-color: var(--accent); }
+  .btn-danger:hover { background: var(--accent); color: var(--paper); border-color: var(--accent); }
+  .btn-sm { font-size: 0.8rem; padding: 5px 10px; }
+
+  /* Project tool card with credentials */
+  .ptool {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .ptool-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .ptool-head:hover { background: var(--paper-2); }
+  .ptool-head .ptool-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    min-width: 50px;
+  }
+  .ptool-head .ptool-name {
+    font-weight: 600;
+    font-size: 0.98rem;
+    flex: 1;
+    min-width: 0;
+  }
+  .ptool-head .ptool-name .custom-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    background: var(--paper-3);
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 8px;
+    vertical-align: 2px;
+  }
+  .ptool-head .ptool-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .ptool-head .ptool-toggle {
+    color: var(--muted);
+    font-size: 1rem;
+    transition: transform 0.15s;
+  }
+  .ptool.open .ptool-head .ptool-toggle { transform: rotate(180deg); }
+  .ptool-body {
+    display: none;
+    padding: 0 16px 16px;
+    border-top: 1px dashed var(--rule);
+  }
+  .ptool.open .ptool-body { display: block; }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .field.full { grid-column: 1 / -1; }
+  .field label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .field input, .field textarea {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.9rem;
+    padding: 8px 10px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--paper);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+    resize: vertical;
+  }
+  .field input:focus, .field textarea:focus { border-color: var(--accent); }
+  .field textarea { min-height: 60px; font-family: 'JetBrains Mono', monospace; font-size: 0.83rem; }
+  .field-secret {
+    position: relative;
+  }
+  .field-secret input { padding-right: 38px; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; }
+  .eye-toggle {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    width: 22px; height: 22px;
+    padding: 0;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    border-radius: 3px;
+    font-size: 0.68rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .eye-toggle:hover { color: var(--accent); border-color: var(--accent); }
+  .ptool-body-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  /* Add tool picker modal */
+  .add-tool-panel, .new-proj-panel, .custom-tool-panel {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .add-tool-panel h4, .new-proj-panel h4, .custom-tool-panel h4 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .add-tool-search { position: relative; margin-bottom: 10px; }
+  .add-tool-search input {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--paper);
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+  }
+  .add-tool-search input:focus { border-color: var(--accent); }
+  .add-tool-results {
+    max-height: 260px;
+    overflow-y: auto;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--paper);
+  }
+  .add-tool-results .row {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--rule);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 0.88rem;
+  }
+  .add-tool-results .row:last-child { border-bottom: none; }
+  .add-tool-results .row:hover { background: var(--paper-3); }
+  .add-tool-results .row .row-blurb { color: var(--muted); font-size: 0.8rem; flex: 1; }
+  .add-tool-results .row .row-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .add-tool-results .row.already { opacity: 0.5; cursor: default; }
+  .add-tool-results .row.already .row-status { color: var(--ok); font-size: 0.78rem; }
+
+  .panel-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .proj-inline-input {
+    font-family: 'Fraunces', serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    padding: 4px 8px;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    background: var(--paper);
+    outline: none;
+    width: 100%;
+    max-width: 420px;
+  }
+
   /* Copy button */
   .copy-btn {
     position: absolute;
@@ -1079,16 +1392,151 @@ const TOP5_IDS = [1, 2, 31, 4, 177]; // GitHub, Filesystem, Context7, Sentry, cc
 const $ = (id) => document.getElementById(id);
 let activeCat = 'all';
 let query = '';
-let savedIds = new Set(JSON.parse(localStorage.getItem('cc-toolkit-saved') || '[]'));
 
-function persistSaved() {
-  localStorage.setItem('cc-toolkit-saved', JSON.stringify([...savedIds]));
+// ---- Project + custom-tool state (persisted to localStorage) ----
+const STORAGE_KEY = 'cc-toolkit-v2';
+const OLD_SAVED_KEY = 'cc-toolkit-saved';
+const EMPTY_FIELDS = () => ({ email: '', username: '', password: '', apiKey: '', url: '', notes: '' });
+
+function loadStore() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) { console.warn('Corrupt store, resetting', e); }
+  return null;
 }
 
+function migrateFromV1() {
+  const saved = JSON.parse(localStorage.getItem(OLD_SAVED_KEY) || '[]');
+  const rootTools = {};
+  saved.forEach(id => { rootTools[String(id)] = { fields: EMPTY_FIELDS(), addedAt: new Date().toISOString() }; });
+  return {
+    projects: {
+      root: { id: 'root', name: 'Root stack', description: 'Tools not tied to a specific project.', createdAt: new Date().toISOString(), tools: rootTools }
+    },
+    customTools: [],
+    projectOrder: ['root'],
+    activeProjectId: 'root'
+  };
+}
+
+let store = loadStore() || migrateFromV1();
+// Ensure schema fields always present
+store.projects = store.projects || {};
+store.customTools = store.customTools || [];
+store.projectOrder = store.projectOrder || ['root'];
+store.activeProjectId = store.activeProjectId || 'root';
+if (!store.projects.root) {
+  store.projects.root = { id: 'root', name: 'Root stack', description: 'Tools not tied to a specific project.', createdAt: new Date().toISOString(), tools: {} };
+  if (!store.projectOrder.includes('root')) store.projectOrder.unshift('root');
+}
+
+function persistStore() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); } catch (e) { alert('Could not save — storage full or blocked.'); }
+}
+
+// ---- Project CRUD ----
+function createProject(name, description = '') {
+  const id = 'proj-' + Math.random().toString(36).slice(2, 9);
+  store.projects[id] = { id, name: name.trim() || 'Untitled project', description: description.trim(), createdAt: new Date().toISOString(), tools: {} };
+  store.projectOrder.push(id);
+  store.activeProjectId = id;
+  persistStore();
+  return id;
+}
+
+function renameProject(id, newName) {
+  if (!store.projects[id]) return;
+  store.projects[id].name = newName.trim() || store.projects[id].name;
+  persistStore();
+}
+
+function deleteProject(id) {
+  if (id === 'root') return; // cannot delete root
+  delete store.projects[id];
+  store.projectOrder = store.projectOrder.filter(p => p !== id);
+  if (store.activeProjectId === id) store.activeProjectId = 'root';
+  persistStore();
+}
+
+// ---- Tool-in-project CRUD ----
+function addToolToProject(projectId, toolId) {
+  const p = store.projects[projectId];
+  if (!p) return;
+  const key = String(toolId);
+  if (!p.tools[key]) {
+    p.tools[key] = { fields: EMPTY_FIELDS(), addedAt: new Date().toISOString() };
+    persistStore();
+  }
+}
+
+function removeToolFromProject(projectId, toolId) {
+  const p = store.projects[projectId];
+  if (!p) return;
+  delete p.tools[String(toolId)];
+  persistStore();
+}
+
+function setToolField(projectId, toolId, field, value) {
+  const p = store.projects[projectId];
+  if (!p || !p.tools[String(toolId)]) return;
+  p.tools[String(toolId)].fields[field] = value;
+  persistStore();
+}
+
+// ---- Custom tools (user-added, not in the 234) ----
+function addCustomTool({ name, url, blurb }) {
+  const id = 'c-' + Math.random().toString(36).slice(2, 9);
+  const t = { id, name: name.trim(), url: (url || '').trim(), blurb: (blurb || '').trim(), tag: 'Custom', cat: 'custom', custom: true };
+  store.customTools.push(t);
+  persistStore();
+  return t;
+}
+
+function removeCustomTool(id) {
+  store.customTools = store.customTools.filter(t => t.id !== id);
+  // also remove from any projects
+  Object.values(store.projects).forEach(p => { delete p.tools[String(id)]; });
+  persistStore();
+}
+
+// ---- Lookups ----
+function getAllTools() {
+  // Merge directory + custom so the rest of the UI can look anything up by id
+  return [...TOOLS, ...store.customTools];
+}
+function toolById(id) {
+  const key = String(id);
+  return getAllTools().find(t => String(t.id) === key);
+}
+
+// Is this tool saved to ANY project? (used for ★ indicator on directory cards)
+function isToolSavedAnywhere(toolId) {
+  const key = String(toolId);
+  return Object.values(store.projects).some(p => !!p.tools[key]);
+}
+// How many projects contain it
+function savedInCount(toolId) {
+  const key = String(toolId);
+  return Object.values(store.projects).filter(p => !!p.tools[key]).length;
+}
+
+// Legacy shim — keeps old ★ button working: toggle membership in Root
 function toggleSaved(id) {
-  if (savedIds.has(id)) savedIds.delete(id);
-  else savedIds.add(id);
-  persistSaved();
+  const key = String(id);
+  const root = store.projects.root;
+  if (root.tools[key]) {
+    // remove from all projects
+    Object.values(store.projects).forEach(p => { delete p.tools[key]; });
+  } else {
+    addToolToProject('root', id);
+  }
+  persistStore();
+}
+
+// Clear the old v1 key once migrated
+if (localStorage.getItem(OLD_SAVED_KEY)) {
+  try { localStorage.removeItem(OLD_SAVED_KEY); } catch (e) {}
 }
 
 // ============= RENDER: TOP 5 =============
@@ -1114,7 +1562,12 @@ function renderTop5() {
 
 // ============= RENDER: CHIPS =============
 function renderChips() {
-  const counts = { all: TOOLS.length, saved: savedIds.size };
+  // Count unique tool IDs across all projects (so a tool in 2 projects counts once)
+  const savedUnique = new Set();
+  Object.values(store.projects).forEach(p => {
+    Object.keys(p.tools).forEach(k => savedUnique.add(k));
+  });
+  const counts = { all: TOOLS.length, saved: savedUnique.size };
   TOOLS.forEach(t => {
     const c = CAT_MAP[t.cat];
     counts[c] = (counts[c] || 0) + 1;
@@ -1180,22 +1633,14 @@ function renderDirectory() {
   const scored = TOOLS.map(t => ({ t, s: scoreTool(t, q) }))
     .filter(x => x.s > 0)
     .filter(x => {
-      if (activeCat === 'saved') return savedIds.has(x.t.id);
+      if (activeCat === 'saved') return isToolSavedAnywhere(x.t.id);
       if (activeCat === 'all') return true;
       return CAT_MAP[x.t.cat] === activeCat;
     });
 
-  // Saved view with no items — friendly empty state
-  if (activeCat === 'saved' && savedIds.size === 0) {
-    $('directory-body').innerHTML = `
-      <div class="dir-group">
-        <div class="dir-group-head">
-          <h3 class="dir-group-title">Your stack is empty</h3>
-          <span class="dir-group-count">0 saved</span>
-        </div>
-        <div class="dir-group-sub">Star the ☆ on any tool card to add it to your stack. Saved to your browser until cleared. <button class="link-btn" id="browse-all">Browse all tools →</button></div>
-      </div>
-    `;
+  // Saved view → new project management UI
+  if (activeCat === 'saved' && !q) {
+    renderProjectsView();
     $('empty').style.display = 'none';
     return;
   }
@@ -1214,7 +1659,7 @@ function renderDirectory() {
     const savedScope = activeCat === 'saved';
     const headerText = savedScope ? `"${esc(q)}" — in your stack` : `Results for "${esc(q)}"`;
     const sublineText = savedScope
-      ? `Searching only your ${savedIds.size} saved tools. <button class="link-btn" id="browse-all">Search all 234 instead →</button>`
+      ? `Searching only tools saved across your projects. <button class="link-btn" id="browse-all">Search all 234 instead →</button>`
       : `Ranked by relevance. Searches expand to related concepts — "voice" finds audio / podcast / transcript tools.`;
     html = `
       <div class="dir-group">
@@ -1228,32 +1673,6 @@ function renderDirectory() {
         </div>
       </div>
     `;
-  } else if (activeCat === 'saved') {
-    // My Stack header with export action
-    html = `
-      <div class="dir-group">
-        <div class="dir-group-head">
-          <h3 class="dir-group-title">★ My stack</h3>
-          <span class="dir-group-count">${savedIds.size} saved</span>
-        </div>
-        <div class="dir-group-sub">Tools you're currently using. <button class="link-btn" id="export-md">Copy as markdown</button> · <button class="link-btn" id="clear-stack">Clear all</button></div>
-    `;
-    // Group by category within saved
-    Object.keys(GROUPS).forEach(primary => {
-      GROUPS[primary].forEach(sub => {
-        const items = scored.filter(x => x.t.cat === sub.id).map(x => x.t);
-        if (items.length === 0) return;
-        html += `
-          <div style="margin-top: 24px;">
-            <h4 style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 10px;">${esc(sub.title)} <span style="color: var(--rule);">·</span> ${items.length}</h4>
-            <div class="dir-grid">
-              ${items.map(t => cardHtml(t, '')).join('')}
-            </div>
-          </div>
-        `;
-      });
-    });
-    html += `</div>`;
   } else {
     // Grouped by category within active filter
     const cats = activeCat === 'all' ? Object.keys(GROUPS) : [activeCat];
@@ -1280,9 +1699,238 @@ function renderDirectory() {
   $('directory-body').innerHTML = html;
 }
 
+// ============= PROJECT MANAGEMENT VIEW =============
+let addToolPickerOpen = null;   // projectId or null
+let addToolQuery = '';
+let newProjPanelOpen = false;
+let customToolPanelOpen = false;
+let renamingProject = null;
+let revealedSecrets = new Set(); // `${projectId}:${toolId}:${field}` keys whose value is currently visible
+
+function renderProjectsView() {
+  const projects = store.projectOrder.map(id => store.projects[id]).filter(Boolean);
+  const active = store.projects[store.activeProjectId] || store.projects.root;
+  const toolsInActive = Object.entries(active.tools);
+
+  let html = '';
+
+  // Security banner
+  html += `
+    <div class="stack-warn">
+      <strong>Heads up:</strong> credentials below are stored in your browser's localStorage — not encrypted, not synced to a server. Don't store shared-production secrets here. Good for personal API keys and account reminders. <button class="link-btn" id="export-json">Export JSON backup</button> · <button class="link-btn" id="import-json">Import</button>
+    </div>
+  `;
+
+  // Project tabs
+  html += `<div class="proj-tabs">`;
+  projects.forEach(p => {
+    const count = Object.keys(p.tools).length;
+    const icon = p.id === 'root' ? '⌂' : '▸';
+    html += `<button class="proj-tab ${p.id === active.id ? 'active' : ''}" data-proj-select="${p.id}">${icon} ${esc(p.name)}<span class="tab-count">${count}</span></button>`;
+  });
+  html += `<button class="proj-tab-new" id="new-proj-btn">+ New project</button>`;
+  html += `</div>`;
+
+  // New project panel
+  if (newProjPanelOpen) {
+    html += `
+      <div class="new-proj-panel">
+        <h4>New project</h4>
+        <div class="field-grid">
+          <div class="field full">
+            <label for="np-name">Name</label>
+            <input type="text" id="np-name" placeholder="e.g. Higgsfield video project" />
+          </div>
+          <div class="field full">
+            <label for="np-desc">Description (optional)</label>
+            <input type="text" id="np-desc" placeholder="Short description" />
+          </div>
+        </div>
+        <div class="panel-actions">
+          <button class="btn btn-primary" id="np-create">Create project</button>
+          <button class="btn" id="np-cancel">Cancel</button>
+        </div>
+      </div>
+    `;
+  }
+
+  // Project header
+  if (renamingProject === active.id && active.id !== 'root') {
+    html += `<div class="proj-header"><input class="proj-inline-input" id="rename-input" value="${escAttr(active.name)}" /></div>`;
+  } else {
+    html += `
+      <div class="proj-header">
+        <h3>${esc(active.name)}</h3>
+        <div class="proj-header-actions">
+          ${active.id !== 'root' ? `<button class="link-btn" id="rename-proj">Rename</button>` : ''}
+          ${active.id !== 'root' ? `<button class="link-btn" id="delete-proj" style="color: var(--accent);">Delete project</button>` : ''}
+          <button class="link-btn" id="export-md">Copy as markdown</button>
+        </div>
+      </div>
+    `;
+  }
+  if (active.description) html += `<p class="proj-desc">${esc(active.description)}</p>`;
+  if (active.id === 'root') html += `<p class="proj-desc">Quick-save tools here from the main directory (★). Move them into a project to attach credentials and notes.</p>`;
+
+  // Toolbar
+  html += `
+    <div class="proj-toolbar">
+      <button class="btn btn-primary" id="open-add-tool">+ Add tool from directory</button>
+      <button class="btn" id="open-custom-tool">+ Add custom tool</button>
+      <span style="flex: 1;"></span>
+      <span style="align-self: center; font-family: 'JetBrains Mono', monospace; font-size: 0.76rem; color: var(--muted); letter-spacing: 0.06em;">${toolsInActive.length} tool${toolsInActive.length === 1 ? '' : 's'}</span>
+    </div>
+  `;
+
+  // Add tool panel
+  if (addToolPickerOpen === active.id) {
+    const candidates = TOOLS
+      .filter(t => {
+        if (!addToolQuery) return true;
+        return scoreTool(t, addToolQuery) > 0;
+      })
+      .slice(0, 40);
+    html += `
+      <div class="add-tool-panel">
+        <h4>Add a tool from the directory</h4>
+        <div class="add-tool-search">
+          <input type="text" id="add-tool-search-input" placeholder="Search 234 tools…" value="${escAttr(addToolQuery)}" autofocus />
+        </div>
+        <div class="add-tool-results">
+          ${candidates.length === 0 ? '<div class="row"><span>No matches</span></div>' : candidates.map(t => {
+            const already = !!active.tools[String(t.id)];
+            return `
+              <div class="row ${already ? 'already' : ''}" data-add-tool="${t.id}">
+                <div style="min-width:0;">
+                  <div><strong>${esc(t.name)}</strong> <span class="row-tag">${esc(t.tag)}</span></div>
+                  <div class="row-blurb">${esc(t.blurb)}</div>
+                </div>
+                ${already ? '<span class="row-status">✓ Added</span>' : '<span style="color:var(--muted);">+ Add</span>'}
+              </div>
+            `;
+          }).join('')}
+        </div>
+        <div class="panel-actions">
+          <button class="btn" id="close-add-tool">Done</button>
+        </div>
+      </div>
+    `;
+  }
+
+  // Custom tool panel
+  if (customToolPanelOpen) {
+    html += `
+      <div class="custom-tool-panel">
+        <h4>Add a custom tool</h4>
+        <p style="color:var(--muted);font-size:0.86rem;margin-bottom:10px;">For anything not in the 234-tool directory (e.g. Higgsfield, a niche SaaS, an internal tool).</p>
+        <div class="field-grid">
+          <div class="field full">
+            <label>Name</label>
+            <input type="text" id="ct-name" placeholder="e.g. Higgsfield" />
+          </div>
+          <div class="field full">
+            <label>URL (optional)</label>
+            <input type="text" id="ct-url" placeholder="https://higgsfield.ai" />
+          </div>
+          <div class="field full">
+            <label>What is it? (one line)</label>
+            <input type="text" id="ct-blurb" placeholder="AI video generation" />
+          </div>
+        </div>
+        <div class="panel-actions">
+          <button class="btn btn-primary" id="ct-add">Add to this project</button>
+          <button class="btn" id="ct-cancel">Cancel</button>
+        </div>
+      </div>
+    `;
+  }
+
+  // Tools in project
+  if (toolsInActive.length === 0) {
+    html += `<p style="color: var(--muted); padding: 20px 0; font-size: 0.92rem;">No tools in this project yet. Use <strong>+ Add tool</strong> above to pick from the directory, or add a custom one.</p>`;
+  } else {
+    toolsInActive
+      .sort(([, a], [, b]) => new Date(b.addedAt) - new Date(a.addedAt))
+      .forEach(([tid, entry]) => {
+        const t = toolById(tid);
+        html += renderProjectTool(active.id, tid, t, entry);
+      });
+  }
+
+  $('directory-body').innerHTML = html;
+}
+
+function renderProjectTool(projId, tid, t, entry) {
+  if (!t) {
+    // Tool may have been removed (e.g., custom tool deleted) — show placeholder
+    return `
+      <div class="ptool">
+        <div class="ptool-head">
+          <div class="ptool-id">#${esc(String(tid))}</div>
+          <div class="ptool-name" style="color:var(--muted);">(Tool no longer exists)</div>
+          <button class="btn btn-sm btn-danger" data-remove-tool="${esc(tid)}" data-proj="${projId}">Remove</button>
+        </div>
+      </div>
+    `;
+  }
+  const f = entry.fields || EMPTY_FIELDS();
+  const showPwd = revealedSecrets.has(`${projId}:${tid}:password`);
+  const showKey = revealedSecrets.has(`${projId}:${tid}:apiKey`);
+  const isCustom = !!t.custom;
+  const idDisplay = isCustom ? 'CUSTOM' : ('#' + String(t.id).padStart(3, '0'));
+  return `
+    <div class="ptool" data-ptool="${esc(tid)}">
+      <div class="ptool-head" data-toggle-ptool="${esc(tid)}">
+        <div class="ptool-id">${idDisplay}</div>
+        <div class="ptool-name">${esc(t.name)}${isCustom ? '<span class="custom-badge">Custom</span>' : ''}</div>
+        <div class="ptool-meta">${esc(t.tag || '')}</div>
+        <span class="ptool-toggle">⌄</span>
+      </div>
+      <div class="ptool-body">
+        <div class="field-grid">
+          <div class="field">
+            <label>Account email</label>
+            <input type="text" data-field="email" data-proj="${projId}" data-tid="${esc(tid)}" value="${escAttr(f.email || '')}" placeholder="name@example.com" />
+          </div>
+          <div class="field">
+            <label>Username</label>
+            <input type="text" data-field="username" data-proj="${projId}" data-tid="${esc(tid)}" value="${escAttr(f.username || '')}" placeholder="e.g. jackp" />
+          </div>
+          <div class="field field-secret">
+            <label>Password</label>
+            <input type="${showPwd ? 'text' : 'password'}" data-field="password" data-proj="${projId}" data-tid="${esc(tid)}" value="${escAttr(f.password || '')}" placeholder="(stored locally)" autocomplete="off" />
+            <button type="button" class="eye-toggle" data-reveal="${projId}:${tid}:password" title="${showPwd ? 'Hide' : 'Reveal'}">${showPwd ? '◉' : '○'}</button>
+          </div>
+          <div class="field field-secret">
+            <label>API key</label>
+            <input type="${showKey ? 'text' : 'password'}" data-field="apiKey" data-proj="${projId}" data-tid="${esc(tid)}" value="${escAttr(f.apiKey || '')}" placeholder="sk_..." autocomplete="off" />
+            <button type="button" class="eye-toggle" data-reveal="${projId}:${tid}:apiKey" title="${showKey ? 'Hide' : 'Reveal'}">${showKey ? '◉' : '○'}</button>
+          </div>
+          <div class="field full">
+            <label>Account URL</label>
+            <input type="text" data-field="url" data-proj="${projId}" data-tid="${esc(tid)}" value="${escAttr(f.url || '')}" placeholder="${esc(t.url || 'https://...')}" />
+          </div>
+          <div class="field full">
+            <label>Notes</label>
+            <textarea data-field="notes" data-proj="${projId}" data-tid="${esc(tid)}" placeholder="Plan tier, renewal date, billing, quirks…">${esc(f.notes || '')}</textarea>
+          </div>
+        </div>
+        <div class="ptool-body-actions">
+          ${t.url ? `<a href="${esc(t.url)}" target="_blank" rel="noopener" class="btn btn-sm">Open site ↗</a>` : ''}
+          ${f.url ? `<a href="${esc(f.url)}" target="_blank" rel="noopener" class="btn btn-sm">Open account ↗</a>` : ''}
+          <span style="flex:1;"></span>
+          ${isCustom ? `<button class="btn btn-sm btn-danger" data-delete-custom="${esc(tid)}">Delete custom tool</button>` : ''}
+          <button class="btn btn-sm btn-danger" data-remove-tool="${esc(tid)}" data-proj="${projId}">Remove from project</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function cardHtml(t, q) {
   const installSnippet = t.install || inferInstall(t);
-  const isSaved = savedIds.has(t.id);
+  const isSaved = isToolSavedAnywhere(t.id);
+  const inCount = savedInCount(t.id);
   return `
     <div class="dir-card ${isSaved ? 'is-saved' : ''}" data-id="${t.id}" tabindex="0" role="button" aria-expanded="false" aria-label="${esc(t.name)} — press Enter to see install details">
       <button class="save-btn ${isSaved ? 'saved' : ''}" data-save="${t.id}" aria-label="${isSaved ? 'Remove from stack' : 'Add to stack'}" aria-pressed="${isSaved}" title="${isSaved ? 'Remove from stack' : 'Add to stack'}">${isSaved ? '★' : '☆'}</button>
@@ -1339,17 +1987,20 @@ document.addEventListener('click', (e) => {
     return;
   }
 
-  // Export stack as markdown
+  // Export active project as markdown
   if (e.target.id === 'export-md') {
-    const lines = ['# My Claude Code stack', '', `_${savedIds.size} tools, exported ${new Date().toISOString().slice(0,10)}_`, ''];
-    Object.keys(GROUPS).forEach(primary => {
-      GROUPS[primary].forEach(sub => {
-        const items = TOOLS.filter(t => savedIds.has(t.id) && t.cat === sub.id);
-        if (items.length === 0) return;
-        lines.push(`## ${sub.title}`, '');
-        items.forEach(t => lines.push(`- **[${t.name}](${t.url})** — ${t.blurb}`));
-        lines.push('');
-      });
+    const p = store.projects[store.activeProjectId];
+    if (!p) return;
+    const entries = Object.entries(p.tools);
+    const lines = [`# ${p.name}`, ''];
+    if (p.description) lines.push(`_${p.description}_`, '');
+    lines.push(`_${entries.length} tool${entries.length === 1 ? '' : 's'}, exported ${new Date().toISOString().slice(0,10)}_`, '');
+    entries.forEach(([tid, entry]) => {
+      const t = toolById(tid);
+      if (!t) return;
+      const url = (entry.fields && entry.fields.url) || t.url || '';
+      lines.push(`- **${url ? `[${t.name}](${url})` : t.name}**${t.tag ? ` _(${t.tag})_` : ''} — ${t.blurb || ''}`);
+      if (entry.fields?.notes) lines.push(`  > ${entry.fields.notes.replace(/\n/g, ' ')}`);
     });
     const md = lines.join('\n');
     navigator.clipboard.writeText(md).then(() => {
@@ -1359,21 +2010,186 @@ document.addEventListener('click', (e) => {
     return;
   }
 
-  if (e.target.id === 'clear-stack') {
-    if (confirm(`Clear all ${savedIds.size} saved tools from your stack?`)) {
-      savedIds.clear();
-      persistSaved();
-      renderChips();
-      renderDirectory();
-    }
-    return;
-  }
-
   if (e.target.id === 'browse-all') {
     activeCat = 'all';
     renderChips();
     renderDirectory();
     document.getElementById('directory').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+
+  // ============= PROJECT MGMT HANDLERS =============
+  // Select a project tab
+  const tabBtn = e.target.closest('[data-proj-select]');
+  if (tabBtn) {
+    store.activeProjectId = tabBtn.dataset.projSelect;
+    persistStore();
+    addToolPickerOpen = null;
+    customToolPanelOpen = false;
+    newProjPanelOpen = false;
+    renamingProject = null;
+    renderProjectsView();
+    renderChips();
+    return;
+  }
+
+  // Open "New project" form
+  if (e.target.id === 'new-proj-btn') {
+    newProjPanelOpen = true;
+    renderProjectsView();
+    setTimeout(() => document.getElementById('np-name')?.focus(), 30);
+    return;
+  }
+  if (e.target.id === 'np-cancel') { newProjPanelOpen = false; renderProjectsView(); return; }
+  if (e.target.id === 'np-create') {
+    const name = (document.getElementById('np-name')?.value || '').trim();
+    const desc = (document.getElementById('np-desc')?.value || '').trim();
+    if (!name) { document.getElementById('np-name')?.focus(); return; }
+    createProject(name, desc);
+    newProjPanelOpen = false;
+    renderProjectsView();
+    renderChips();
+    return;
+  }
+
+  // Rename project
+  if (e.target.id === 'rename-proj') {
+    renamingProject = store.activeProjectId;
+    renderProjectsView();
+    setTimeout(() => { const i = document.getElementById('rename-input'); if (i) { i.focus(); i.select(); } }, 30);
+    return;
+  }
+  // Delete project
+  if (e.target.id === 'delete-proj') {
+    const p = store.projects[store.activeProjectId];
+    if (p && confirm(`Delete project "${p.name}" and all its stored credentials? This cannot be undone.`)) {
+      deleteProject(store.activeProjectId);
+      renderProjectsView();
+      renderChips();
+    }
+    return;
+  }
+
+  // Open "Add tool from directory"
+  if (e.target.id === 'open-add-tool') {
+    addToolPickerOpen = store.activeProjectId;
+    addToolQuery = '';
+    customToolPanelOpen = false;
+    renderProjectsView();
+    setTimeout(() => document.getElementById('add-tool-search-input')?.focus(), 30);
+    return;
+  }
+  if (e.target.id === 'close-add-tool') { addToolPickerOpen = null; renderProjectsView(); return; }
+
+  // Add a directory tool to current project
+  const addRow = e.target.closest('[data-add-tool]');
+  if (addRow && !addRow.classList.contains('already')) {
+    addToolToProject(store.activeProjectId, addRow.dataset.addTool);
+    renderProjectsView();
+    return;
+  }
+
+  // Open custom tool form
+  if (e.target.id === 'open-custom-tool') {
+    customToolPanelOpen = true;
+    addToolPickerOpen = null;
+    renderProjectsView();
+    setTimeout(() => document.getElementById('ct-name')?.focus(), 30);
+    return;
+  }
+  if (e.target.id === 'ct-cancel') { customToolPanelOpen = false; renderProjectsView(); return; }
+  if (e.target.id === 'ct-add') {
+    const name = (document.getElementById('ct-name')?.value || '').trim();
+    const url = (document.getElementById('ct-url')?.value || '').trim();
+    const blurb = (document.getElementById('ct-blurb')?.value || '').trim();
+    if (!name) { document.getElementById('ct-name')?.focus(); return; }
+    const newTool = addCustomTool({ name, url, blurb });
+    addToolToProject(store.activeProjectId, newTool.id);
+    customToolPanelOpen = false;
+    renderProjectsView();
+    return;
+  }
+
+  // Delete custom tool (from everywhere)
+  const delCustomBtn = e.target.closest('[data-delete-custom]');
+  if (delCustomBtn) {
+    const tid = delCustomBtn.dataset.deleteCustom;
+    if (confirm('Delete this custom tool from all projects?')) {
+      removeCustomTool(tid);
+      renderProjectsView();
+    }
+    return;
+  }
+
+  // Remove tool from current project
+  const removeBtn = e.target.closest('[data-remove-tool]');
+  if (removeBtn) {
+    removeToolFromProject(removeBtn.dataset.proj, removeBtn.dataset.removeTool);
+    renderProjectsView();
+    renderChips();
+    return;
+  }
+
+  // Toggle per-tool expand in project view
+  const ptoolHead = e.target.closest('[data-toggle-ptool]');
+  if (ptoolHead && !e.target.closest('input, textarea, button, a')) {
+    const wrap = ptoolHead.closest('.ptool');
+    if (wrap) wrap.classList.toggle('open');
+    return;
+  }
+
+  // Reveal/hide a secret
+  const eye = e.target.closest('[data-reveal]');
+  if (eye) {
+    e.preventDefault();
+    const key = eye.dataset.reveal;
+    if (revealedSecrets.has(key)) revealedSecrets.delete(key);
+    else revealedSecrets.add(key);
+    renderProjectsView();
+    return;
+  }
+
+  // Export JSON backup
+  if (e.target.id === 'export-json') {
+    e.preventDefault();
+    const blob = new Blob([JSON.stringify(store, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `claude-code-stack-${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+    return;
+  }
+  // Import JSON backup
+  if (e.target.id === 'import-json') {
+    e.preventDefault();
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json,.json';
+    input.onchange = (ev) => {
+      const file = ev.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          if (!data || !data.projects) throw new Error('Invalid file');
+          if (!confirm('Import this file? It will replace your current projects and custom tools.')) return;
+          store = data;
+          if (!store.projects.root) store.projects.root = { id: 'root', name: 'Root stack', description: '', createdAt: new Date().toISOString(), tools: {} };
+          store.projectOrder = store.projectOrder || Object.keys(store.projects);
+          store.activeProjectId = store.activeProjectId || 'root';
+          store.customTools = store.customTools || [];
+          persistStore();
+          renderProjectsView();
+          renderChips();
+          renderDirectory();
+        } catch (err) { alert('Import failed: ' + err.message); }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
     return;
   }
 
@@ -1419,6 +2235,79 @@ $('search').addEventListener('input', (e) => {
   query = e.target.value;
   clearTimeout(debounceTimer);
   debounceTimer = setTimeout(renderDirectory, 120);
+});
+
+// ============= PROJECT VIEW INPUT HANDLERS =============
+// Delegated input/change for credential fields, add-tool search, rename, etc.
+let addToolDebounce;
+document.addEventListener('input', (e) => {
+  // Add-tool picker live search
+  if (e.target.id === 'add-tool-search-input') {
+    addToolQuery = e.target.value;
+    clearTimeout(addToolDebounce);
+    addToolDebounce = setTimeout(() => {
+      // Rerender results only (preserve focus on input)
+      const panel = document.querySelector('.add-tool-panel .add-tool-results');
+      if (!panel) return;
+      const active = store.projects[store.activeProjectId];
+      const candidates = TOOLS
+        .filter(t => !addToolQuery || scoreTool(t, addToolQuery) > 0)
+        .slice(0, 40);
+      panel.innerHTML = candidates.length === 0 ? '<div class="row"><span>No matches</span></div>' : candidates.map(t => {
+        const already = !!active.tools[String(t.id)];
+        return `
+          <div class="row ${already ? 'already' : ''}" data-add-tool="${t.id}">
+            <div style="min-width:0;">
+              <div><strong>${esc(t.name)}</strong> <span class="row-tag">${esc(t.tag)}</span></div>
+              <div class="row-blurb">${esc(t.blurb)}</div>
+            </div>
+            ${already ? '<span class="row-status">✓ Added</span>' : '<span style="color:var(--muted);">+ Add</span>'}
+          </div>
+        `;
+      }).join('');
+    }, 80);
+    return;
+  }
+
+  // Persist credential field on input (debounced per field)
+  const input = e.target.closest('[data-field]');
+  if (input) {
+    const pid = input.dataset.proj;
+    const tid = input.dataset.tid;
+    const field = input.dataset.field;
+    clearTimeout(input._saveT);
+    input._saveT = setTimeout(() => {
+      setToolField(pid, tid, field, input.value);
+    }, 250);
+    return;
+  }
+});
+
+// Project rename commit on Enter or blur
+document.addEventListener('keydown', (e) => {
+  if (e.target.id === 'rename-input' && e.key === 'Enter') {
+    e.preventDefault();
+    renameProject(store.activeProjectId, e.target.value);
+    renamingProject = null;
+    renderProjectsView();
+    renderChips();
+  }
+  if (e.target.id === 'rename-input' && e.key === 'Escape') {
+    renamingProject = null;
+    renderProjectsView();
+  }
+  // New-project form — Enter submits
+  if (e.target.id === 'np-name' && e.key === 'Enter') { document.getElementById('np-create')?.click(); }
+  if (e.target.id === 'np-desc' && e.key === 'Enter') { document.getElementById('np-create')?.click(); }
+  if (e.target.id === 'ct-name' && e.key === 'Enter') { document.getElementById('ct-add')?.click(); }
+});
+document.addEventListener('focusout', (e) => {
+  if (e.target.id === 'rename-input') {
+    renameProject(store.activeProjectId, e.target.value);
+    renamingProject = null;
+    renderProjectsView();
+    renderChips();
+  }
 });
 
 document.addEventListener('keydown', (e) => {
