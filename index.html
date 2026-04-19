@@ -977,10 +977,10 @@
 
 <!-- ============== DIRECTORY ============== -->
 <section id="directory">
-  <div class="section-head">
-    <div class="section-num">02 — The full directory</div>
-    <h2 class="serif">Two hundred and thirty-four, <em>categorised.</em></h2>
-    <p class="section-lede">Click any card for install instructions and official docs. Search ranks results; category chips filter the view.</p>
+  <div class="section-head" id="directory-head">
+    <div class="section-num" id="dir-section-num">02 — The full directory</div>
+    <h2 class="serif" id="dir-section-title">Two hundred and thirty-four, <em>categorised.</em></h2>
+    <p class="section-lede" id="dir-section-lede">Click any card for install instructions and official docs. Search ranks results; category chips filter the view.</p>
   </div>
   <div class="directory" id="directory-body"></div>
   <div class="empty" id="empty" style="display:none">
@@ -1629,6 +1629,26 @@ function renderDirectory() {
   // Top 5 only shows on the "all" tab with no active search
   const top5 = $('top5');
   if (top5) top5.style.display = (activeCat === 'all' && !q) ? '' : 'none';
+
+  // Roadmap section hidden on My Stack
+  const roadmap = $('roadmap');
+  if (roadmap) roadmap.style.display = (activeCat === 'saved') ? 'none' : '';
+
+  // Swap directory section-head copy based on active tab
+  const secNum = $('dir-section-num');
+  const secTitle = $('dir-section-title');
+  const secLede = $('dir-section-lede');
+  if (secNum && secTitle && secLede) {
+    if (activeCat === 'saved' && !q) {
+      secNum.textContent = '02 — Your command center';
+      secTitle.innerHTML = `A <em>living database</em> of your stack.`;
+      secLede.innerHTML = `Group tools by project, pin the email / API key / notes for each, and keep everything you need to run a project in one place. Click <strong>+ New project</strong> to spin up a workspace (e.g. "Higgsfield video"), <strong>+ Add tool from directory</strong> to pull in anything from the 234, or <strong>+ Add custom tool</strong> for things outside the index. Expand any tool card to fill in its credentials — secrets hide by default, and everything auto-saves locally.`;
+    } else {
+      secNum.textContent = '02 — The full directory';
+      secTitle.innerHTML = `Two hundred and thirty-four, <em>categorised.</em>`;
+      secLede.innerHTML = `Click any card for install instructions and official docs. Search ranks results; category chips filter the view.`;
+    }
+  }
 
   const scored = TOOLS.map(t => ({ t, s: scoreTool(t, q) }))
     .filter(x => x.s > 0)
