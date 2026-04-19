@@ -354,6 +354,55 @@
   /* Search result highlight */
   mark { background: var(--highlight); color: var(--ink); padding: 0 2px; border-radius: 2px; }
 
+  /* Save (★) button on each card */
+  .save-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+    color: var(--rule);
+    background: transparent;
+    border-radius: 3px;
+    transition: all 0.15s;
+    line-height: 1;
+    z-index: 2;
+  }
+  .save-btn:hover { color: var(--accent); background: var(--paper-3); }
+  .save-btn.saved { color: var(--accent); }
+  .dir-card.is-saved { background: #f0e6d4; }
+  .dir-card.is-saved::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+  }
+
+  /* ★ My stack chip — distinct from regular chips */
+  .chip.chip-saved { border-color: var(--accent); color: var(--accent); }
+  .chip.chip-saved:hover { background: var(--paper-3); color: var(--accent-ink); }
+  .chip.chip-saved.active { background: var(--accent); color: var(--paper); border-color: var(--accent); }
+
+  /* Link-style buttons inside headers */
+  .link-btn {
+    background: none;
+    border: none;
+    color: var(--accent);
+    font-family: inherit;
+    font-size: inherit;
+    padding: 0;
+    border-bottom: 1px solid rgba(154,52,18,0.25);
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .link-btn:hover { border-bottom-color: var(--accent); }
+
   /* Copy button */
   .copy-btn {
     position: absolute;
@@ -577,7 +626,56 @@ const CATS = [
   { id: 'auto',   label: 'Hooks & Obs' },
   { id: 'tool',   label: 'Editors & Tools' },
   { id: 'res',    label: 'Research' },
+  { id: 'saved',  label: '★ My stack' },
 ];
+
+// Concept synonyms — expand searches like "voice" to match tools tagged audio/podcast/transcript
+const SYNONYMS = {
+  voice: ['audio', 'speech', 'tts', 'stt', 'whisper', 'transcript', 'podcast', 'spoken', 'briefing', 'record'],
+  audio: ['voice', 'sound', 'music', 'podcast', 'briefing', 'playback', 'spotify'],
+  video: ['youtube', 'transcript', 'playback', 'stream', 'record'],
+  image: ['picture', 'vision', 'visual', 'design', 'screenshot', 'figma'],
+  design: ['figma', 'ui', 'visual', 'frontend', 'aesthetic', 'layout'],
+  chat: ['message', 'conversation', 'slack', 'discord', 'intercom', 'comment'],
+  payment: ['stripe', 'billing', 'subscription', 'card', 'ramp', 'money'],
+  database: ['db', 'sql', 'postgres', 'mysql', 'mongo', 'redis', 'sqlite', 'warehouse'],
+  vector: ['rag', 'embedding', 'similarity', 'pinecone', 'chroma', 'weaviate', 'qdrant', 'milvus', 'retrieval'],
+  rag: ['vector', 'embedding', 'retrieval', 'pinecone', 'chroma', 'pgvector'],
+  browser: ['chrome', 'playwright', 'puppeteer', 'automation', 'scraping', 'web'],
+  scrape: ['firecrawl', 'apify', 'playwright', 'puppeteer', 'crawler', 'scraping'],
+  search: ['google', 'brave', 'perplexity', 'exa', 'tavily', 'query'],
+  note: ['notes', 'obsidian', 'notion', 'logseq', 'pkm', 'notebook', 'second brain'],
+  notes: ['note', 'obsidian', 'notion', 'logseq', 'pkm'],
+  task: ['todo', 'todoist', 'linear', 'asana', 'jira', 'things', 'planning'],
+  todo: ['task', 'todoist', 'things', 'planning'],
+  test: ['testing', 'tdd', 'pytest', 'vitest', 'quality', 'webapp-testing'],
+  deploy: ['deployment', 'ci', 'cd', 'vercel', 'render', 'railway', 'docker', 'kubernetes'],
+  finance: ['money', 'plaid', 'coinbase', 'trading', 'portfolio', 'broker', 'ramp', 'stripe'],
+  money: ['finance', 'plaid', 'coinbase', 'trading', 'payment', 'stripe'],
+  crypto: ['coinbase', 'coingecko', 'bitcoin', 'ethereum', 'trading', 'portfolio'],
+  trading: ['broker', 'alpaca', 'questrade', 'polygon', 'stocks', 'crypto'],
+  music: ['spotify', 'audio', 'playback', 'sound'],
+  email: ['gmail', 'mail', 'intercom'],
+  mail: ['email', 'gmail'],
+  calendar: ['schedule', 'events', 'scheduling', 'google calendar'],
+  schedule: ['calendar', 'cron', 'events'],
+  free: ['open-source', 'self-hostable', 'local', 'opensource'],
+  private: ['local', 'self-hostable', 'privacy', 'tabnine', 'ollama', 'offline'],
+  offline: ['local', 'private', 'ollama', 'jan', 'lmstudio', 'lm studio'],
+  monitor: ['observability', 'langfuse', 'langsmith', 'helicone', 'trace', 'eval'],
+  observability: ['langfuse', 'langsmith', 'helicone', 'trace', 'monitor', 'eval'],
+  cost: ['usage', 'ccusage', 'pricing', 'token', 'budget'],
+  token: ['cost', 'usage', 'ccusage', 'statusline'],
+  python: ['pydantic', 'agno', 'crewai', 'langchain', 'dspy'],
+  typescript: ['mastra', 'vercel', 'tanstack', 'ts'],
+  ide: ['cursor', 'windsurf', 'zed', 'jetbrains', 'vscode', 'editor'],
+  editor: ['ide', 'cursor', 'windsurf', 'zed', 'vscode'],
+  shell: ['terminal', 'warp', 'iterm', 'zsh', 'bash', 'fish'],
+  assistant: ['siri', 'shortcuts', 'notebooklm', 'voice', 'jarvis'],
+  research: ['notebooklm', 'perplexity', 'arxiv', 'deepwiki'],
+  docs: ['documentation', 'context7', 'deepwiki', 'wiki'],
+  api: ['claude-api', 'sdk', 'anthropic'],
+};
 
 // map from v3 detailed categories to simple ones
 const CAT_MAP = {
@@ -864,6 +962,17 @@ const TOP5_IDS = [1, 2, 31, 4, 177]; // GitHub, Filesystem, Context7, Sentry, cc
 const $ = (id) => document.getElementById(id);
 let activeCat = 'all';
 let query = '';
+let savedIds = new Set(JSON.parse(localStorage.getItem('cc-toolkit-saved') || '[]'));
+
+function persistSaved() {
+  localStorage.setItem('cc-toolkit-saved', JSON.stringify([...savedIds]));
+}
+
+function toggleSaved(id) {
+  if (savedIds.has(id)) savedIds.delete(id);
+  else savedIds.add(id);
+  persistSaved();
+}
 
 // ============= RENDER: TOP 5 =============
 function renderTop5() {
@@ -888,32 +997,52 @@ function renderTop5() {
 
 // ============= RENDER: CHIPS =============
 function renderChips() {
-  const counts = { all: TOOLS.length };
+  const counts = { all: TOOLS.length, saved: savedIds.size };
   TOOLS.forEach(t => {
     const c = CAT_MAP[t.cat];
     counts[c] = (counts[c] || 0) + 1;
   });
   $('chips').innerHTML = CATS.map(c =>
-    `<button class="chip ${c.id === activeCat ? 'active' : ''}" data-cat="${c.id}">${esc(c.label)}<span class="n">${counts[c.id] || 0}</span></button>`
+    `<button class="chip ${c.id === activeCat ? 'active' : ''} ${c.id === 'saved' ? 'chip-saved' : ''}" data-cat="${c.id}">${esc(c.label)}<span class="n">${counts[c.id] || 0}</span></button>`
   ).join('');
 }
 
 // ============= SEARCH RANKING =============
 function scoreTool(t, q) {
   if (!q) return 1;
-  q = q.toLowerCase();
+  q = q.toLowerCase().trim();
   const name = t.name.toLowerCase();
   const blurb = t.blurb.toLowerCase();
   const tag = t.tag.toLowerCase();
+
+  // Direct matches (highest score)
   if (name === q) return 1000;
   if (name.startsWith(q)) return 500;
-  // word-start matches in name
   const words = name.split(/[^a-z0-9]+/);
   if (words.some(w => w.startsWith(q))) return 300;
   if (name.includes(q)) return 200;
   if (tag.includes(q)) return 80;
   if (blurb.includes(q)) return 40;
-  return 0;
+
+  // Concept / synonym expansion — "voice" finds audio/podcast/transcript tools
+  const related = SYNONYMS[q] || [];
+  let best = 0;
+  for (const alt of related) {
+    if (name.includes(alt)) best = Math.max(best, 70);
+    else if (tag.includes(alt)) best = Math.max(best, 35);
+    else if (blurb.includes(alt)) best = Math.max(best, 25);
+  }
+  if (best > 0) return best;
+
+  // Reverse lookup — query is one of the alts under another concept
+  for (const [concept, alts] of Object.entries(SYNONYMS)) {
+    if (alts.includes(q)) {
+      if (name.includes(concept)) best = Math.max(best, 60);
+      else if (tag.includes(concept)) best = Math.max(best, 30);
+      else if (blurb.includes(concept)) best = Math.max(best, 20);
+    }
+  }
+  return best;
 }
 
 function highlight(text, q) {
@@ -933,7 +1062,26 @@ function renderDirectory() {
 
   const scored = TOOLS.map(t => ({ t, s: scoreTool(t, q) }))
     .filter(x => x.s > 0)
-    .filter(x => activeCat === 'all' || CAT_MAP[x.t.cat] === activeCat);
+    .filter(x => {
+      if (activeCat === 'saved') return savedIds.has(x.t.id);
+      if (activeCat === 'all') return true;
+      return CAT_MAP[x.t.cat] === activeCat;
+    });
+
+  // Saved view with no items — friendly empty state
+  if (activeCat === 'saved' && savedIds.size === 0) {
+    $('directory-body').innerHTML = `
+      <div class="dir-group">
+        <div class="dir-group-head">
+          <h3 class="dir-group-title">Your stack is empty</h3>
+          <span class="dir-group-count">0 saved</span>
+        </div>
+        <div class="dir-group-sub">Star the ☆ on any tool card to add it to your stack. Saved here until you clear your browser data.</div>
+      </div>
+    `;
+    $('empty').style.display = 'none';
+    return;
+  }
 
   if (scored.length === 0) {
     $('directory-body').innerHTML = '';
@@ -945,7 +1093,6 @@ function renderDirectory() {
   let html = '';
 
   if (q) {
-    // Ranked search — flat list ordered by score
     scored.sort((a, b) => b.s - a.s || a.t.id - b.t.id);
     html = `
       <div class="dir-group">
@@ -953,12 +1100,38 @@ function renderDirectory() {
           <h3 class="dir-group-title">Results for "${esc(q)}"</h3>
           <span class="dir-group-count">${scored.length} match${scored.length === 1 ? '' : 'es'}</span>
         </div>
-        <div class="dir-group-sub">Ranked by relevance: exact name → name match → tag → description.</div>
+        <div class="dir-group-sub">Ranked by relevance. Searches expand to related concepts — "voice" finds audio / podcast / transcript tools.</div>
         <div class="dir-grid">
           ${scored.map(({ t }) => cardHtml(t, q)).join('')}
         </div>
       </div>
     `;
+  } else if (activeCat === 'saved') {
+    // My Stack header with export action
+    html = `
+      <div class="dir-group">
+        <div class="dir-group-head">
+          <h3 class="dir-group-title">★ My stack</h3>
+          <span class="dir-group-count">${savedIds.size} saved</span>
+        </div>
+        <div class="dir-group-sub">Tools you're currently using. <button class="link-btn" id="export-md">Copy as markdown</button> · <button class="link-btn" id="clear-stack">Clear all</button></div>
+    `;
+    // Group by category within saved
+    Object.keys(GROUPS).forEach(primary => {
+      GROUPS[primary].forEach(sub => {
+        const items = scored.filter(x => x.t.cat === sub.id).map(x => x.t);
+        if (items.length === 0) return;
+        html += `
+          <div style="margin-top: 24px;">
+            <h4 style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 10px;">${esc(sub.title)} <span style="color: var(--rule);">·</span> ${items.length}</h4>
+            <div class="dir-grid">
+              ${items.map(t => cardHtml(t, '')).join('')}
+            </div>
+          </div>
+        `;
+      });
+    });
+    html += `</div>`;
   } else {
     // Grouped by category within active filter
     const cats = activeCat === 'all' ? Object.keys(GROUPS) : [activeCat];
@@ -987,8 +1160,10 @@ function renderDirectory() {
 
 function cardHtml(t, q) {
   const installSnippet = t.install || inferInstall(t);
+  const isSaved = savedIds.has(t.id);
   return `
-    <div class="dir-card" data-id="${t.id}">
+    <div class="dir-card ${isSaved ? 'is-saved' : ''}" data-id="${t.id}">
+      <button class="save-btn ${isSaved ? 'saved' : ''}" data-save="${t.id}" aria-label="${isSaved ? 'Remove from stack' : 'Add to stack'}" title="${isSaved ? 'Remove from stack' : 'Add to stack'}">${isSaved ? '★' : '☆'}</button>
       <div class="dir-card-num">#${String(t.id).padStart(3, '0')}</div>
       <div class="dir-card-name">${highlight(t.name, q)}</div>
       <div class="dir-card-tag">${esc(t.tag)}</div>
@@ -1029,6 +1204,49 @@ document.addEventListener('click', (e) => {
     document.getElementById('directory').scrollIntoView({ behavior: 'smooth', block: 'start' });
     return;
   }
+
+  // Save button — toggles tool in/out of My Stack
+  const saveBtn = e.target.closest('.save-btn');
+  if (saveBtn) {
+    e.preventDefault();
+    e.stopPropagation();
+    const id = Number(saveBtn.dataset.save);
+    toggleSaved(id);
+    renderChips();
+    renderDirectory();
+    return;
+  }
+
+  // Export stack as markdown
+  if (e.target.id === 'export-md') {
+    const lines = ['# My Claude Code stack', '', `_${savedIds.size} tools, exported ${new Date().toISOString().slice(0,10)}_`, ''];
+    Object.keys(GROUPS).forEach(primary => {
+      GROUPS[primary].forEach(sub => {
+        const items = TOOLS.filter(t => savedIds.has(t.id) && t.cat === sub.id);
+        if (items.length === 0) return;
+        lines.push(`## ${sub.title}`, '');
+        items.forEach(t => lines.push(`- **[${t.name}](${t.url})** — ${t.blurb}`));
+        lines.push('');
+      });
+    });
+    const md = lines.join('\n');
+    navigator.clipboard.writeText(md).then(() => {
+      e.target.textContent = 'Copied ✓';
+      setTimeout(() => { e.target.textContent = 'Copy as markdown'; }, 1600);
+    });
+    return;
+  }
+
+  if (e.target.id === 'clear-stack') {
+    if (confirm(`Clear all ${savedIds.size} saved tools from your stack?`)) {
+      savedIds.clear();
+      persistSaved();
+      renderChips();
+      renderDirectory();
+    }
+    return;
+  }
+
   const copyBtn = e.target.closest('.copy-btn');
   if (copyBtn) {
     e.preventDefault();
@@ -1041,6 +1259,7 @@ document.addEventListener('click', (e) => {
     });
     return;
   }
+
   const card = e.target.closest('.dir-card');
   if (card) {
     card.classList.toggle('open');
