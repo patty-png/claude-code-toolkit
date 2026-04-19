@@ -3,13 +3,15 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Claude Code Power Stack — Top 100 Tools & Resources (2026)</title>
+<title>Claude Code Power Stack v3 — Interactive Tool Directory</title>
 <style>
   :root {
     --bg: #0b0d10;
     --panel: #13171c;
     --panel-2: #1a1f26;
+    --panel-3: #222932;
     --border: #242b33;
+    --border-hover: #3a4550;
     --text: #e6edf3;
     --muted: #8b98a5;
     --accent: #d97757;
@@ -20,6 +22,7 @@
     --red: #f85149;
   }
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -46,152 +49,253 @@
     overflow-x: auto;
     font-size: 0.85em;
     color: #e6edf3;
+    margin: 8px 0;
   }
   pre code { background: transparent; border: none; padding: 0; color: inherit; }
+  button { font-family: inherit; cursor: pointer; }
 
   header {
-    padding: 48px 32px 24px;
+    padding: 40px 32px 20px;
     border-bottom: 1px solid var(--border);
     background: linear-gradient(180deg, #141820 0%, var(--bg) 100%);
   }
-  header .wrap { max-width: 1200px; margin: 0 auto; }
-  header h1 {
-    font-size: 2.4rem;
-    margin: 0 0 8px;
-    letter-spacing: -0.02em;
-  }
-  header .subtitle {
-    color: var(--muted);
-    font-size: 1.05rem;
-    margin: 0;
-  }
-  header .meta {
-    margin-top: 18px;
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
-  header .meta span { background: var(--panel); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); }
+  header .wrap { max-width: 1280px; margin: 0 auto; }
+  header h1 { font-size: 2.2rem; margin: 0 0 6px; letter-spacing: -0.02em; }
+  header .subtitle { color: var(--muted); font-size: 1rem; margin: 0; max-width: 820px; }
+  header .version { display: inline-block; background: var(--accent); color: #1a0f08; font-weight: 700; padding: 2px 10px; border-radius: 4px; font-size: 0.75rem; letter-spacing: 0.05em; margin-right: 8px; vertical-align: middle; }
+  header .meta { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; font-size: 0.8rem; color: var(--muted); }
+  header .meta span { background: var(--panel); padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border); }
 
-  nav.toc {
+  /* Search + Filter Bar */
+  .controls {
     position: sticky;
     top: 0;
-    background: rgba(11,13,16,0.92);
-    backdrop-filter: blur(8px);
+    z-index: 20;
+    background: rgba(11,13,16,0.96);
+    backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
-    padding: 10px 32px;
-    z-index: 10;
+    padding: 14px 32px;
   }
-  nav.toc .wrap { max-width: 1200px; margin: 0 auto; display: flex; gap: 18px; flex-wrap: wrap; font-size: 0.88rem; }
-  nav.toc a { color: var(--muted); }
-  nav.toc a:hover { color: var(--accent); text-decoration: none; }
+  .controls .wrap { max-width: 1280px; margin: 0 auto; }
+  .search-row { display: flex; gap: 12px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+  .search-input {
+    flex: 1;
+    min-width: 240px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-input:focus { border-color: var(--accent); }
+  .search-input::placeholder { color: var(--muted); }
+  .result-count { font-size: 0.85rem; color: var(--muted); white-space: nowrap; }
+  .clear-btn {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 9px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+  }
+  .clear-btn:hover { background: var(--panel-2); color: var(--text); }
 
-  main { max-width: 1200px; margin: 0 auto; padding: 32px; }
+  .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .chip:hover { background: var(--panel-2); color: var(--text); border-color: var(--border-hover); }
+  .chip.active { background: var(--accent); color: #1a0f08; border-color: var(--accent); font-weight: 600; }
+  .chip .n { opacity: 0.65; margin-left: 4px; font-size: 0.78rem; }
+  .chip.active .n { opacity: 0.85; }
 
-  section { margin-bottom: 48px; }
+  main { max-width: 1280px; margin: 0 auto; padding: 28px 32px; }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin: 0 0 24px;
+  }
+  .stat { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 12px; text-align: center; }
+  .stat .n { font-size: 1.6rem; font-weight: 700; color: var(--accent); display: block; }
+  .stat .l { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  section { margin-bottom: 40px; }
   section h2 {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     margin: 0 0 6px;
     letter-spacing: -0.01em;
     border-left: 3px solid var(--accent);
     padding-left: 12px;
   }
-  section .section-lede { color: var(--muted); margin: 0 0 20px; padding-left: 15px; }
+  section .section-lede { color: var(--muted); margin: 0 0 18px; padding-left: 15px; max-width: 880px; font-size: 0.95rem; }
 
-  .top10-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
+  /* Top 10 cards — clickable */
+  .top10-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
   .tool-card {
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: 10px;
-    padding: 20px 22px;
-    transition: border-color 0.15s;
+    padding: 18px 20px;
+    transition: border-color 0.15s, transform 0.1s;
+    position: relative;
   }
-  .tool-card:hover { border-color: #3a4550; }
-  .tool-head {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-bottom: 8px;
-  }
-  .tool-rank {
-    background: var(--accent);
-    color: #1a0f08;
-    font-weight: 700;
-    padding: 2px 10px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-  }
-  .tool-name { font-size: 1.2rem; font-weight: 600; margin: 0; }
-  .tool-tag {
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--muted);
-    background: var(--panel-2);
-    padding: 2px 8px;
-    border-radius: 4px;
+  .tool-card:hover { border-color: var(--border-hover); }
+  .tool-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+  .tool-rank { background: var(--accent); color: #1a0f08; font-weight: 700; padding: 2px 9px; border-radius: 6px; font-size: 0.82rem; }
+  .tool-name { font-size: 1.15rem; font-weight: 600; margin: 0; }
+  .tool-name a { color: var(--text); border-bottom: 1px dotted transparent; }
+  .tool-name a:hover { color: var(--accent-2); border-bottom-color: var(--accent-2); text-decoration: none; }
+  .tool-tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); background: var(--panel-2); padding: 2px 7px; border-radius: 4px; border: 1px solid var(--border); }
+  .tool-desc { color: var(--muted); margin: 0 0 10px; font-size: 0.92rem; }
+  .tool-install h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin: 10px 0 4px; }
+  .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: var(--panel-3);
     border: 1px solid var(--border);
-  }
-  .tool-desc { color: var(--muted); margin: 0 0 14px; font-size: 0.95rem; }
-  .tool-install h4 {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
     color: var(--muted);
-    margin: 12px 0 6px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    opacity: 0;
+    transition: opacity 0.15s;
   }
+  pre:hover .copy-btn { opacity: 1; }
+  .copy-btn:hover { background: var(--accent); color: #1a0f08; border-color: var(--accent); }
+  .copy-btn.copied { background: var(--green); color: #0a1a0d; border-color: var(--green); }
+  pre { position: relative; }
 
-  .category-block {
+  /* Interactive grid */
+  .group-section { margin-bottom: 36px; }
+  .group-title {
+    font-size: 1.3rem;
+    margin: 0 0 4px;
+    border-left: 3px solid var(--accent-2);
+    padding-left: 12px;
+    color: var(--text);
+  }
+  .group-sub { color: var(--muted); font-size: 0.88rem; padding-left: 15px; margin: 0 0 14px; }
+
+  .tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+  }
+  .mini-card {
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 18px 22px;
-    margin-bottom: 14px;
-  }
-  .category-title {
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.15s;
     display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 10px;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
   }
-  .category-title h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    color: var(--accent-2);
+  .mini-card:hover {
+    background: var(--panel-2);
+    border-color: var(--accent);
+    transform: translateY(-1px);
   }
-  .category-title .count { font-size: 0.8rem; color: var(--muted); }
-  .tool-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-  .tool-list li {
-    padding: 8px 10px;
-    border-radius: 5px;
-    font-size: 0.93rem;
-    display: flex;
-    gap: 10px;
-    align-items: baseline;
-  }
-  .tool-list li:hover { background: var(--panel-2); }
-  .tool-list .num {
-    color: var(--muted);
+  .mini-card .mc-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .mini-card .mc-num {
     font-family: "JetBrains Mono", Consolas, monospace;
-    font-size: 0.82rem;
-    min-width: 28px;
+    font-size: 0.72rem;
+    color: var(--muted);
+    background: var(--panel-2);
+    padding: 1px 6px;
+    border-radius: 3px;
   }
-  .tool-list .name { font-weight: 600; color: var(--text); }
-  .tool-list .blurb { color: var(--muted); }
+  .mini-card .mc-name { font-weight: 600; font-size: 0.93rem; color: var(--text); flex: 1; }
+  .mini-card .mc-tag { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .mini-card .mc-blurb { color: var(--muted); font-size: 0.85rem; margin: 2px 0 0; }
+  .mini-card .mc-link {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    color: var(--muted);
+    opacity: 0;
+    transition: opacity 0.15s;
+    font-size: 0.85rem;
+  }
+  .mini-card:hover .mc-link { opacity: 1; color: var(--accent-2); }
+
+  /* Modal */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    max-width: 640px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    padding: 24px 26px;
+    position: relative;
+  }
+  .modal-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 1.4rem;
+    line-height: 1;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  .modal-close:hover { background: var(--panel-2); color: var(--text); }
+  .modal h3 { margin: 0 0 4px; font-size: 1.3rem; }
+  .modal .m-tag { display: inline-block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); background: var(--panel-2); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); margin-right: 6px; }
+  .modal .m-desc { color: var(--muted); margin: 14px 0 10px; font-size: 0.95rem; }
+  .modal h4 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin: 16px 0 6px; }
+  .modal .m-links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .modal .m-links a {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: var(--text);
+  }
+  .modal .m-links a:hover { background: var(--accent); color: #1a0f08; border-color: var(--accent); text-decoration: none; }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+    font-size: 0.95rem;
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    margin: 20px 0;
+  }
 
   .notes {
     background: var(--panel-2);
@@ -199,26 +303,16 @@
     border-left: 3px solid var(--accent-2);
     border-radius: 6px;
     padding: 14px 18px;
-    margin: 18px 0;
-    font-size: 0.92rem;
+    margin: 16px 0;
+    font-size: 0.9rem;
     color: var(--muted);
   }
   .notes strong { color: var(--text); }
 
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 24px 32px;
-    text-align: center;
-    color: var(--muted);
-    font-size: 0.88rem;
-  }
+  footer { border-top: 1px solid var(--border); padding: 20px 32px; text-align: center; color: var(--muted); font-size: 0.85rem; }
 
   @media (min-width: 900px) {
     .top10-grid { grid-template-columns: repeat(2, 1fr); }
-    .tool-list { grid-template-columns: 1fr 1fr; }
-  }
-  @media (min-width: 1400px) {
-    .tool-list { grid-template-columns: 1fr 1fr 1fr; }
   }
 </style>
 </head>
@@ -226,439 +320,585 @@
 
 <header>
   <div class="wrap">
-    <h1>Claude Code Power Stack</h1>
-    <p class="subtitle">Top 100 tools, MCPs, skills, and workflow resources — with install guides for the 10 that matter most.</p>
+    <h1><span class="version">v3</span>Claude Code Power Stack</h1>
+    <p class="subtitle">Interactive directory of 234 tools. Click any card for install commands and official links. Search and filter to drill in.</p>
     <div class="meta">
       <span>Compiled 2026-04-19</span>
       <span>For Jack (Windows 11 + Mac)</span>
-      <span>100+ tools · 10 deep-install guides · 8 categories</span>
+      <span>Click cards to expand · Ctrl/⌘+K to search</span>
     </div>
   </div>
 </header>
 
-<nav class="toc">
+<div class="controls">
   <div class="wrap">
-    <a href="#top10">Top 10 (with installs)</a>
-    <a href="#official-mcp">Official MCPs</a>
-    <a href="#3p-mcp">3rd-party MCPs</a>
-    <a href="#skills">Skills</a>
-    <a href="#agents">Subagents</a>
-    <a href="#hooks">Hooks</a>
-    <a href="#companions">Companion AI</a>
-    <a href="#knowledge">Knowledge & Research</a>
-    <a href="#dashboards">Dashboards & Marketplaces</a>
-    <a href="#strategy">Stack Strategy</a>
+    <div class="search-row">
+      <input id="search" class="search-input" type="text" placeholder="Search 234 tools — try 'github', 'postgres', 'mcp', 'browser'…" autocomplete="off" />
+      <span class="result-count" id="count">234 tools</span>
+      <button class="clear-btn" id="clear-btn">Clear</button>
+    </div>
+    <div class="filter-chips" id="chips"></div>
   </div>
-</nav>
+</div>
 
 <main>
+
+<div class="stats-row">
+  <div class="stat"><span class="n">234</span><span class="l">Tools indexed</span></div>
+  <div class="stat"><span class="n">16</span><span class="l">Categories</span></div>
+  <div class="stat"><span class="n">10</span><span class="l">Install guides</span></div>
+  <div class="stat"><span class="n">70</span><span class="l">MCP servers</span></div>
+  <div class="stat"><span class="n">40+</span><span class="l">Skills & plugins</span></div>
+</div>
 
 <!-- ========== TOP 10 ========== -->
 <section id="top10">
   <h2>Top 10 Most Impactful — With Install Guides</h2>
-  <p class="section-lede">If you install only ten things, make them these. Ordered by real-world leverage, not novelty.</p>
-
-  <div class="top10-grid">
-
-    <!-- 1 -->
-    <div class="tool-card">
-      <div class="tool-head">
-        <span class="tool-rank">#1</span>
-        <h3 class="tool-name">GitHub MCP Server</h3>
-        <span class="tool-tag">Official</span>
-      </div>
-      <p class="tool-desc">51 tools for repos, issues, PRs, Actions, releases. The single highest-leverage MCP — #1 most-used across every 2026 dev survey (28k+ stars). Pairs natively with Claude Code's file access.</p>
-      <div class="tool-install">
-        <h4>Install (remote, OAuth — recommended)</h4>
-        <pre><code>claude mcp add --transport http github https://api.githubcopilot.com/mcp/</code></pre>
-        <h4>Install (local, token)</h4>
-        <pre><code>claude mcp add github -- docker run -i --rm \
-  -e GITHUB_PERSONAL_ACCESS_TOKEN=ghp_xxx \
-  ghcr.io/github/github-mcp-server</code></pre>
-      </div>
-    </div>
-
-    <!-- 2 -->
-    <div class="tool-card">
-      <div class="tool-head">
-        <span class="tool-rank">#2</span>
-        <h3 class="tool-name">Filesystem MCP</h3>
-        <span class="tool-tag">Official · Free</span>
-      </div>
-      <p class="tool-desc">Gives Claude sandboxed read/write across any folders you allow — beyond the current working directory. The cheapest, most immediate productivity bump.</p>
-      <div class="tool-install">
-        <h4>Install</h4>
-        <pre><code>claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem \
-  "C:/Users/johnd/Personal" \
-  "C:/Users/johnd/Downloads"</code></pre>
-      </div>
-    </div>
-
-    <!-- 3 -->
-    <div class="tool-card">
-      <div class="tool-head">
-        <span class="tool-rank">#3</span>
-        <h3 class="tool-name">Playwright MCP</h3>
-        <span class="tool-tag">Microsoft</span>
-      </div>
-      <p class="tool-desc">Accessibility-tree browser automation — no screenshot guessing. Lets Claude test web apps, scrape authed pages, fill forms. Gold standard for browser work.</p>
-      <div class="tool-install">
-        <h4>Install</h4>
-        <pre><code>claude mcp add playwright -- npx -y @playwright/mcp@latest
-npx playwright install chromium</code></pre>
-      </div>
-    </div>
-
-    <!-- 4 -->
-    <div class="tool-card">
-      <div class="tool-head">
-        <span class="tool-rank">#4</span>
-        <h3 class="tool-name">Context7 MCP</h3>
-        <span class="tool-tag">Upstash</span>
-      </div>
-      <p class="tool-desc">Fixes the #1 Claude Code failure mode: outdated library knowledge. Injects live, version-pinned docs for 10k+ libraries on demand. Add <code>use context7</code> to any prompt.</p>
-      <div class="tool-install">
-        <h4>Install (remote)</h4>
-        <pre><code>claude mcp add --transport http context7 https://mcp.context7.com/mcp</code></pre>
-      </div>
-    </div>
-
-    <!-- 5 -->
-    <div class="tool-card">
-      <div class="tool-head">
-        <span class="tool-rank">#5</span>
-        <h3 class="tool-name">Sentry MCP</h3>
-        <span class="tool-tag">Remote · OAuth</span>
-      </div>
-      <p class="tool-desc">Error-tracking directly in the loop. Ask Claude to pull the top 5 unresolved errors, triage root cause via Seer AI, then patch. Zero-install remote server.</p>
-      <div class="tool-install">
-        <h4>Install</h4>
-        <pre><code>claude mcp add --transport http sentry https://mcp.sentry.dev/mcp</code></pre>
-      </div>
-    </div>
-
-    <!-- 6 -->
-    <div class="tool-card">
-      <div class="tool-head">
-        <span class="tool-rank">#6</span>
-        <h3 class="tool-name">Superpowers (obra)</h3>
-        <span class="tool-tag">Skill Framework</span>
-      </div>
-      <p class="tool-desc">The largest community skill library. A composable SDLC framework: brainstorm → worktree → plan → TDD execute → review → merge, all as chained skills.</p>
-      <div class="tool-install">
-        <h4>Install</h4>
-        <pre><code>cd ~/.claude/plugins
-git clone https://github.com/obra/superpowers.git
-# then /plugin enable superpowers inside Claude Code</code></pre>
-      </div>
-    </div>
-
-    <!-- 7 -->
-    <div class="tool-card">
-      <div class="tool-head">
-        <span class="tool-rank">#7</span>
-        <h3 class="tool-name">wshobson/agents</h3>
-        <span class="tool-tag">100+ Subagents</span>
-      </div>
-      <p class="tool-desc">Production-ready subagents for orchestration: backend-architect, database-architect, security-auditor, test-automator, deployment-engineer, etc. Drop in as a plugin.</p>
-      <div class="tool-install">
-        <h4>Install</h4>
-        <pre><code>mkdir -p ~/.claude/agents
-git clone https://github.com/wshobson/agents ~/.claude/agents/wshobson
-# subagents auto-discover on next Claude Code start</code></pre>
-      </div>
-    </div>
-
-    <!-- 8 -->
-    <div class="tool-card">
-      <div class="tool-head">
-        <span class="tool-rank">#8</span>
-        <h3 class="tool-name">Notion MCP</h3>
-        <span class="tool-tag">Official Remote</span>
-      </div>
-      <p class="tool-desc">18 tools for pages, databases, search. Turns Notion into Claude's long-term memory — dump meeting notes, research, specs and let Claude query them mid-task.</p>
-      <div class="tool-install">
-        <h4>Install</h4>
-        <pre><code>claude mcp add --transport http notion https://mcp.notion.com/mcp
-# OAuth flow opens automatically on first use</code></pre>
-      </div>
-    </div>
-
-    <!-- 9 -->
-    <div class="tool-card">
-      <div class="tool-head">
-        <span class="tool-rank">#9</span>
-        <h3 class="tool-name">n8n-mcp (czlonkowski)</h3>
-        <span class="tool-tag">Automation Bridge</span>
-      </div>
-      <p class="tool-desc">Lets Claude Code build n8n workflows from plain English (1,500+ node knowledge). The cleanest answer to "replace my Zapier stack." 90–100% workflow completion in one session.</p>
-      <div class="tool-install">
-        <h4>Install</h4>
-        <pre><code>claude mcp add n8n -- npx -y n8n-mcp
-# docs: https://github.com/czlonkowski/n8n-mcp</code></pre>
-      </div>
-    </div>
-
-    <!-- 10 -->
-    <div class="tool-card">
-      <div class="tool-head">
-        <span class="tool-rank">#10</span>
-        <h3 class="tool-name">NotebookLM + Claude Code Combo</h3>
-        <span class="tool-tag">Workflow</span>
-      </div>
-      <p class="tool-desc">Not a tool — a pattern. NotebookLM for grounded research across PDFs, videos, docs. Export key findings → paste into Claude Code as <code>.claude/context/</code> files. Blind-spot coverage.</p>
-      <div class="tool-install">
-        <h4>Setup</h4>
-        <pre><code># 1. notebooklm.google.com — create notebook, add sources
-# 2. Use "Briefing doc" or "Study guide" to distill
-# 3. Copy output to ./docs/research-brief.md in your repo
-# 4. Claude Code auto-reads via CLAUDE.md context include</code></pre>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="notes">
-    <strong>Install locations.</strong> MCPs added with <code>claude mcp add</code> default to user scope — available in every project. Add <code>--scope project</code> to pin an MCP to a single repo (writes to <code>.mcp.json</code>). Add <code>--scope local</code> for machine-only config not committed to git.
-  </div>
+  <p class="section-lede">The ten tools that produce the biggest day-one productivity jump. Click any title to open the project page. Hover <code>&lt;pre&gt;</code> blocks to copy the install command.</p>
+  <div class="top10-grid" id="top10-grid"></div>
+  <div class="notes"><strong>Install tip:</strong> MCPs added with <code>claude mcp add</code> default to user scope. Add <code>--scope project</code> to pin to one repo (writes <code>.mcp.json</code>). <code>--scope local</code> = machine-only.</div>
 </section>
 
-<!-- ========== OFFICIAL MCP ========== -->
-<section id="official-mcp">
-  <h2>Official & First-Party MCP Servers</h2>
-  <p class="section-lede">Maintained by Anthropic, the service vendor, or through official partnership. Prefer these over community forks.</p>
-  <div class="category-block">
-    <div class="category-title"><h3>Reference & Core</h3><span class="count">14 tools</span></div>
-    <ol class="tool-list" start="1">
-      <li><span class="num">1</span><span><span class="name">GitHub MCP</span> — <span class="blurb">Repos, issues, PRs, Actions (covered above).</span></span></li>
-      <li><span class="num">2</span><span><span class="name">Filesystem MCP</span> — <span class="blurb">Sandboxed file I/O.</span></span></li>
-      <li><span class="num">3</span><span><span class="name">Playwright MCP</span> — <span class="blurb">Browser automation (Microsoft).</span></span></li>
-      <li><span class="num">4</span><span><span class="name">Sentry MCP</span> — <span class="blurb">Error tracking + Seer root cause.</span></span></li>
-      <li><span class="num">5</span><span><span class="name">Notion MCP</span> — <span class="blurb">Pages, databases, search.</span></span></li>
-      <li><span class="num">6</span><span><span class="name">Linear MCP</span> — <span class="blurb">Issues, projects, cycles (<code>mcp.linear.app</code>).</span></span></li>
-      <li><span class="num">7</span><span><span class="name">Atlassian MCP</span> — <span class="blurb">Jira + Confluence.</span></span></li>
-      <li><span class="num">8</span><span><span class="name">Slack MCP</span> — <span class="blurb">Messages, channel history, search.</span></span></li>
-      <li><span class="num">9</span><span><span class="name">Postgres MCP</span> — <span class="blurb">Read-only SQL + schema inspect.</span></span></li>
-      <li><span class="num">10</span><span><span class="name">SQLite MCP</span> — <span class="blurb">Local DB queries & migrations.</span></span></li>
-      <li><span class="num">11</span><span><span class="name">Google Drive MCP</span> — <span class="blurb">Search + read Drive files.</span></span></li>
-      <li><span class="num">12</span><span><span class="name">Google Calendar MCP</span> — <span class="blurb">Events, scheduling (already in your stack).</span></span></li>
-      <li><span class="num">13</span><span><span class="name">Stripe MCP</span> — <span class="blurb">Customers, subs, payments.</span></span></li>
-      <li><span class="num">14</span><span><span class="name">Cloudflare MCP</span> — <span class="blurb">Workers, KV, DNS, R2.</span></span></li>
-    </ol>
-  </div>
-  <div class="category-block">
-    <div class="category-title"><h3>New in 2026 Official Expansion</h3><span class="count">10 tools</span></div>
-    <ol class="tool-list" start="15">
-      <li><span class="num">15</span><span><span class="name">Amplitude MCP</span> — <span class="blurb">Product analytics.</span></span></li>
-      <li><span class="num">16</span><span><span class="name">Asana MCP</span> — <span class="blurb">Tasks, projects.</span></span></li>
-      <li><span class="num">17</span><span><span class="name">Box MCP</span> — <span class="blurb">Enterprise file search.</span></span></li>
-      <li><span class="num">18</span><span><span class="name">Clay MCP</span> — <span class="blurb">GTM data enrichment.</span></span></li>
-      <li><span class="num">19</span><span><span class="name">Hex MCP</span> — <span class="blurb">Data notebooks & SQL.</span></span></li>
-      <li><span class="num">20</span><span><span class="name">Salesforce MCP</span> — <span class="blurb">CRM records.</span></span></li>
-      <li><span class="num">21</span><span><span class="name">Figma MCP</span> — <span class="blurb">Design tokens, components.</span></span></li>
-      <li><span class="num">22</span><span><span class="name">Vercel MCP</span> — <span class="blurb">Deployments, logs, envs.</span></span></li>
-      <li><span class="num">23</span><span><span class="name">AWS MCP</span> — <span class="blurb">S3, Lambda, DynamoDB, CloudWatch.</span></span></li>
-      <li><span class="num">24</span><span><span class="name">Supabase MCP</span> — <span class="blurb">Postgres + auth + storage.</span></span></li>
-    </ol>
-  </div>
-</section>
-
-<!-- ========== 3RD PARTY MCP ========== -->
-<section id="3p-mcp">
-  <h2>Community & Third-Party MCPs</h2>
-  <p class="section-lede">High-quality unofficial servers that plug known gaps. Vet stars + last-commit before installing.</p>
-  <div class="category-block">
-    <div class="category-title"><h3>Must-Have Community Servers</h3><span class="count">16 tools</span></div>
-    <ol class="tool-list" start="25">
-      <li><span class="num">25</span><span><span class="name">Context7</span> — <span class="blurb">Live library docs (covered above).</span></span></li>
-      <li><span class="num">26</span><span><span class="name">n8n-mcp</span> — <span class="blurb">Builds n8n workflows.</span></span></li>
-      <li><span class="num">27</span><span><span class="name">Brave Search MCP</span> — <span class="blurb">Web search without Google hoops.</span></span></li>
-      <li><span class="num">28</span><span><span class="name">Perplexity MCP</span> — <span class="blurb">Sourced web answers.</span></span></li>
-      <li><span class="num">29</span><span><span class="name">Firecrawl MCP</span> — <span class="blurb">LLM-ready site scraping.</span></span></li>
-      <li><span class="num">30</span><span><span class="name">Exa MCP</span> — <span class="blurb">Semantic web search for agents.</span></span></li>
-      <li><span class="num">31</span><span><span class="name">Tavily MCP</span> — <span class="blurb">Search optimized for RAG.</span></span></li>
-      <li><span class="num">32</span><span><span class="name">Apify MCP</span> — <span class="blurb">5,000+ pre-built scrapers.</span></span></li>
-      <li><span class="num">33</span><span><span class="name">Zapier MCP</span> — <span class="blurb">8,000+ app actions.</span></span></li>
-      <li><span class="num">34</span><span><span class="name">Make.com MCP</span> — <span class="blurb">Scenario triggers.</span></span></li>
-      <li><span class="num">35</span><span><span class="name">Composio MCP</span> — <span class="blurb">250+ SaaS integrations in one server.</span></span></li>
-      <li><span class="num">36</span><span><span class="name">Obsidian MCP</span> — <span class="blurb">Vault read/write for note-takers.</span></span></li>
-      <li><span class="num">37</span><span><span class="name">Apple Shortcuts MCP</span> — <span class="blurb">Trigger macOS Shortcuts.</span></span></li>
-      <li><span class="num">38</span><span><span class="name">Gmail MCP</span> — <span class="blurb">Read/send/search mail.</span></span></li>
-      <li><span class="num">39</span><span><span class="name">Spotify MCP</span> — <span class="blurb">Playback, playlists, recs.</span></span></li>
-      <li><span class="num">40</span><span><span class="name">YouTube Transcript MCP</span> — <span class="blurb">Pull transcripts for summarization.</span></span></li>
-    </ol>
-  </div>
-  <div class="category-block">
-    <div class="category-title"><h3>Specialist & DevOps MCPs</h3><span class="count">14 tools</span></div>
-    <ol class="tool-list" start="41">
-      <li><span class="num">41</span><span><span class="name">Docker MCP</span> — <span class="blurb">Containers, compose, logs.</span></span></li>
-      <li><span class="num">42</span><span><span class="name">Kubernetes MCP</span> — <span class="blurb">kubectl wrapper for agents.</span></span></li>
-      <li><span class="num">43</span><span><span class="name">Terraform MCP</span> — <span class="blurb">Plan/apply with review gates.</span></span></li>
-      <li><span class="num">44</span><span><span class="name">Grafana MCP</span> — <span class="blurb">Query dashboards & alerts.</span></span></li>
-      <li><span class="num">45</span><span><span class="name">Datadog MCP</span> — <span class="blurb">Metrics, logs, APM traces.</span></span></li>
-      <li><span class="num">46</span><span><span class="name">PagerDuty MCP</span> — <span class="blurb">Incident triage from CLI.</span></span></li>
-      <li><span class="num">47</span><span><span class="name">MongoDB MCP</span> — <span class="blurb">Collections, aggregation.</span></span></li>
-      <li><span class="num">48</span><span><span class="name">Redis MCP</span> — <span class="blurb">Cache inspection & ops.</span></span></li>
-      <li><span class="num">49</span><span><span class="name">Plaid MCP</span> — <span class="blurb">Banking data (matches your finance stack).</span></span></li>
-      <li><span class="num">50</span><span><span class="name">Coinbase MCP</span> — <span class="blurb">Prices, portfolio (matches your finance stack).</span></span></li>
-      <li><span class="num">51</span><span><span class="name">Alpaca MCP</span> — <span class="blurb">Broker trading API.</span></span></li>
-      <li><span class="num">52</span><span><span class="name">HubSpot MCP</span> — <span class="blurb">CRM contacts, deals, tickets.</span></span></li>
-      <li><span class="num">53</span><span><span class="name">Intercom MCP</span> — <span class="blurb">Support conversations.</span></span></li>
-      <li><span class="num">54</span><span><span class="name">Puppeteer MCP</span> — <span class="blurb">Lighter-weight Playwright alt.</span></span></li>
-    </ol>
-  </div>
-</section>
-
-<!-- ========== SKILLS ========== -->
-<section id="skills">
-  <h2>Skills & Skill Packs</h2>
-  <p class="section-lede">Markdown-based capability modules that load on demand. Lower overhead than MCPs, portable across Claude Code, Cursor, Codex CLI.</p>
-  <div class="category-block">
-    <div class="category-title"><h3>Essential Skill Collections</h3><span class="count">14 tools</span></div>
-    <ol class="tool-list" start="55">
-      <li><span class="num">55</span><span><span class="name">Anthropic Official Skills</span> — <span class="blurb">pdf, xlsx, docx, pptx, skill-creator (already in your stack).</span></span></li>
-      <li><span class="num">56</span><span><span class="name">Superpowers (obra)</span> — <span class="blurb">Covered above.</span></span></li>
-      <li><span class="num">57</span><span><span class="name">VoltAgent/awesome-agent-skills</span> — <span class="blurb">1,000+ curated skills directory.</span></span></li>
-      <li><span class="num">58</span><span><span class="name">alirezarezvani/claude-skills</span> — <span class="blurb">232+ engineering/marketing/product skills.</span></span></li>
-      <li><span class="num">59</span><span><span class="name">travisvn/awesome-claude-skills</span> — <span class="blurb">Curated skill index with installers.</span></span></li>
-      <li><span class="num">60</span><span><span class="name">ComposioHQ/awesome-claude-skills</span> — <span class="blurb">Cross-surface skill compilations.</span></span></li>
-      <li><span class="num">61</span><span><span class="name">Claude Scientific Skills</span> — <span class="blurb">Research/engineering workflows.</span></span></li>
-      <li><span class="num">62</span><span><span class="name">Trail of Bits Security Skills</span> — <span class="blurb">Code auditing, vuln detection.</span></span></li>
-      <li><span class="num">63</span><span><span class="name">next-skills</span> — <span class="blurb">Next.js patterns (app router, server actions).</span></span></li>
-      <li><span class="num">64</span><span><span class="name">Fullstack Dev Skills</span> — <span class="blurb">65+ stack-specific skills.</span></span></li>
-      <li><span class="num">65</span><span><span class="name">translate-book</span> — <span class="blurb">Parallel subagent book translation.</span></span></li>
-      <li><span class="num">66</span><span><span class="name">manim_skill</span> — <span class="blurb">3Blue1Brown-style math animations.</span></span></li>
-      <li><span class="num">67</span><span><span class="name">napkin</span> — <span class="blurb">Persistent memory of past mistakes.</span></span></li>
-      <li><span class="num">68</span><span><span class="name">antigravity-awesome-skills</span> — <span class="blurb">1,400+ skills via npm installer.</span></span></li>
-    </ol>
-  </div>
-</section>
-
-<!-- ========== SUBAGENTS ========== -->
-<section id="agents">
-  <h2>Subagents & Orchestrators</h2>
-  <p class="section-lede">Specialist agents Claude hands work off to. Great for parallel review, security, infra — domains where a narrower system prompt beats the main loop.</p>
-  <div class="category-block">
-    <div class="category-title"><h3>Subagent Libraries</h3><span class="count">12 tools</span></div>
-    <ol class="tool-list" start="69">
-      <li><span class="num">69</span><span><span class="name">wshobson/agents</span> — <span class="blurb">Covered above.</span></span></li>
-      <li><span class="num">70</span><span><span class="name">claude-code-subagents</span> — <span class="blurb">100+ production subagents.</span></span></li>
-      <li><span class="num">71</span><span><span class="name">AgentSys (avifenesh)</span> — <span class="blurb">PR mgmt, perf investigation, drift.</span></span></li>
-      <li><span class="num">72</span><span><span class="name">ContextKit (Cihat Gündüz)</span> — <span class="blurb">4-phase planning + quality agents.</span></span></li>
-      <li><span class="num">73</span><span><span class="name">Claude Squad</span> — <span class="blurb">Parallel agents in isolated workspaces.</span></span></li>
-      <li><span class="num">74</span><span><span class="name">Auto-Claude</span> — <span class="blurb">Autonomous multi-agent framework.</span></span></li>
-      <li><span class="num">75</span><span><span class="name">Ralph Orchestrator</span> — <span class="blurb">Task-completion loop controller.</span></span></li>
-      <li><span class="num">76</span><span><span class="name">shinpr/claude-code-workflows</span> — <span class="blurb">Production dev workflows, specialized agents.</span></span></li>
-      <li><span class="num">77</span><span><span class="name">code-reviewer (built-in)</span> — <span class="blurb">Native subagent for PR review.</span></span></li>
-      <li><span class="num">78</span><span><span class="name">security-auditor</span> — <span class="blurb">OWASP/credential scan specialist.</span></span></li>
-      <li><span class="num">79</span><span><span class="name">test-automator</span> — <span class="blurb">pytest/vitest scaffolding.</span></span></li>
-      <li><span class="num">80</span><span><span class="name">deployment-engineer</span> — <span class="blurb">CI/CD + rollout agents.</span></span></li>
-    </ol>
-  </div>
-</section>
-
-<!-- ========== HOOKS ========== -->
-<section id="hooks">
-  <h2>Hooks & Automation</h2>
-  <p class="section-lede">Shell commands that fire on lifecycle events. Deterministic guardrails — the piece LLMs can't skip.</p>
-  <div class="category-block">
-    <div class="category-title"><h3>Hook Patterns & Collections</h3><span class="count">10 tools</span></div>
-    <ol class="tool-list" start="81">
-      <li><span class="num">81</span><span><span class="name">TDD Guard</span> — <span class="blurb">Blocks non-TDD file writes.</span></span></li>
-      <li><span class="num">82</span><span><span class="name">Dippy</span> — <span class="blurb">Auto-approves safe bash reads.</span></span></li>
-      <li><span class="num">83</span><span><span class="name">TypeScript Quality Hooks</span> — <span class="blurb">Live tsc + eslint gating.</span></span></li>
-      <li><span class="num">84</span><span><span class="name">Prettier-on-PostToolUse</span> — <span class="blurb">Auto-format after every edit.</span></span></li>
-      <li><span class="num">85</span><span><span class="name">Env-file Shield</span> — <span class="blurb">Block edits to .env / secrets.</span></span></li>
-      <li><span class="num">86</span><span><span class="name">Stop-on-Red-Test</span> — <span class="blurb">Halt session if tests fail.</span></span></li>
-      <li><span class="num">87</span><span><span class="name">less-permission-prompts</span> — <span class="blurb">Auto-allowlist from transcripts (in your stack).</span></span></li>
-      <li><span class="num">88</span><span><span class="name">Commit-on-Stop</span> — <span class="blurb">Auto-snapshot work at session end.</span></span></li>
-      <li><span class="num">89</span><span><span class="name">SubagentStop Slack notify</span> — <span class="blurb">Ping when long agent finishes.</span></span></li>
-      <li><span class="num">90</span><span><span class="name">PreCompact Transcript Archive</span> — <span class="blurb">Save full convo before compaction.</span></span></li>
-    </ol>
-  </div>
-</section>
-
-<!-- ========== COMPANIONS ========== -->
-<section id="companions">
-  <h2>Companion AI Tools</h2>
-  <p class="section-lede">Work alongside Claude Code — not replacements. Pair terminal agent (deep work) with inline AI (autocomplete).</p>
-  <div class="category-block">
-    <div class="category-title"><h3>Editors & Inline Agents</h3><span class="count">6 tools</span></div>
-    <ol class="tool-list" start="91">
-      <li><span class="num">91</span><span><span class="name">Cursor</span> — <span class="blurb">Best all-round AI editor; Composer for multi-file.</span></span></li>
-      <li><span class="num">92</span><span><span class="name">Windsurf</span> — <span class="blurb">Cascade context tracking; gentler than Cursor.</span></span></li>
-      <li><span class="num">93</span><span><span class="name">Cline</span> — <span class="blurb">Open-source VS Code agent; pairs with DeepSeek for cheap.</span></span></li>
-      <li><span class="num">94</span><span><span class="name">Aider</span> — <span class="blurb">Terminal git-aware pair-programmer.</span></span></li>
-      <li><span class="num">95</span><span><span class="name">Codex CLI</span> — <span class="blurb">OpenAI's Claude Code competitor; reuses your skills folder.</span></span></li>
-      <li><span class="num">96</span><span><span class="name">Gemini CLI</span> — <span class="blurb">Google terminal agent; shares skill format.</span></span></li>
-    </ol>
-  </div>
-</section>
-
-<!-- ========== KNOWLEDGE ========== -->
-<section id="knowledge">
-  <h2>Knowledge & Research Layer</h2>
-  <p class="section-lede">Claude Code is weak at deep, sourced research. These fill the gap.</p>
-  <div class="category-block">
-    <div class="category-title"><h3>Research & Knowledge</h3><span class="count">4 tools</span></div>
-    <ol class="tool-list" start="97">
-      <li><span class="num">97</span><span><span class="name">NotebookLM</span> — <span class="blurb">Grounded multi-source research; audio briefings.</span></span></li>
-      <li><span class="num">98</span><span><span class="name">Perplexity Spaces</span> — <span class="blurb">Shared research workspaces with sources.</span></span></li>
-      <li><span class="num">99</span><span><span class="name">Obsidian + Claude</span> — <span class="blurb">Local markdown vault as second brain.</span></span></li>
-      <li><span class="num">100</span><span><span class="name">Readwise Reader</span> — <span class="blurb">Save everything; export to NotebookLM.</span></span></li>
-    </ol>
-  </div>
-</section>
-
-<!-- ========== DASHBOARDS ========== -->
-<section id="dashboards">
-  <h2>Dashboards, Marketplaces & Monitoring</h2>
-  <p class="section-lede">Bonus tier — tooling to watch, discover, and manage everything above.</p>
-  <div class="category-block">
-    <div class="category-title"><h3>Ecosystem Tools</h3><span class="count">8 tools</span></div>
-    <ol class="tool-list" start="1">
-      <li><span class="num">★</span><span><span class="name">buildwithclaude.com</span> — <span class="blurb">Plugin marketplace; 500+ extensions.</span></span></li>
-      <li><span class="num">★</span><span><span class="name">registry.modelcontextprotocol.io</span> — <span class="blurb">Official MCP registry.</span></span></li>
-      <li><span class="num">★</span><span><span class="name">glama.ai/mcp/servers</span> — <span class="blurb">21k+ MCP server directory.</span></span></li>
-      <li><span class="num">★</span><span><span class="name">hesreallyhim/awesome-claude-code</span> — <span class="blurb">The canonical awesome-list.</span></span></li>
-      <li><span class="num">★</span><span><span class="name">ccflare / better-ccflare</span> — <span class="blurb">Usage/cost dashboards.</span></span></li>
-      <li><span class="num">★</span><span><span class="name">ccxray</span> — <span class="blurb">HTTP proxy for request inspection.</span></span></li>
-      <li><span class="num">★</span><span><span class="name">claudekit</span> — <span class="blurb">CLI toolkit, checkpointing, subagents.</span></span></li>
-      <li><span class="num">★</span><span><span class="name">Cowork</span> — <span class="blurb">Team/plugin management (in your stack).</span></span></li>
-    </ol>
-  </div>
+<!-- ========== INTERACTIVE GRID ========== -->
+<section id="directory">
+  <h2>Full Directory — Click to Expand</h2>
+  <p class="section-lede">Filtered by chips and search. Click any card for install command + official docs.</p>
+  <div id="groups"></div>
+  <div id="empty" class="empty-state" style="display:none">No tools match. Try a different search or clear the filter.</div>
 </section>
 
 <!-- ========== STRATEGY ========== -->
 <section id="strategy">
-  <h2>Recommended Stack Strategy for You</h2>
-  <p class="section-lede">Given your profile — Python primary, Windows + Mac, finance/health/client projects, existing Coinbase/Plaid/Wealthsimple integrations:</p>
-
-  <div class="category-block">
-    <div class="category-title"><h3>Phase 1 — This Week (high-leverage, zero-friction)</h3></div>
-    <p style="color:var(--muted);margin:0 0 10px;">Install in order: <code>GitHub MCP</code> → <code>Filesystem MCP</code> → <code>Context7</code> → <code>Sentry MCP</code> → <code>Notion MCP</code>. All are remote or <code>npx</code> — under 15 minutes total.</p>
-  </div>
-
-  <div class="category-block">
-    <div class="category-title"><h3>Phase 2 — Next (domain-specific power-ups)</h3></div>
-    <p style="color:var(--muted);margin:0 0 10px;">For your finance panel: add <code>Plaid MCP</code> + <code>Coinbase MCP</code> so Claude can debug live data. For Jarvis/projects: add <code>Playwright MCP</code> + <code>n8n-mcp</code>. Install <code>wshobson/agents</code> to get parallel specialists.</p>
-  </div>
-
-  <div class="category-block">
-    <div class="category-title"><h3>Phase 3 — Workflow Polish</h3></div>
-    <p style="color:var(--muted);margin:0 0 10px;">Adopt <code>Superpowers</code> skill framework for larger features. Add a Prettier/Black PostToolUse hook. Wire Claude Code <code>Stop</code> event to a desktop notification on Windows via PowerShell. Start using NotebookLM for any domain research before coding.</p>
-  </div>
-
-  <div class="notes">
-    <strong>Avoid over-installing.</strong> Every MCP loaded = tokens eaten on startup + tool-choice confusion. Stick to the Top 10, add domain-specific servers only when actively working on that domain. Use <code>claude mcp list</code> and <code>claude mcp remove &lt;name&gt;</code> regularly.
-  </div>
+  <h2>Stack Strategy</h2>
+  <p class="section-lede">Phased rollout tailored to your setup — Python primary, Windows + Mac, finance/health/client projects.</p>
+  <div class="notes"><strong>Phase 1 — This Week (15 min).</strong> Install: <code>GitHub MCP</code> → <code>Filesystem MCP</code> → <code>Context7</code> → <code>Sentry MCP</code> → <code>ccusage</code>. All remote or npx.</div>
+  <div class="notes"><strong>Phase 2 — Domain.</strong> Finance panel: <code>Plaid MCP</code> + <code>Coinbase MCP</code> + <code>Postgres MCP</code>. Add <code>cc-statusline</code> for live token cost. Use NotebookLM for research briefs.</div>
+  <div class="notes"><strong>Phase 3 — Scale.</strong> <code>wshobson/agents</code> for orchestration. <code>Superpowers</code> for big features. <code>Langfuse</code> when shipping agent code. <code>Ollama</code> + <code>Continue.dev</code> for offline.</div>
+  <div class="notes"><strong>Phase 4 — Polish.</strong> Black PostToolUse hook. Stop-on-Red-Test hook. Windows desktop notification on <code>Stop</code>. <code>Oh My Posh</code> unified prompt across Mac + PC.</div>
 </section>
 
 </main>
 
-<footer>
-  Claude Code Power Stack · Compiled 2026-04-19 · Save this page or bookmark <code>active/projects/claude-code-toolkit/index.html</code>
-</footer>
+<!-- Modal -->
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<footer>Claude Code Power Stack v3 · Interactive · 234 tools · <code>active/projects/claude-code-toolkit/index.html</code></footer>
+
+<script>
+// ==================== DATA ====================
+const CATEGORIES = [
+  { id: 'all', label: 'All' },
+  { id: 'official-mcp', label: 'Official MCPs' },
+  { id: 'community-mcp', label: 'Community MCPs' },
+  { id: 'db-mcp', label: 'Database MCPs' },
+  { id: 'browser-mcp', label: 'Browser MCPs' },
+  { id: 'devops-mcp', label: 'DevOps MCPs' },
+  { id: 'skill', label: 'Skills' },
+  { id: 'subagent', label: 'Subagents' },
+  { id: 'framework', label: 'Agent Frameworks' },
+  { id: 'hook', label: 'Hooks' },
+  { id: 'obs', label: 'Observability' },
+  { id: 'usage', label: 'Usage Tracking' },
+  { id: 'companion', label: 'AI Editors' },
+  { id: 'local', label: 'Local LLMs' },
+  { id: 'terminal', label: 'Terminal' },
+  { id: 'knowledge', label: 'Knowledge' },
+  { id: 'marketplace', label: 'Marketplaces' },
+];
+
+const GROUPS = {
+  'official-mcp': { title: 'Official & First-Party MCP Servers', sub: 'Maintained by Anthropic, the vendor, or via official partnership.' },
+  'community-mcp': { title: 'Community & Third-Party MCPs', sub: 'Vetted picks from the 12,000+ MCPs in public registries.' },
+  'db-mcp': { title: 'Database & Vector Store MCPs', sub: 'Query production schemas. Read-only by default on the Postgres reference.' },
+  'browser-mcp': { title: 'Browser & Computer-Use MCPs', sub: 'Give Claude eyes and hands. Pick one primary to avoid confusion.' },
+  'devops-mcp': { title: 'DevOps & Infra MCPs', sub: 'Containers, IaC, monitoring, CI/CD.' },
+  'skill': { title: 'Skills & Skill Packs', sub: 'Markdown capability modules. Lower overhead than MCPs, portable across agents.' },
+  'subagent': { title: 'Subagents & Orchestrators', sub: 'Specialists Claude hands work off to.' },
+  'framework': { title: 'Agent SDKs & Frameworks', sub: 'For building your own agents outside Claude Code.' },
+  'hook': { title: 'Hooks & Lifecycle Automation', sub: 'Shell commands on lifecycle events. Deterministic guardrails.' },
+  'obs': { title: 'Observability, Evals & Tracing', sub: 'See what agents, skills, and MCPs are actually doing.' },
+  'usage': { title: 'Usage, Cost & Status Line Tools', sub: 'Cost and rate-limit visibility.' },
+  'companion': { title: 'Companion AI IDEs & Agents', sub: 'Pair Claude Code (terminal) with an editor-based autocomplete.' },
+  'local': { title: 'Local LLM Runners', sub: 'Offline / private / free — pair with Cline or Continue.dev.' },
+  'terminal': { title: 'Terminal & Shell Enhancements', sub: 'Claude Code lives here. Faster shell = faster everything.' },
+  'knowledge': { title: 'Knowledge, Research & PKM', sub: 'Fill Claude Code\'s sourced-research gap.' },
+  'marketplace': { title: 'Marketplaces, Registries & Directories', sub: 'Discover faster than blog posts can publish.' },
+};
+
+// Each tool: {id, name, cat, tag, blurb, url, install?}
+const TOOLS = [
+  // ========== Top 10 hero (also render in dir) ==========
+  { id:1, name:'GitHub MCP', cat:'official-mcp', tag:'Official', blurb:'51 tools for repos, issues, PRs, Actions. #1 most-used MCP (28k+ stars).', url:'https://github.com/github/github-mcp-server', install:'claude mcp add --transport http github https://api.githubcopilot.com/mcp/' },
+  { id:2, name:'Filesystem MCP', cat:'official-mcp', tag:'Official', blurb:'Sandboxed read/write across any folders you allow.', url:'https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem', install:'claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem "C:/Users/johnd/Personal"' },
+  { id:3, name:'Playwright MCP', cat:'browser-mcp', tag:'Microsoft', blurb:'Accessibility-tree browser automation — no screenshot guessing.', url:'https://github.com/microsoft/playwright-mcp', install:'claude mcp add playwright -- npx -y @playwright/mcp@latest\nnpx playwright install chromium' },
+  { id:4, name:'Sentry MCP', cat:'official-mcp', tag:'Remote · OAuth', blurb:'Error tracking + Seer root cause. Zero-install remote server.', url:'https://mcp.sentry.dev/', install:'claude mcp add --transport http sentry https://mcp.sentry.dev/mcp' },
+  { id:5, name:'Notion MCP', cat:'official-mcp', tag:'Official Remote', blurb:'18 tools for pages, databases, search, comments.', url:'https://developers.notion.com/docs/mcp', install:'claude mcp add --transport http notion https://mcp.notion.com/mcp' },
+  { id:6, name:'Linear MCP', cat:'official-mcp', tag:'Official Remote', blurb:'23+ tools for issues, projects, initiatives, milestones.', url:'https://linear.app/changelog/2025-mcp', install:'claude mcp add --transport http linear https://mcp.linear.app/sse' },
+  { id:7, name:'Atlassian MCP', cat:'official-mcp', tag:'Official', blurb:'Jira + Confluence — search tickets with JQL, update statuses.', url:'https://www.atlassian.com/blog/announcements/remote-mcp-server', install:'claude mcp add --transport http atlassian https://mcp.atlassian.com/v1/sse' },
+  { id:8, name:'Slack MCP', cat:'official-mcp', tag:'Official', blurb:'Messages, channel history, search.', url:'https://github.com/modelcontextprotocol/servers/tree/main/src/slack', install:'claude mcp add slack -- npx -y @modelcontextprotocol/server-slack' },
+  { id:9, name:'Postgres MCP', cat:'db-mcp', tag:'Reference', blurb:'Read-only SQL + schema inspect. The reference implementation.', url:'https://github.com/modelcontextprotocol/servers/tree/main/src/postgres', install:'claude mcp add postgres -- npx -y @modelcontextprotocol/server-postgres "postgresql://user:pass@host/db"' },
+  { id:10, name:'SQLite MCP', cat:'db-mcp', tag:'Reference', blurb:'Local DB queries + migrations.', url:'https://github.com/modelcontextprotocol/servers/tree/main/src/sqlite', install:'claude mcp add sqlite -- npx -y @modelcontextprotocol/server-sqlite ./mydb.sqlite' },
+  { id:11, name:'Google Drive MCP', cat:'official-mcp', tag:'Official', blurb:'Search + read Drive files.', url:'https://github.com/modelcontextprotocol/servers/tree/main/src/gdrive', install:'claude mcp add gdrive -- npx -y @modelcontextprotocol/server-gdrive' },
+  { id:12, name:'Google Calendar MCP', cat:'official-mcp', tag:'In Your Stack', blurb:'Events, scheduling, free-busy.', url:'https://github.com/nspady/google-calendar-mcp' },
+  { id:13, name:'Gmail MCP', cat:'official-mcp', tag:'Community Top', blurb:'Read/send/search mail.', url:'https://github.com/GongRzhe/Gmail-MCP-Server', install:'claude mcp add gmail -- npx -y @gongrzhe/server-gmail-autoauth-mcp' },
+  { id:14, name:'Stripe MCP', cat:'official-mcp', tag:'Official', blurb:'Customers, subscriptions, payments.', url:'https://github.com/stripe/agent-toolkit/tree/main/modelcontextprotocol' },
+  { id:15, name:'Cloudflare MCP', cat:'official-mcp', tag:'Official', blurb:'Workers, KV, DNS, R2.', url:'https://github.com/cloudflare/mcp-server-cloudflare' },
+  { id:16, name:'Vercel MCP', cat:'official-mcp', tag:'Official', blurb:'Deployments, logs, envs.', url:'https://vercel.com/docs/mcp' },
+  { id:17, name:'AWS MCP', cat:'official-mcp', tag:'Official', blurb:'S3, Lambda, DynamoDB, CloudWatch.', url:'https://github.com/awslabs/mcp' },
+  { id:18, name:'Supabase MCP', cat:'official-mcp', tag:'Official', blurb:'Postgres + auth + storage.', url:'https://github.com/supabase-community/supabase-mcp' },
+  { id:19, name:'Figma MCP', cat:'official-mcp', tag:'2026 Partner', blurb:'Design tokens, components, dev mode.', url:'https://www.figma.com/developers/mcp' },
+  { id:20, name:'Amplitude MCP', cat:'official-mcp', tag:'2026 Partner', blurb:'Product analytics queries.', url:'https://amplitude.com/docs/mcp' },
+  { id:21, name:'Asana MCP', cat:'official-mcp', tag:'2026 Partner', blurb:'Tasks, projects, workflows.', url:'https://developers.asana.com/docs/mcp' },
+  { id:22, name:'Box MCP', cat:'official-mcp', tag:'2026 Partner', blurb:'Enterprise file search.', url:'https://developer.box.com/guides/box-mcp/' },
+  { id:23, name:'Clay MCP', cat:'official-mcp', tag:'2026 Partner', blurb:'GTM data enrichment.', url:'https://docs.clay.com/' },
+  { id:24, name:'Hex MCP', cat:'official-mcp', tag:'2026 Partner', blurb:'Data notebooks + SQL.', url:'https://learn.hex.tech/docs/explore-data/ai-and-chat/mcp-server' },
+  { id:25, name:'Salesforce MCP', cat:'official-mcp', tag:'2026 Partner', blurb:'CRM records.', url:'https://developer.salesforce.com/' },
+  { id:26, name:'HubSpot MCP', cat:'official-mcp', tag:'Official', blurb:'Contacts, deals, tickets.', url:'https://developers.hubspot.com/mcp' },
+  { id:27, name:'Intercom MCP', cat:'official-mcp', tag:'Official', blurb:'Support conversations.', url:'https://developers.intercom.com/docs/references/mcp' },
+  { id:28, name:'PagerDuty MCP', cat:'official-mcp', tag:'Official', blurb:'Incident triage from CLI.', url:'https://github.com/PagerDuty/pagerduty-mcp-server' },
+  { id:29, name:'Datadog MCP', cat:'official-mcp', tag:'Official', blurb:'Metrics, logs, APM traces.', url:'https://docs.datadoghq.com/bits_ai/' },
+  { id:30, name:'Apollo MCP', cat:'official-mcp', tag:'In Your Stack', blurb:'Lead enrichment — apollo.io APIs.', url:'https://mcp.apollo.io/' },
+
+  // Community MCP — Search & Research
+  { id:31, name:'Context7 MCP', cat:'community-mcp', tag:'Upstash', blurb:'Live library docs for 10k+ libs. Fixes outdated API hallucinations.', url:'https://github.com/upstash/context7', install:'claude mcp add --transport http context7 https://mcp.context7.com/mcp' },
+  { id:32, name:'Brave Search MCP', cat:'community-mcp', tag:'Reference', blurb:'Web search without Google hoops.', url:'https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search', install:'claude mcp add brave -- npx -y @modelcontextprotocol/server-brave-search' },
+  { id:33, name:'Perplexity MCP', cat:'community-mcp', tag:'Community', blurb:'Sourced web answers.', url:'https://github.com/ppl-ai/modelcontextprotocol' },
+  { id:34, name:'Exa MCP', cat:'community-mcp', tag:'Exa', blurb:'Semantic web search for agents.', url:'https://github.com/exa-labs/exa-mcp-server' },
+  { id:35, name:'Tavily MCP', cat:'community-mcp', tag:'Tavily', blurb:'Search optimized for RAG.', url:'https://github.com/tavily-ai/tavily-mcp' },
+  { id:36, name:'Firecrawl MCP', cat:'community-mcp', tag:'Mendable', blurb:'LLM-ready site scraping.', url:'https://github.com/mendableai/firecrawl-mcp-server' },
+  { id:37, name:'Apify MCP', cat:'community-mcp', tag:'Apify', blurb:'5,000+ pre-built scrapers.', url:'https://docs.apify.com/platform/integrations/mcp' },
+  { id:38, name:'DeepWiki MCP', cat:'community-mcp', tag:'Devin', blurb:'AI-generated wiki per GitHub repo.', url:'https://docs.devin.ai/work-with-devin/deepwiki-mcp' },
+  { id:39, name:'arxiv MCP', cat:'community-mcp', tag:'Research', blurb:'Scientific paper search.', url:'https://github.com/blazickjp/arxiv-mcp-server' },
+  { id:40, name:'YouTube Transcript MCP', cat:'community-mcp', tag:'Community', blurb:'Pull transcripts for summarization.', url:'https://github.com/kimtaeyoon83/mcp-server-youtube-transcript' },
+
+  // Integration Hubs
+  { id:41, name:'n8n-mcp', cat:'community-mcp', tag:'Automation', blurb:'Builds n8n workflows end-to-end from plain English (1,505 nodes).', url:'https://github.com/czlonkowski/n8n-mcp', install:'claude mcp add n8n -- npx -y n8n-mcp' },
+  { id:42, name:'Zapier MCP', cat:'community-mcp', tag:'Zapier', blurb:'8,000+ app actions through MCP.', url:'https://zapier.com/mcp' },
+  { id:43, name:'Make.com MCP', cat:'community-mcp', tag:'Make', blurb:'Scenario triggers via MCP.', url:'https://www.make.com/en/help/tools/mcp-server' },
+  { id:44, name:'Composio MCP', cat:'community-mcp', tag:'Composio', blurb:'850+ SaaS apps, OAuth-managed.', url:'https://mcp.composio.dev/' },
+  { id:45, name:'Pipedream MCP', cat:'community-mcp', tag:'Pipedream', blurb:'Event-driven automation.', url:'https://pipedream.com/docs/connect/mcp/' },
+  { id:46, name:'Activepieces MCP', cat:'community-mcp', tag:'Open-source', blurb:'Open-source Zapier alternative with MCP.', url:'https://www.activepieces.com/docs/mcp' },
+  { id:47, name:'Windmill MCP', cat:'community-mcp', tag:'Windmill', blurb:'Self-hosted automation platform.', url:'https://www.windmill.dev/' },
+  { id:48, name:'IFTTT MCP', cat:'community-mcp', tag:'Community', blurb:'Consumer app triggers.', url:'https://ifttt.com/' },
+  { id:49, name:'Trigger.dev MCP', cat:'community-mcp', tag:'Trigger.dev', blurb:'Background jobs for devs.', url:'https://trigger.dev/' },
+  { id:50, name:'Inngest MCP', cat:'community-mcp', tag:'Inngest', blurb:'Durable function workflows.', url:'https://www.inngest.com/' },
+
+  // Personal Productivity
+  { id:51, name:'Obsidian MCP', cat:'community-mcp', tag:'Community', blurb:'Vault read/write.', url:'https://github.com/MarkusPfundstein/mcp-obsidian' },
+  { id:52, name:'Logseq MCP', cat:'community-mcp', tag:'Community', blurb:'Block-based PKM.', url:'https://github.com/dailydaniel/logseq-mcp' },
+  { id:53, name:'Apple Shortcuts MCP', cat:'community-mcp', tag:'macOS', blurb:'Trigger macOS Shortcuts.', url:'https://github.com/recursechamber/apple-shortcuts-mcp' },
+  { id:54, name:'Spotify MCP', cat:'community-mcp', tag:'Community', blurb:'Playback, playlists, recs.', url:'https://github.com/varunneal/spotify-mcp' },
+  { id:55, name:'Todoist MCP', cat:'community-mcp', tag:'Community', blurb:'Tasks + natural-language dates.', url:'https://github.com/abhiz123/todoist-mcp-server' },
+  { id:56, name:'Raindrop MCP', cat:'community-mcp', tag:'Community', blurb:'Bookmarks + highlights.', url:'https://github.com/adeze/raindrop-mcp' },
+  { id:57, name:'Readwise MCP', cat:'community-mcp', tag:'Community', blurb:'Saved articles + book highlights.', url:'https://github.com/readwiseio/readwise-mcp' },
+  { id:58, name:'Things MCP', cat:'community-mcp', tag:'macOS', blurb:'Mac task manager.', url:'https://github.com/hald/things-mcp' },
+  { id:59, name:'Apple Notes/Reminders MCP', cat:'community-mcp', tag:'macOS', blurb:'Native Apple apps.', url:'https://github.com/sirmews/apple-notes-mcp' },
+  { id:60, name:'Discord MCP', cat:'community-mcp', tag:'Community', blurb:'Server messages + channels.', url:'https://github.com/v-3/discordmcp' },
+
+  // Finance
+  { id:61, name:'Plaid MCP', cat:'community-mcp', tag:'Fits Your Stack', blurb:'Banking + transaction data. (You already have Plaid integrated.)', url:'https://github.com/plaid/plaid-mcp' },
+  { id:62, name:'Coinbase MCP', cat:'community-mcp', tag:'Fits Your Stack', blurb:'Prices, portfolio, trades. (You already have Coinbase integrated.)', url:'https://github.com/coinbase/coinbase-mcp' },
+  { id:63, name:'Alpaca MCP', cat:'community-mcp', tag:'Broker', blurb:'Broker trading API.', url:'https://github.com/alpacahq/alpaca-mcp-server' },
+  { id:64, name:'Questrade MCP', cat:'community-mcp', tag:'Canadian Broker', blurb:'Canadian broker integration.', url:'https://www.questrade.com/api' },
+  { id:65, name:'Yahoo Finance MCP', cat:'community-mcp', tag:'Market Data', blurb:'Quotes, fundamentals, news.', url:'https://github.com/narumiruna/yfinance-mcp' },
+  { id:66, name:'CoinGecko MCP', cat:'community-mcp', tag:'Crypto', blurb:'Crypto market data.', url:'https://github.com/coingecko/coingecko-mcp' },
+  { id:67, name:'Polygon.io MCP', cat:'community-mcp', tag:'Market Data', blurb:'Real-time stock feeds.', url:'https://polygon.io/blog/mcp-server' },
+  { id:68, name:'Ramp MCP', cat:'community-mcp', tag:'Expenses', blurb:'Corporate cards & expenses.', url:'https://ramp.com/developers' },
+
+  // DB
+  { id:69, name:'MySQL MCP', cat:'db-mcp', tag:'Community', blurb:'Queries + schema inspect.', url:'https://github.com/designcomputer/mysql_mcp_server' },
+  { id:70, name:'MongoDB MCP', cat:'db-mcp', tag:'Official', blurb:'Collections + aggregation.', url:'https://github.com/mongodb-js/mongodb-mcp-server' },
+  { id:71, name:'Redis MCP', cat:'db-mcp', tag:'Official', blurb:'Cache inspection & ops.', url:'https://github.com/redis/mcp-redis' },
+  { id:72, name:'BigQuery MCP', cat:'db-mcp', tag:'Google', blurb:'Google warehouse queries.', url:'https://github.com/googleapis/genai-toolbox' },
+  { id:73, name:'Snowflake MCP', cat:'db-mcp', tag:'Snowflake', blurb:'Enterprise warehouse queries.', url:'https://github.com/Snowflake-Labs/mcp' },
+  { id:74, name:'DuckDB MCP', cat:'db-mcp', tag:'DuckDB', blurb:'Local analytics engine.', url:'https://github.com/motherduckdb/mcp-server-motherduck' },
+  { id:75, name:'ClickHouse MCP', cat:'db-mcp', tag:'ClickHouse', blurb:'OLAP columnar DB.', url:'https://github.com/ClickHouse/mcp-clickhouse' },
+
+  // Vector
+  { id:76, name:'Chroma MCP', cat:'db-mcp', tag:'Vector', blurb:'Leading open-source vector DB.', url:'https://github.com/chroma-core/chroma-mcp' },
+  { id:77, name:'Pinecone MCP', cat:'db-mcp', tag:'Vector', blurb:'Hosted, low-latency similarity search.', url:'https://github.com/pinecone-io/pinecone-mcp' },
+  { id:78, name:'Weaviate MCP', cat:'db-mcp', tag:'Vector', blurb:'Built-in hybrid search.', url:'https://github.com/weaviate/mcp-server-weaviate' },
+  { id:79, name:'Qdrant MCP', cat:'db-mcp', tag:'Vector', blurb:'Rust-powered, self-hostable.', url:'https://github.com/qdrant/mcp-server-qdrant' },
+  { id:80, name:'Milvus MCP', cat:'db-mcp', tag:'Vector', blurb:'Enterprise-scale vector DB.', url:'https://github.com/zilliztech/mcp-server-milvus' },
+  { id:81, name:'pgvector MCP', cat:'db-mcp', tag:'Vector', blurb:'Postgres extension — simplest RAG path.', url:'https://github.com/pgvector/pgvector' },
+
+  // Browser
+  { id:82, name:'Chrome DevTools MCP', cat:'browser-mcp', tag:'Google', blurb:'Network, console, performance profiling.', url:'https://github.com/ChromeDevTools/chrome-devtools-mcp' },
+  { id:83, name:'Puppeteer MCP', cat:'browser-mcp', tag:'Reference', blurb:'Lighter-weight Playwright alt.', url:'https://github.com/modelcontextprotocol/servers/tree/main/src/puppeteer' },
+  { id:84, name:'Browser MCP (browsermcp.io)', cat:'browser-mcp', tag:'Community', blurb:'VS Code / Cursor / Claude bridge.', url:'https://browsermcp.io/' },
+  { id:85, name:'mcp-chrome (hangwin)', cat:'browser-mcp', tag:'Extension', blurb:'Chrome extension — uses YOUR logged-in session.', url:'https://github.com/hangwin/mcp-chrome' },
+  { id:86, name:'Claude in Chrome', cat:'browser-mcp', tag:'Official Beta', blurb:'Official beta Chrome extension.', url:'https://code.claude.com/docs/en/chrome' },
+  { id:87, name:'Claude Preview', cat:'browser-mcp', tag:'In Your Stack', blurb:'Screenshot + inspect local dev servers.', url:'https://docs.claude.com/en/docs/claude-code/preview' },
+  { id:88, name:'Windows-MCP', cat:'browser-mcp', tag:'In Your Stack', blurb:'OS-level automation for Windows.', url:'https://github.com/CursorTouch/Windows-MCP' },
+
+  // DevOps
+  { id:89, name:'Docker MCP', cat:'devops-mcp', tag:'Official', blurb:'Containers, compose, logs.', url:'https://github.com/docker/mcp-servers' },
+  { id:90, name:'Kubernetes MCP', cat:'devops-mcp', tag:'Community', blurb:'kubectl wrapper for agents.', url:'https://github.com/Flux159/mcp-server-kubernetes' },
+  { id:91, name:'Terraform MCP', cat:'devops-mcp', tag:'HashiCorp', blurb:'Plan/apply with review gates.', url:'https://github.com/hashicorp/terraform-mcp-server' },
+  { id:92, name:'Pulumi MCP', cat:'devops-mcp', tag:'Pulumi', blurb:'IaC in TypeScript/Python.', url:'https://github.com/pulumi/mcp-server' },
+  { id:93, name:'Grafana MCP', cat:'devops-mcp', tag:'Grafana', blurb:'Query dashboards + alerts.', url:'https://github.com/grafana/mcp-grafana' },
+  { id:94, name:'GitLab MCP', cat:'devops-mcp', tag:'Community', blurb:'Alternative to GitHub MCP.', url:'https://github.com/modelcontextprotocol/servers/tree/main/src/gitlab' },
+  { id:95, name:'Bitbucket MCP', cat:'devops-mcp', tag:'Atlassian', blurb:'Atlassian repos.', url:'https://github.com/MatanYemini/bitbucket-mcp' },
+  { id:96, name:'CircleCI MCP', cat:'devops-mcp', tag:'CircleCI', blurb:'Pipeline control from chat.', url:'https://github.com/CircleCI-Public/mcp-server-circleci' },
+  { id:97, name:'Railway MCP', cat:'devops-mcp', tag:'Community', blurb:'Simple PaaS deploys.', url:'https://github.com/jason-tan-swe/railway-mcp' },
+  { id:98, name:'Render MCP', cat:'devops-mcp', tag:'Render', blurb:'Deploy control & logs.', url:'https://render.com/docs/mcp' },
+
+  // Anthropic Skills
+  { id:99, name:'pdf skill', cat:'skill', tag:'Anthropic', blurb:'Extract, merge, split, rotate, OCR, fill forms.', url:'https://github.com/anthropics/skills' },
+  { id:100, name:'xlsx skill', cat:'skill', tag:'Anthropic', blurb:'Read/edit/create spreadsheets.', url:'https://github.com/anthropics/skills' },
+  { id:101, name:'docx skill', cat:'skill', tag:'Anthropic', blurb:'Word docs with TOC, headers, tracked changes.', url:'https://github.com/anthropics/skills' },
+  { id:102, name:'pptx skill', cat:'skill', tag:'Anthropic', blurb:'Slide decks, templates, speaker notes.', url:'https://github.com/anthropics/skills' },
+  { id:103, name:'skill-creator', cat:'skill', tag:'Anthropic', blurb:'Build/improve/eval new skills.', url:'https://github.com/anthropics/skills' },
+  { id:104, name:'frontend-design skill', cat:'skill', tag:'Anthropic', blurb:'Forces deliberate aesthetic choices first.', url:'https://github.com/anthropics/skills' },
+  { id:105, name:'webapp-testing skill', cat:'skill', tag:'Anthropic', blurb:'Browser QA via Playwright.', url:'https://github.com/anthropics/skills' },
+  { id:106, name:'simplify skill', cat:'skill', tag:'In Your Stack', blurb:'Review + fix for reuse/quality.', url:'https://github.com/anthropics/skills' },
+  { id:107, name:'consolidate-memory skill', cat:'skill', tag:'Anthropic', blurb:'Merge/prune memory files.', url:'https://github.com/anthropics/skills' },
+  { id:108, name:'github-name-finder', cat:'skill', tag:'Anthropic', blurb:'Batch-check GitHub handle availability.', url:'https://github.com/anthropics/skills' },
+  { id:109, name:'schedule skill', cat:'skill', tag:'Anthropic', blurb:'Cron-backed scheduled agents.', url:'https://github.com/anthropics/skills' },
+  { id:110, name:'setup-cowork', cat:'skill', tag:'Anthropic', blurb:'Guided Cowork plugin install.', url:'https://github.com/anthropics/skills' },
+
+  // Community Skills
+  { id:111, name:'Superpowers (obra)', cat:'skill', tag:'Framework', blurb:'Largest community skill library. Full SDLC framework: brainstorm → plan → TDD → review.', url:'https://github.com/obra/superpowers', install:'cd ~/.claude/plugins && git clone https://github.com/obra/superpowers.git' },
+  { id:112, name:'VoltAgent/awesome-agent-skills', cat:'skill', tag:'Directory', blurb:'1,000+ curated skills from Anthropic, Google Labs, Vercel, Stripe, Cloudflare.', url:'https://github.com/VoltAgent/awesome-agent-skills' },
+  { id:113, name:'alirezarezvani/claude-skills', cat:'skill', tag:'Directory', blurb:'232+ engineering/marketing/product/compliance skills.', url:'https://github.com/alirezarezvani/claude-skills' },
+  { id:114, name:'travisvn/awesome-claude-skills', cat:'skill', tag:'Directory', blurb:'Curated index with installers.', url:'https://github.com/travisvn/awesome-claude-skills' },
+  { id:115, name:'ComposioHQ/awesome-claude-skills', cat:'skill', tag:'Directory', blurb:'Cross-surface skill compilations.', url:'https://github.com/ComposioHQ/awesome-claude-skills' },
+  { id:116, name:'Claude Scientific Skills', cat:'skill', tag:'Research', blurb:'Research/engineering flows.', url:'https://github.com/anthropics/skills' },
+  { id:117, name:'Trail of Bits Security Skills', cat:'skill', tag:'Security', blurb:'Code audits + vulnerability detection.', url:'https://github.com/trailofbits/skills' },
+  { id:118, name:'Fullstack Dev Skills', cat:'skill', tag:'Community', blurb:'65+ stack-specific skills.', url:'https://github.com/VoltAgent/awesome-agent-skills' },
+  { id:119, name:'antigravity-awesome-skills', cat:'skill', tag:'Installer', blurb:'1,400+ skills via npm installer.', url:'https://github.com/sickn33/antigravity-awesome-skills' },
+  { id:120, name:'BehiSecc/awesome-claude-skills', cat:'skill', tag:'Security', blurb:'Security-focused curation.', url:'https://github.com/BehiSecc/awesome-claude-skills' },
+
+  // Niche Skills
+  { id:121, name:'next-skills', cat:'skill', tag:'Next.js', blurb:'Next.js app router patterns.', url:'https://github.com/VoltAgent/awesome-agent-skills' },
+  { id:122, name:'translate-book', cat:'skill', tag:'Translation', blurb:'Parallel subagent book translation.', url:'https://github.com/anthropics/skills' },
+  { id:123, name:'manim_skill', cat:'skill', tag:'Animation', blurb:'3Blue1Brown-style math animations.', url:'https://github.com/anthropics/skills' },
+  { id:124, name:'napkin', cat:'skill', tag:'Memory', blurb:'Persistent memory of past mistakes.', url:'https://github.com/obra/napkin' },
+  { id:125, name:'ContextKit', cat:'skill', tag:'Framework', blurb:'4-phase planning methodology by Cihat Gündüz.', url:'https://github.com/FlineDev/ContextKit' },
+  { id:126, name:'twscrape skill', cat:'skill', tag:'In Your Stack', blurb:'Twitter/X async scraping.', url:'https://github.com/vladkens/twscrape' },
+  { id:127, name:'codebase-health-check', cat:'skill', tag:'In Your Stack', blurb:'Multi-agent audit workflow.', url:'https://github.com/anthropics/skills' },
+  { id:128, name:'claude-api skill', cat:'skill', tag:'In Your Stack', blurb:'SDK build/debug/optimize guide.', url:'https://github.com/anthropics/skills' },
+
+  // Subagents
+  { id:129, name:'wshobson/agents', cat:'subagent', tag:'100+ agents', blurb:'Production-ready: backend-architect, security-auditor, test-automator, deployment-engineer.', url:'https://github.com/wshobson/agents', install:'mkdir -p ~/.claude/agents && git clone https://github.com/wshobson/agents ~/.claude/agents/wshobson' },
+  { id:130, name:'claude-code-subagents', cat:'subagent', tag:'Community', blurb:'100+ alternative subagent library.', url:'https://github.com/VoltAgent/awesome-claude-code-subagents' },
+  { id:131, name:'AgentSys', cat:'subagent', tag:'Orchestration', blurb:'PR mgmt, perf investigation, drift detection by avifenesh.', url:'https://github.com/avifenesh/AgentSys' },
+  { id:132, name:'Claude Squad', cat:'subagent', tag:'Parallel', blurb:'Parallel agents in isolated workspaces.', url:'https://github.com/smtg-ai/claude-squad' },
+  { id:133, name:'Auto-Claude', cat:'subagent', tag:'Autonomous', blurb:'Autonomous multi-agent framework.', url:'https://github.com/auto-claude/auto-claude' },
+  { id:134, name:'Ralph Orchestrator', cat:'subagent', tag:'Loops', blurb:'Task completion loops.', url:'https://github.com/mikeyobrien/ralph-orchestrator' },
+  { id:135, name:'shinpr/claude-code-workflows', cat:'subagent', tag:'Workflows', blurb:'Production flows with specialists.', url:'https://github.com/shinpr/claude-code-workflows' },
+  { id:136, name:'code-reviewer (built-in)', cat:'subagent', tag:'Native', blurb:'Native PR review subagent.', url:'https://code.claude.com/docs/en/sub-agents' },
+  { id:137, name:'code-explorer (built-in)', cat:'subagent', tag:'Native', blurb:'Read-only codebase navigator.', url:'https://code.claude.com/docs/en/sub-agents' },
+  { id:138, name:'code-architect (built-in)', cat:'subagent', tag:'Native', blurb:'Feature architecture planner.', url:'https://code.claude.com/docs/en/sub-agents' },
+  { id:139, name:'security-auditor', cat:'subagent', tag:'wshobson', blurb:'OWASP/credential scan specialist.', url:'https://github.com/wshobson/agents' },
+  { id:140, name:'test-automator', cat:'subagent', tag:'wshobson', blurb:'pytest/vitest scaffolding.', url:'https://github.com/wshobson/agents' },
+  { id:141, name:'deployment-engineer', cat:'subagent', tag:'wshobson', blurb:'CI/CD + rollout agents.', url:'https://github.com/wshobson/agents' },
+  { id:142, name:'database-architect', cat:'subagent', tag:'wshobson', blurb:'Schema + migration specialist.', url:'https://github.com/wshobson/agents' },
+
+  // Frameworks
+  { id:143, name:'Claude Agent SDK', cat:'framework', tag:'Anthropic', blurb:'Tool-use-first minimal loop. Pairs with sub-agents as tools.', url:'https://github.com/anthropics/claude-agent-sdk-python' },
+  { id:144, name:'Vercel AI SDK (v6)', cat:'framework', tag:'Vercel', blurb:'TS streaming, models + tools, UI helpers.', url:'https://sdk.vercel.ai/' },
+  { id:145, name:'Mastra', cat:'framework', tag:'TypeScript', blurb:'Full-stack TS framework — agents, workflows, memory, evals, MCP.', url:'https://mastra.ai/' },
+  { id:146, name:'LangChain / LangGraph', cat:'framework', tag:'Python', blurb:'Leading Python stateful-agent framework.', url:'https://github.com/langchain-ai/langgraph' },
+  { id:147, name:'OpenAI Agents SDK', cat:'framework', tag:'OpenAI', blurb:'Tight GPT integration.', url:'https://github.com/openai/openai-agents-python' },
+  { id:148, name:'Google ADK', cat:'framework', tag:'Google', blurb:'Agent Development Kit for Gemini.', url:'https://google.github.io/adk-docs/' },
+  { id:149, name:'Microsoft Agent Framework', cat:'framework', tag:'Microsoft', blurb:'.NET/C# multi-agent.', url:'https://github.com/microsoft/agent-framework' },
+  { id:150, name:'CrewAI', cat:'framework', tag:'Python', blurb:'Rapid role-based agent prototyping.', url:'https://github.com/crewAIInc/crewAI' },
+  { id:151, name:'PydanticAI', cat:'framework', tag:'Python', blurb:'Type-safe Python agents.', url:'https://ai.pydantic.dev/' },
+  { id:152, name:'Agno', cat:'framework', tag:'Python', blurb:'Lightweight Python agent lib.', url:'https://github.com/agno-agi/agno' },
+  { id:153, name:'DSPy', cat:'framework', tag:'Stanford', blurb:'Programmatic prompt optimization.', url:'https://github.com/stanfordnlp/dspy' },
+  { id:154, name:'TanStack AI', cat:'framework', tag:'React', blurb:'Framework-agnostic React hooks.', url:'https://tanstack.com/' },
+
+  // Hooks
+  { id:155, name:'TDD Guard', cat:'hook', tag:'Hook', blurb:'Blocks non-TDD file writes.', url:'https://github.com/nizos/tdd-guard' },
+  { id:156, name:'Dippy', cat:'hook', tag:'Hook', blurb:'Auto-approves safe bash reads.', url:'https://github.com/sheldonhull/dippy' },
+  { id:157, name:'TypeScript Quality Hooks', cat:'hook', tag:'Hook', blurb:'Live tsc + eslint gating.', url:'https://github.com/hesreallyhim/awesome-claude-code' },
+  { id:158, name:'Prettier-on-PostToolUse', cat:'hook', tag:'Pattern', blurb:'Auto-format after every edit.', url:'https://code.claude.com/docs/en/hooks' },
+  { id:159, name:'Black-on-PostToolUse', cat:'hook', tag:'Pattern', blurb:'Same for Python (your default formatter).', url:'https://code.claude.com/docs/en/hooks' },
+  { id:160, name:'Env-file Shield', cat:'hook', tag:'Pattern', blurb:'Block edits to .env / secrets.', url:'https://code.claude.com/docs/en/hooks' },
+  { id:161, name:'Stop-on-Red-Test', cat:'hook', tag:'Pattern', blurb:'Halt session if tests fail.', url:'https://code.claude.com/docs/en/hooks' },
+  { id:162, name:'less-permission-prompts', cat:'hook', tag:'In Your Stack', blurb:'Auto-allowlist from transcripts.', url:'https://code.claude.com/docs/en/skills' },
+  { id:163, name:'Commit-on-Stop', cat:'hook', tag:'Pattern', blurb:'Auto-snapshot work at session end.', url:'https://code.claude.com/docs/en/hooks' },
+  { id:164, name:'SubagentStop Slack notify', cat:'hook', tag:'Pattern', blurb:'Ping when long agent finishes.', url:'https://code.claude.com/docs/en/hooks' },
+  { id:165, name:'PreCompact Transcript Archive', cat:'hook', tag:'Pattern', blurb:'Save full convo before compaction.', url:'https://code.claude.com/docs/en/hooks' },
+  { id:166, name:'StopFailure hard-block', cat:'hook', tag:'Pattern', blurb:'Force-fail for policy violations.', url:'https://code.claude.com/docs/en/hooks' },
+
+  // Observability
+  { id:167, name:'Langfuse', cat:'obs', tag:'Open-source', blurb:'Official Claude Agent SDK integration. Captures hooks system.', url:'https://langfuse.com/integrations/frameworks/claude-agent-sdk' },
+  { id:168, name:'LangSmith', cat:'obs', tag:'LangChain', blurb:'Official Claude Code plugin for traces + evals.', url:'https://www.langchain.com/langsmith' },
+  { id:169, name:'Helicone', cat:'obs', tag:'Open-source', blurb:'Gateway proxy + cost routing, one-line integration.', url:'https://www.helicone.ai/' },
+  { id:170, name:'Arize Phoenix', cat:'obs', tag:'Open-source', blurb:'Open-source eval + trace.', url:'https://phoenix.arize.com/' },
+  { id:171, name:'PromptLayer', cat:'obs', tag:'Prompt Mgmt', blurb:'Visual prompt builder + analytics.', url:'https://promptlayer.com/' },
+  { id:172, name:'Portkey', cat:'obs', tag:'Gateway', blurb:'Gateway, fallback, observability.', url:'https://portkey.ai/' },
+  { id:173, name:'agent-observability plugin', cat:'obs', tag:'Claude Plugin', blurb:'10-vendor integration — Langfuse, Arize, OpenTelemetry, Sentry, Datadog.', url:'https://github.com/nexus-labs-automation/agent-observability' },
+  { id:174, name:'Maxim AI', cat:'obs', tag:'Eval', blurb:'End-to-end eval + simulation.', url:'https://www.getmaxim.ai/' },
+  { id:175, name:'Agenta', cat:'obs', tag:'Open-source', blurb:'Open-source prompt management.', url:'https://agenta.ai/' },
+  { id:176, name:'W&B Weave', cat:'obs', tag:'W&B', blurb:'ML experiment tracking applied to LLMs.', url:'https://wandb.ai/site/weave' },
+
+  // Usage
+  { id:177, name:'ccusage', cat:'usage', tag:'CLI', blurb:'Cost/token analyzer on local JSONL. Daily/monthly/session reports. Free.', url:'https://github.com/ryoppippi/ccusage', install:'npm install -g ccusage\nccusage daily\nccusage session --live' },
+  { id:178, name:'Claude-Code-Usage-Monitor', cat:'usage', tag:'Live Chart', blurb:'Real-time token chart + limit predictions.', url:'https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor' },
+  { id:179, name:'cc-statusline', cat:'usage', tag:'Statusline', blurb:'Beautiful informative statusline with ccusage integration.', url:'https://github.com/chongdashu/cc-statusline' },
+  { id:180, name:'claude-usage (phuryn)', cat:'usage', tag:'Dashboard', blurb:'Local dashboard with session history + progress bar.', url:'https://github.com/phuryn/claude-usage' },
+  { id:181, name:'Claude Token Monitor (VSCode)', cat:'usage', tag:'VS Code', blurb:'Editor extension for token tracking.', url:'https://marketplace.visualstudio.com/items?itemName=Wilendar.claude-usage-monitor' },
+  { id:182, name:'ccflare / better-ccflare', cat:'usage', tag:'Dashboard', blurb:'Usage dashboard with extensive metrics.', url:'https://github.com/snipeship/ccflare' },
+
+  // Companions
+  { id:183, name:'Cursor', cat:'companion', tag:'Editor', blurb:'Best overall AI editor. Owns Supermaven. 72% acceptance rate.', url:'https://cursor.sh/' },
+  { id:184, name:'Windsurf', cat:'companion', tag:'Editor', blurb:'Cascade context tracking, gentler than Cursor.', url:'https://codeium.com/windsurf' },
+  { id:185, name:'GitHub Copilot', cat:'companion', tag:'Editor', blurb:'Default Sonnet 4 for paid tier. $10/mo.', url:'https://github.com/features/copilot' },
+  { id:186, name:'Cline', cat:'companion', tag:'Open-source', blurb:'Open-source VS Code agent. Pairs with DeepSeek for cheap.', url:'https://cline.bot/' },
+  { id:187, name:'Aider', cat:'companion', tag:'Terminal', blurb:'Terminal git-aware pair programmer.', url:'https://aider.chat/' },
+  { id:188, name:'Continue.dev', cat:'companion', tag:'Open-source', blurb:'Open-source VS Code + JetBrains.', url:'https://www.continue.dev/' },
+  { id:189, name:'Codex CLI', cat:'companion', tag:'OpenAI', blurb:'OpenAI\'s Claude Code competitor. Reuses skills folder.', url:'https://github.com/openai/codex' },
+  { id:190, name:'Gemini CLI', cat:'companion', tag:'Google', blurb:'Google terminal agent. Shares skill format.', url:'https://github.com/google-gemini/gemini-cli' },
+  { id:191, name:'Sourcegraph Cody', cat:'companion', tag:'Enterprise', blurb:'Multi-codebase context + code search.', url:'https://sourcegraph.com/cody' },
+  { id:192, name:'Tabnine', cat:'companion', tag:'Privacy', blurb:'Privacy-first completions.', url:'https://www.tabnine.com/' },
+  { id:193, name:'Supermaven', cat:'companion', tag:'Completion', blurb:'1M-token ultra-fast completions (now part of Cursor).', url:'https://supermaven.com/' },
+  { id:194, name:'Zed', cat:'companion', tag:'Editor', blurb:'Rust editor with native AI.', url:'https://zed.dev/' },
+  { id:195, name:'JetBrains AI Assistant', cat:'companion', tag:'JetBrains', blurb:'IntelliJ/PyCharm/WebStorm integration.', url:'https://www.jetbrains.com/ai/' },
+  { id:196, name:'Replit Agent', cat:'companion', tag:'Cloud IDE', blurb:'Cloud IDE with full agent.', url:'https://replit.com/' },
+
+  // Local LLMs
+  { id:197, name:'Ollama', cat:'local', tag:'Default', blurb:'Default choice for local LLMs. 52M downloads/mo in Q1 2026.', url:'https://ollama.com/', install:'curl -fsSL https://ollama.com/install.sh | sh\nollama pull llama3.3' },
+  { id:198, name:'LM Studio', cat:'local', tag:'GUI', blurb:'Best GUI. HuggingFace browser built in.', url:'https://lmstudio.ai/' },
+  { id:199, name:'vLLM', cat:'local', tag:'Production', blurb:'Production-grade throughput.', url:'https://github.com/vllm-project/vllm' },
+  { id:200, name:'Jan', cat:'local', tag:'Desktop', blurb:'Privacy-first desktop app.', url:'https://jan.ai/' },
+  { id:201, name:'GPT4All', cat:'local', tag:'Simple', blurb:'Simple local chat interface.', url:'https://www.nomic.ai/gpt4all' },
+  { id:202, name:'text-generation-webui', cat:'local', tag:'Web UI', blurb:'Feature-rich web interface.', url:'https://github.com/oobabooga/text-generation-webui' },
+  { id:203, name:'LocalAI', cat:'local', tag:'API Compat', blurb:'OpenAI-API-compatible local runtime.', url:'https://localai.io/' },
+  { id:204, name:'llama.cpp', cat:'local', tag:'Engine', blurb:'Underlying inference engine powering most tools.', url:'https://github.com/ggerganov/llama.cpp' },
+
+  // Terminal
+  { id:205, name:'Warp', cat:'terminal', tag:'AI Terminal', blurb:'AI Command Center. Cross-platform (Windows + Mac + Linux).', url:'https://www.warp.dev/' },
+  { id:206, name:'Wezterm', cat:'terminal', tag:'Terminal', blurb:'Cross-platform, Lua-scriptable.', url:'https://wezfurlong.org/wezterm/' },
+  { id:207, name:'iTerm2', cat:'terminal', tag:'macOS', blurb:'macOS classic.', url:'https://iterm2.com/' },
+  { id:208, name:'Alacritty', cat:'terminal', tag:'GPU-fast', blurb:'GPU-fast minimal terminal.', url:'https://alacritty.org/' },
+  { id:209, name:'Oh My Posh', cat:'terminal', tag:'Prompt', blurb:'Cross-shell prompt — PowerShell, Bash, Zsh, Fish.', url:'https://ohmyposh.dev/' },
+  { id:210, name:'Starship', cat:'terminal', tag:'Prompt', blurb:'Rust prompt; 3–6x faster than Powerlevel10k.', url:'https://starship.rs/' },
+  { id:211, name:'zoxide', cat:'terminal', tag:'Utility', blurb:'Smart `cd` replacement. Jump by partial name.', url:'https://github.com/ajeetdsouza/zoxide' },
+  { id:212, name:'fzf', cat:'terminal', tag:'Utility', blurb:'Fuzzy finder — pair with Claude for file picks.', url:'https://github.com/junegunn/fzf' },
+
+  // Knowledge
+  { id:213, name:'NotebookLM', cat:'knowledge', tag:'Google', blurb:'Grounded multi-source research. Audio briefings.', url:'https://notebooklm.google.com/' },
+  { id:214, name:'Perplexity Spaces', cat:'knowledge', tag:'Perplexity', blurb:'Shared sourced research workspaces.', url:'https://www.perplexity.ai/spaces' },
+  { id:215, name:'Obsidian', cat:'knowledge', tag:'Local', blurb:'Local markdown vault. Plain-text, portable.', url:'https://obsidian.md/' },
+  { id:216, name:'Logseq', cat:'knowledge', tag:'Local', blurb:'Block-based open-source PKM.', url:'https://logseq.com/' },
+  { id:217, name:'Anytype', cat:'knowledge', tag:'Local-first', blurb:'Local-first Notion alternative.', url:'https://anytype.io/' },
+  { id:218, name:'Readwise Reader', cat:'knowledge', tag:'Read-later', blurb:'Save everything, export to NotebookLM.', url:'https://readwise.io/read' },
+  { id:219, name:'Raindrop.io', cat:'knowledge', tag:'Bookmarks', blurb:'Bookmark manager with highlights.', url:'https://raindrop.io/' },
+  { id:220, name:'Pocket', cat:'knowledge', tag:'Mozilla', blurb:'Lightweight read-later (now Mozilla).', url:'https://getpocket.com/' },
+  { id:221, name:'Heptabase', cat:'knowledge', tag:'Visual', blurb:'Visual whiteboard PKM.', url:'https://heptabase.com/' },
+  { id:222, name:'Capacities', cat:'knowledge', tag:'Object-based', blurb:'Object-based notes.', url:'https://capacities.io/' },
+
+  // Marketplaces
+  { id:223, name:'buildwithclaude.com', cat:'marketplace', tag:'Plugins', blurb:'500+ plugins, skills, subagents, commands, hooks.', url:'https://buildwithclaude.com/' },
+  { id:224, name:'Official MCP Registry', cat:'marketplace', tag:'Registry', blurb:'Anthropic-hosted official MCP registry.', url:'https://registry.modelcontextprotocol.io/' },
+  { id:225, name:'Glama.ai MCP Servers', cat:'marketplace', tag:'Directory', blurb:'21,740+ MCP servers indexed.', url:'https://glama.ai/mcp/servers' },
+  { id:226, name:'mcpservers.org', cat:'marketplace', tag:'Community', blurb:'Awesome MCP servers community list.', url:'https://mcpservers.org/' },
+  { id:227, name:'Claude Code Marketplaces', cat:'marketplace', tag:'Aggregator', blurb:'Marketplace aggregator.', url:'https://claudemarketplaces.com/' },
+  { id:228, name:'awesome-claude-code', cat:'marketplace', tag:'GitHub', blurb:'Canonical GitHub awesome-list by hesreallyhim.', url:'https://github.com/hesreallyhim/awesome-claude-code' },
+  { id:229, name:'claude-plugins-official', cat:'marketplace', tag:'Official', blurb:'Anthropic\'s 101-plugin official marketplace.', url:'https://github.com/anthropics/claude-plugins-official' },
+  { id:230, name:'MCP Bundles', cat:'marketplace', tag:'Curated', blurb:'Curated install bundles.', url:'https://www.mcpbundles.com/' },
+  { id:231, name:'Cowork', cat:'marketplace', tag:'In Your Stack', blurb:'Team plugin sharing.', url:'https://cowork.com/' },
+  { id:232, name:'Composio Awesome Claude Plugins', cat:'marketplace', tag:'GitHub', blurb:'Curated plugin list with custom commands, agents, hooks, MCPs.', url:'https://github.com/ComposioHQ/awesome-claude-plugins' },
+  { id:233, name:'MCP Playground Online', cat:'marketplace', tag:'Directory', blurb:'50+ best MCP servers with reviews.', url:'https://mcpplaygroundonline.com/blog/awesome-mcp-servers' },
+  { id:234, name:'mcp-awesome.com', cat:'marketplace', tag:'Directory', blurb:'1,200+ quality-verified servers.', url:'https://mcp-awesome.com/' },
+];
+
+// IDs of the Top 10 hero picks
+const TOP10_IDS = [1, 2, 3, 31, 4, 111, 129, 177, 41, 213];
+
+// ==================== RENDERING ====================
+const $ = (id) => document.getElementById(id);
+let activeCategory = 'all';
+let searchQuery = '';
+
+function renderTop10() {
+  const order = TOP10_IDS.map(id => TOOLS.find(t => t.id === id));
+  const grid = $('top10-grid');
+  grid.innerHTML = order.map((t, i) => `
+    <div class="tool-card">
+      <div class="tool-head">
+        <span class="tool-rank">#${i + 1}</span>
+        <h3 class="tool-name"><a href="${t.url}" target="_blank" rel="noopener">${escapeHtml(t.name)}</a></h3>
+        <span class="tool-tag">${escapeHtml(t.tag)}</span>
+      </div>
+      <p class="tool-desc">${escapeHtml(t.blurb)}</p>
+      ${t.install ? `
+        <div class="tool-install">
+          <h4>Install</h4>
+          <pre><button class="copy-btn" data-copy="${escapeAttr(t.install)}">Copy</button><code>${escapeHtml(t.install)}</code></pre>
+        </div>` : ''}
+    </div>
+  `).join('');
+}
+
+function renderChips() {
+  const counts = {};
+  TOOLS.forEach(t => counts[t.cat] = (counts[t.cat] || 0) + 1);
+  const totalCount = TOOLS.length;
+  $('chips').innerHTML = CATEGORIES.map(c => {
+    const n = c.id === 'all' ? totalCount : (counts[c.id] || 0);
+    return `<button class="chip${c.id === activeCategory ? ' active' : ''}" data-cat="${c.id}">${escapeHtml(c.label)}<span class="n">${n}</span></button>`;
+  }).join('');
+}
+
+function renderGroups() {
+  const filtered = TOOLS.filter(t => {
+    if (activeCategory !== 'all' && t.cat !== activeCategory) return false;
+    if (!searchQuery) return true;
+    const q = searchQuery.toLowerCase();
+    return t.name.toLowerCase().includes(q) || t.blurb.toLowerCase().includes(q) || t.tag.toLowerCase().includes(q);
+  });
+
+  $('count').textContent = `${filtered.length} tool${filtered.length === 1 ? '' : 's'}`;
+  $('empty').style.display = filtered.length === 0 ? 'block' : 'none';
+
+  // Group by category, preserve CATEGORIES order
+  const groupedHtml = CATEGORIES.filter(c => c.id !== 'all').map(c => {
+    const items = filtered.filter(t => t.cat === c.id);
+    if (items.length === 0) return '';
+    const meta = GROUPS[c.id];
+    return `
+      <div class="group-section">
+        <h3 class="group-title">${escapeHtml(meta.title)} <span style="color:var(--muted);font-size:0.78rem;font-weight:400;margin-left:6px;">${items.length}</span></h3>
+        <p class="group-sub">${escapeHtml(meta.sub)}</p>
+        <div class="tool-grid">
+          ${items.map(t => `
+            <div class="mini-card" data-id="${t.id}">
+              <div class="mc-head">
+                <span class="mc-num">#${t.id}</span>
+                <span class="mc-name">${escapeHtml(t.name)}</span>
+                <span class="mc-link">↗</span>
+              </div>
+              <div class="mc-tag">${escapeHtml(t.tag)}</div>
+              <p class="mc-blurb">${escapeHtml(t.blurb)}</p>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+  $('groups').innerHTML = groupedHtml;
+}
+
+function openModal(id) {
+  const t = TOOLS.find(x => x.id === id);
+  if (!t) return;
+  const mcpName = slugifyMcp(t.name);
+  const installSnippet = t.install || inferInstall(t);
+  const shortUrl = t.url.replace(/^https?:\/\//, '').replace(/\/$/, '');
+  $('modal-body').innerHTML = `
+    <h3>${escapeHtml(t.name)}</h3>
+    <span class="m-tag">${escapeHtml(t.tag)}</span>
+    <span class="m-tag">${escapeHtml(CATEGORIES.find(c => c.id === t.cat)?.label || t.cat)}</span>
+    <span class="m-tag">#${t.id}</span>
+    <p class="m-desc">${escapeHtml(t.blurb)}</p>
+    <h4>Install / Usage</h4>
+    <pre><button class="copy-btn" data-copy="${escapeAttr(installSnippet)}">Copy</button><code>${escapeHtml(installSnippet)}</code></pre>
+    <h4>Links</h4>
+    <div class="m-links">
+      <a href="${t.url}" target="_blank" rel="noopener">Official site / repo →</a>
+      <a href="https://www.google.com/search?q=${encodeURIComponent(t.name + ' claude code install')}" target="_blank" rel="noopener">Search installs</a>
+      <a href="https://github.com/search?q=${encodeURIComponent(t.name)}&type=repositories" target="_blank" rel="noopener">GitHub search</a>
+    </div>
+    <p style="color:var(--muted);font-size:0.82rem;margin-top:14px;">Link: <a href="${t.url}" target="_blank" rel="noopener">${escapeHtml(shortUrl)}</a></p>
+  `;
+  $('modal-backdrop').classList.add('open');
+}
+
+function closeModal() { $('modal-backdrop').classList.remove('open'); }
+
+function inferInstall(t) {
+  if (t.cat === 'official-mcp' || t.cat === 'community-mcp' || t.cat === 'db-mcp' || t.cat === 'browser-mcp' || t.cat === 'devops-mcp') {
+    const slug = slugifyMcp(t.name);
+    return `# Remote (if supported):\nclaude mcp add --transport http ${slug} <SERVER_URL>\n\n# Or npx:\nclaude mcp add ${slug} -- npx -y <package>\n\n# Check the official repo for exact command:\n# ${t.url}`;
+  }
+  if (t.cat === 'skill') return `# Drop into ~/.claude/skills/\ngit clone ${t.url} ~/.claude/skills/${slugifyMcp(t.name)}\n# Or follow install instructions in the repo README.`;
+  if (t.cat === 'subagent') return `# Drop into ~/.claude/agents/\ngit clone ${t.url} ~/.claude/agents/${slugifyMcp(t.name)}`;
+  if (t.cat === 'hook') return `# Configure in ~/.claude/settings.json under "hooks":\n# See Claude Code hooks docs: https://code.claude.com/docs/en/hooks\n# Reference implementation: ${t.url}`;
+  if (t.cat === 'framework') return `# See official docs for install:\n# ${t.url}`;
+  if (t.cat === 'local') return `# See install guide on official site:\n# ${t.url}`;
+  if (t.cat === 'companion' || t.cat === 'terminal' || t.cat === 'knowledge' || t.cat === 'marketplace' || t.cat === 'usage' || t.cat === 'obs') return `# Visit official site for install / signup:\n# ${t.url}`;
+  return `# See: ${t.url}`;
+}
+
+function slugifyMcp(name) {
+  return name.toLowerCase().replace(/mcp$/i, '').replace(/\(.*?\)/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').replace(/-server$/, '').slice(0, 24);
+}
+
+function escapeHtml(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+function escapeAttr(s) { return String(s).replace(/"/g, '&quot;').replace(/\n/g, '&#10;'); }
+
+// ==================== EVENTS ====================
+document.addEventListener('click', (e) => {
+  const chip = e.target.closest('.chip');
+  if (chip) {
+    activeCategory = chip.dataset.cat;
+    renderChips();
+    renderGroups();
+    window.scrollTo({ top: document.getElementById('directory').offsetTop - 140, behavior: 'smooth' });
+    return;
+  }
+  const card = e.target.closest('.mini-card');
+  if (card) {
+    openModal(Number(card.dataset.id));
+    return;
+  }
+  if (e.target.id === 'modal-close' || e.target.id === 'modal-backdrop') {
+    closeModal();
+    return;
+  }
+  const copyBtn = e.target.closest('.copy-btn');
+  if (copyBtn) {
+    e.preventDefault();
+    e.stopPropagation();
+    navigator.clipboard.writeText(copyBtn.dataset.copy).then(() => {
+      copyBtn.classList.add('copied');
+      copyBtn.textContent = 'Copied!';
+      setTimeout(() => { copyBtn.classList.remove('copied'); copyBtn.textContent = 'Copy'; }, 1400);
+    });
+    return;
+  }
+});
+
+$('search').addEventListener('input', (e) => {
+  searchQuery = e.target.value.trim();
+  renderGroups();
+});
+
+$('clear-btn').addEventListener('click', () => {
+  $('search').value = '';
+  searchQuery = '';
+  activeCategory = 'all';
+  renderChips();
+  renderGroups();
+  $('search').focus();
+});
+
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    $('search').focus();
+    $('search').select();
+  }
+  if (e.key === 'Escape') {
+    if ($('modal-backdrop').classList.contains('open')) closeModal();
+    else if (document.activeElement === $('search')) $('search').blur();
+  }
+});
+
+// Boot
+renderTop10();
+renderChips();
+renderGroups();
+</script>
 
 </body>
 </html>
