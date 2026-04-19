@@ -9,17 +9,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --paper: #f5efe6;
-    --paper-2: #ede5d8;
-    --paper-3: #e4d9c6;
-    --ink: #1e1915;
-    --ink-2: #3a322a;
-    --muted: #8a7e6f;
-    --rule: #d6c7ae;
-    --accent: #9a3412;       /* deep terracotta */
-    --accent-ink: #5e1e0a;
-    --highlight: #fef3c7;    /* warm yellow for search highlight */
-    --ok: #3f6212;
+    /* Official Claude Code palette */
+    --paper: #f0eee6;          /* ivory */
+    --paper-2: #e8e4d8;
+    --paper-3: #ddd6c5;
+    --ink: #141413;            /* near-black */
+    --ink-2: #2b2926;
+    --muted: #7a736b;
+    --rule: #d4ccbc;
+    --accent: #cc785c;         /* Claude terracotta */
+    --accent-ink: #a0583f;
+    --accent-soft: #e8c5b6;
+    --highlight: #fef3c7;
+    --ok: #4a7c1e;
+    --term-bg: #181715;        /* terminal black */
+    --term-line: #2a2724;
+    --term-text: #ece6d8;
+    --term-dim: #7a736b;
+    --term-accent: #e89b7d;    /* brighter terracotta on dark */
+    --term-green: #a3b86c;
+    --term-yellow: #e8c670;
     --radius: 4px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -56,66 +65,223 @@
   .container { max-width: 920px; margin: 0 auto; padding: 0 32px; }
   .wide { max-width: 1200px; }
 
-  /* -------- LANDING (splash screen) -------- */
+  /* -------- LANDING (interactive terminal stage) -------- */
   .view-landing {
     min-height: 100vh;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 24px;
+    flex-direction: column;
+    padding: 20px 24px 32px;
     position: relative;
     overflow: hidden;
+    background: radial-gradient(ellipse at 50% 40%, #f7f3ea 0%, #f0eee6 55%, #e8e4d8 100%);
   }
-  .view-landing::before {
-    content: '&';
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -52%);
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-size: clamp(22rem, 55vw, 42rem);
-    font-weight: 200;
-    color: rgba(154,52,18,0.07);
-    line-height: 0.7;
-    pointer-events: none;
-    user-select: none;
-    z-index: 0;
-    font-variation-settings: "opsz" 144;
-  }
-  .landing-content {
-    max-width: 640px;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-  }
-  .landing-content .eyebrow { justify-content: center; margin-bottom: 22px; }
-  .landing-content .lede { max-width: 540px; margin: 0 auto 26px; }
-  .landing-meta {
-    margin-top: 46px;
-    display: flex;
-    gap: 28px;
-    justify-content: center;
-    flex-wrap: wrap;
+  .landing-header {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: 1200px; margin: 0 auto; width: 100%;
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.72rem;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--muted);
   }
-  .landing-meta strong {
-    font-family: 'Fraunces', serif;
-    font-weight: 500;
-    font-style: italic;
-    font-size: 1.35em;
-    color: var(--accent);
-    margin-right: 7px;
+  .landing-header .brand { display: flex; align-items: center; gap: 10px; font-weight: 500; color: var(--ink); }
+  .landing-header .brand-mark {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px;
+    background: var(--ink); color: var(--accent);
+    border-radius: 5px; font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem; font-weight: 700;
     letter-spacing: 0;
     text-transform: none;
-    vertical-align: -1px;
   }
-  @media (max-width: 640px) {
-    .landing-meta { gap: 16px; font-size: 0.66rem; margin-top: 32px; }
-    .view-landing::before { transform: translate(-50%, -48%); }
+  .landing-header-meta { display: flex; gap: 22px; }
+  .landing-header-meta span strong {
+    color: var(--accent);
+    font-family: 'Fraunces', serif; font-style: italic; font-weight: 500;
+    font-size: 1.3em; letter-spacing: 0; text-transform: none;
+    margin-right: 4px; vertical-align: -1px;
+  }
+
+  .landing-stage-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 0;
+    min-height: 0;
+  }
+  .landing-stage {
+    position: relative;
+    width: min(500px, 86vw, 56vh);
+    aspect-ratio: 1 / 1;
+  }
+  .landing-stage .connections {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .landing-stage .connections .line {
+    stroke: var(--accent); stroke-width: 0.25; fill: none;
+    opacity: 0.28;
+    stroke-dasharray: 1 1.5;
+    transition: opacity 0.25s, stroke-width 0.25s;
+  }
+  .landing-stage .connections .line.active {
+    opacity: 0.95; stroke-width: 0.5;
+    stroke-dasharray: none;
+  }
+
+  .terminal {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(58%, 320px);
+    background: var(--term-bg);
+    border-radius: 10px;
+    box-shadow: 0 16px 48px -12px rgba(20,20,19,0.35), 0 4px 12px -4px rgba(20,20,19,0.2);
+    border: 1px solid rgba(255,255,255,0.04);
+    overflow: hidden;
+    z-index: 2;
+  }
+  .terminal-bar {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 12px;
+    background: #222120;
+    border-bottom: 1px solid var(--term-line);
+  }
+  .terminal-bar .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: #3a3633;
+  }
+  .terminal-bar .dot.red { background: #e86f5a; }
+  .terminal-bar .dot.yellow { background: #e8c670; }
+  .terminal-bar .dot.green { background: #7fa85a; }
+  .terminal-bar .term-title {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--term-dim);
+    letter-spacing: 0.08em;
+  }
+  .terminal-body {
+    padding: 12px 14px 14px;
+    min-height: 150px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.74rem;
+    line-height: 1.5;
+    color: var(--term-text);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .terminal-body .t-prompt { color: var(--term-accent); font-weight: 600; }
+  .terminal-body .t-cmd { color: var(--term-text); }
+  .terminal-body .t-arrow { color: var(--term-dim); }
+  .terminal-body .t-ok { color: var(--term-green); }
+  .terminal-body .t-warn { color: var(--term-yellow); }
+  .terminal-body .t-dim { color: var(--term-dim); }
+  .terminal-body .t-accent { color: var(--term-accent); }
+  .terminal-body .cursor {
+    display: inline-block;
+    width: 7px; height: 0.95em;
+    background: var(--term-accent);
+    vertical-align: -2px;
+    margin-left: 2px;
+    animation: blink 1s steps(2, end) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .orbit {
+    position: absolute; inset: 0;
+    z-index: 1;
+  }
+  .node {
+    position: absolute;
+    top: calc(50% + sin(var(--a)) * var(--r));
+    left: calc(50% + cos(var(--a)) * var(--r));
+    transform: translate(-50%, -50%);
+    width: 84px; height: 84px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 4px;
+    background: var(--ink);
+    color: var(--paper);
+    border: 1px solid var(--ink-2);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 6px 18px -6px rgba(20,20,19,0.3);
+    padding: 8px;
+  }
+  .node:hover {
+    transform: translate(-50%, -50%) scale(1.06);
+    box-shadow: 0 10px 24px -8px rgba(204,120,92,0.4);
+    border-color: var(--accent);
+  }
+  .node.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    box-shadow: 0 10px 28px -8px rgba(204,120,92,0.55);
+  }
+  .node-icon {
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--accent);
+    transition: color 0.2s;
+  }
+  .node.active .node-icon { color: #fff; }
+  .node-icon svg { width: 100%; height: 100%; }
+  .node-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .landing-cta-wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  .landing-cta-wrap h1.display {
+    font-size: clamp(1.7rem, 3.6vw, 2.4rem);
+    line-height: 1.05;
+    margin-bottom: 8px;
+  }
+  .landing-cta-wrap .lede {
+    max-width: 520px;
+    margin: 0 auto 14px;
+    color: var(--ink-2);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  .landing-hint {
+    margin-top: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .landing-hint::before {
+    content: '↑'; margin-right: 8px; color: var(--accent);
+  }
+
+  @media (max-width: 720px) {
+    .terminal { width: 62%; }
+    .node { width: 78px; height: 78px; }
+    .node-icon { width: 22px; height: 22px; }
+    .node-label { font-size: 0.56rem; }
+    .landing-cta-wrap h1.display { font-size: 1.75rem; }
+  }
+  @media (max-width: 480px) {
+    .landing-header-meta { display: none; }
+    .terminal-body { font-size: 0.68rem; min-height: 140px; }
+    .terminal { width: 70%; }
   }
 
   /* App view — revealed when user clicks into directory */
@@ -997,20 +1163,72 @@
 
 <!-- ============== LANDING ============== -->
 <div class="view-landing" id="view-landing">
-  <div class="landing-content">
-    <div class="eyebrow">
-      <span>A curated guide</span>
-      <span>April 2026</span>
+  <div class="landing-header">
+    <div class="brand">
+      <span class="brand-mark">&gt;_</span>
+      <span>Claude Code Toolkit</span>
     </div>
-    <h1 class="display">The Claude Code<span class="br-wide"><br></span> Power <em>Stack.</em></h1>
-    <p class="lede">A working directory of the MCPs, skills, agents, SaaS services, and workflow tools that actually move the needle — and the five that matter most.</p>
-    <button class="hero-cta" id="enter-app" type="button">Start exploring <span class="arrow">→</span></button>
-    <div class="landing-meta">
-      <span><strong>5</strong> essentials</span>
-      <span><strong id="lm-count">284</strong> indexed</span>
-      <span><strong>17</strong> categories</span>
-      <span><strong>★</strong> save your stack</span>
+    <div class="landing-header-meta">
+      <span><strong id="lm-count">284</strong> tools</span>
+      <span><strong id="lm-cats">9</strong> categories</span>
     </div>
+  </div>
+
+  <div class="landing-stage-wrap">
+    <div class="landing-stage" id="landing-stage">
+      <svg class="connections" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <line class="line" data-for="mcp"      x1="50" y1="50" x2="50"   y2="6"></line>
+        <line class="line" data-for="skills"   x1="50" y1="50" x2="88.1" y2="28"></line>
+        <line class="line" data-for="subagents" x1="50" y1="50" x2="88.1" y2="72"></line>
+        <line class="line" data-for="hooks"    x1="50" y1="50" x2="50"   y2="94"></line>
+        <line class="line" data-for="plugins"  x1="50" y1="50" x2="11.9" y2="72"></line>
+        <line class="line" data-for="claudemd" x1="50" y1="50" x2="11.9" y2="28"></line>
+      </svg>
+
+      <div class="orbit">
+        <button class="node" data-feature="mcp" style="--a: -90deg; --r: 44%;" type="button" aria-label="MCP demo">
+          <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"/><rect x="7" y="7" width="10" height="10" rx="2"/></svg></span>
+          <span class="node-label">MCP</span>
+        </button>
+        <button class="node" data-feature="skills" style="--a: -30deg; --r: 44%;" type="button" aria-label="Skills demo">
+          <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></span>
+          <span class="node-label">Skills</span>
+        </button>
+        <button class="node" data-feature="subagents" style="--a: 30deg; --r: 44%;" type="button" aria-label="Subagents demo">
+          <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="4" r="1.8"/><circle cx="12" cy="20" r="1.8"/><circle cx="4" cy="12" r="1.8"/><circle cx="20" cy="12" r="1.8"/><path d="M12 10V6M12 18v-4M10 12H6M18 12h-4"/></svg></span>
+          <span class="node-label">Subagents</span>
+        </button>
+        <button class="node" data-feature="hooks" style="--a: 90deg; --r: 44%;" type="button" aria-label="Hooks demo">
+          <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v6a4 4 0 0 0 8 0V6a3 3 0 0 0-6 0"/><path d="M12 13v8"/></svg></span>
+          <span class="node-label">Hooks</span>
+        </button>
+        <button class="node" data-feature="plugins" style="--a: 150deg; --r: 44%;" type="button" aria-label="Plugins demo">
+          <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6H3v4a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4v-4h-6V2z"/></svg></span>
+          <span class="node-label">Plugins</span>
+        </button>
+        <button class="node" data-feature="claudemd" style="--a: 210deg; --r: 44%;" type="button" aria-label="CLAUDE.md demo">
+          <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></span>
+          <span class="node-label">CLAUDE.md</span>
+        </button>
+      </div>
+
+      <div class="terminal" id="landing-terminal">
+        <div class="terminal-bar">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+          <span class="term-title">claude-code</span>
+        </div>
+        <div class="terminal-body" id="term-body" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="landing-cta-wrap">
+    <h1 class="display">Your Claude Code <em>command deck.</em></h1>
+    <p class="lede">284 curated MCPs, skills, agents, and SaaS integrations — searchable, with one-line install commands. Save your stack, track credentials per project.</p>
+    <button class="hero-cta" id="enter-app" type="button">Explore the stack <span class="arrow">→</span></button>
+    <div class="landing-hint">Click any node above to see it in action</div>
   </div>
 </div>
 
@@ -2524,14 +2742,130 @@ if (!isApplePlatform) {
   document.querySelectorAll('.kbd-hint').forEach(k => { k.textContent = 'Ctrl K'; });
 }
 
-// Landing metadata count reflects real tool total (minus chip 'all'/'saved')
+// Landing metadata count reflects real tool total
 const lmCount = document.getElementById('lm-count');
 if (lmCount) lmCount.textContent = TOOLS.length;
 const top5Total = document.getElementById('top5-total');
 if (top5Total) top5Total.textContent = TOOLS.length;
-// Update category count too — primary chips minus 'all' and 'saved'
-const catCountEl = document.querySelector('.landing-meta span:nth-child(3) strong');
-if (catCountEl) catCountEl.textContent = CATS.filter(c => c.id !== 'all' && c.id !== 'saved').length;
+const lmCats = document.getElementById('lm-cats');
+if (lmCats) lmCats.textContent = CATS.filter(c => c.id !== 'all' && c.id !== 'saved').length;
+
+// ============= LANDING TERMINAL (interactive) =============
+const TERM_DEMOS = {
+  intro: [
+    { cls: 't-dim', text: '// Click a node to see Claude Code in action\n' },
+    { cls: 't-prompt', text: '$ ' },
+    { cls: 't-cmd',  text: 'claude ' },
+    { cls: 't-accent', text: '--help\n' },
+    { cls: 't-arrow', text: '→ ' }, { cls: 't-dim', text: 'Anthropic\'s agentic CLI\n' },
+    { cls: 't-arrow', text: '→ ' }, { cls: 't-dim', text: 'Extensible via MCP, skills, hooks, plugins\n' },
+    { cls: 't-ok',    text: '✓ Ready.\n' },
+  ],
+  mcp: [
+    { cls: 't-prompt', text: '$ ' },
+    { cls: 't-cmd',  text: 'claude mcp add ' },
+    { cls: 't-accent', text: 'github\n' },
+    { cls: 't-arrow', text: '→ ' }, { cls: 't-dim', text: 'Fetching github-mcp-server…\n' },
+    { cls: 't-arrow', text: '→ ' }, { cls: 't-dim', text: 'Registering 51 tools\n' },
+    { cls: 't-ok',    text: '✓ Connected. ' }, { cls: 't-dim', text: '/mcp to browse.\n' },
+  ],
+  skills: [
+    { cls: 't-prompt', text: '$ ' },
+    { cls: 't-cmd',  text: 'claude skill create ' },
+    { cls: 't-accent', text: 'pr-review\n' },
+    { cls: 't-arrow', text: '→ ' }, { cls: 't-dim', text: 'Scaffolding .claude/skills/pr-review/\n' },
+    { cls: 't-arrow', text: '→ ' }, { cls: 't-dim', text: 'Writing SKILL.md\n' },
+    { cls: 't-ok',    text: '✓ Loaded. ' }, { cls: 't-dim', text: 'Invoke via /pr-review.\n' },
+  ],
+  subagents: [
+    { cls: 't-prompt', text: '$ ' },
+    { cls: 't-cmd',  text: 'Spawning ' },
+    { cls: 't-accent', text: 'code-reviewer' },
+    { cls: 't-cmd',  text: ' agent…\n' },
+    { cls: 't-arrow', text: '→ ' }, { cls: 't-dim', text: 'Analyzing 23 files in parallel\n' },
+    { cls: 't-arrow', text: '→ ' }, { cls: 't-dim', text: '3 issues, 12 suggestions\n' },
+    { cls: 't-ok',    text: '✓ Report ready.\n' },
+  ],
+  hooks: [
+    { cls: 't-dim', text: '[hook] ' },
+    { cls: 't-accent', text: 'pre-tool-use ' },
+    { cls: 't-dim', text: '(Bash)\n' },
+    { cls: 't-arrow', text: '→ ' }, { cls: 't-cmd', text: 'intercepted: ' }, { cls: 't-warn', text: 'rm -rf node_modules\n' },
+    { cls: 't-warn',  text: '⚠ blocked by policy\n' },
+    { cls: 't-ok',    text: '✓ Safe. ' }, { cls: 't-dim', text: 'Action cancelled.\n' },
+  ],
+  plugins: [
+    { cls: 't-prompt', text: '$ ' },
+    { cls: 't-cmd',  text: 'claude plugin install ' },
+    { cls: 't-accent', text: 'linear\n' },
+    { cls: 't-arrow', text: '→ ' }, { cls: 't-dim', text: 'Adding 14 slash commands\n' },
+    { cls: 't-arrow', text: '→ ' }, { cls: 't-dim', text: '/linear-issue  /linear-comment  …\n' },
+    { cls: 't-ok',    text: '✓ Installed.\n' },
+  ],
+  claudemd: [
+    { cls: 't-dim', text: '# CLAUDE.md\n' },
+    { cls: 't-accent', text: '## Coding Style\n' },
+    { cls: 't-cmd',  text: '- Python 3.9+ with type hints\n' },
+    { cls: 't-cmd',  text: '- snake_case vars, PascalCase classes\n' },
+    { cls: 't-accent', text: '## Rules\n' },
+    { cls: 't-cmd',  text: '- Never commit .env files\n' },
+    { cls: 't-ok',    text: '✓ Loaded into every session.\n' },
+  ],
+};
+
+let termTyping = null;
+function typeTerminal(key) {
+  const body = document.getElementById('term-body');
+  if (!body) return;
+  if (termTyping) { clearTimeout(termTyping); termTyping = null; }
+  body.innerHTML = '';
+  const segments = TERM_DEMOS[key] || TERM_DEMOS.intro;
+  let segIdx = 0, charIdx = 0;
+  let currentSpan = null;
+  const cursor = document.createElement('span');
+  cursor.className = 'cursor';
+  body.appendChild(cursor);
+
+  function step() {
+    if (segIdx >= segments.length) { termTyping = null; return; }
+    const seg = segments[segIdx];
+    if (charIdx === 0) {
+      currentSpan = document.createElement('span');
+      currentSpan.className = seg.cls || '';
+      body.insertBefore(currentSpan, cursor);
+    }
+    currentSpan.textContent += seg.text[charIdx];
+    charIdx++;
+    if (charIdx >= seg.text.length) { segIdx++; charIdx = 0; }
+    const ch = seg.text[charIdx - 1];
+    const delay = ch === '\n' ? 80 : (ch === ' ' ? 14 : 18 + Math.random() * 14);
+    termTyping = setTimeout(step, delay);
+  }
+  step();
+}
+
+function setActiveNode(key) {
+  document.querySelectorAll('.node').forEach(n => {
+    n.classList.toggle('active', n.dataset.feature === key);
+  });
+  document.querySelectorAll('.connections .line').forEach(l => {
+    l.classList.toggle('active', l.dataset.for === key);
+  });
+}
+
+document.querySelectorAll('.node').forEach(node => {
+  node.addEventListener('click', (e) => {
+    e.preventDefault(); e.stopPropagation();
+    const key = node.dataset.feature;
+    setActiveNode(key);
+    typeTerminal(key);
+  });
+});
+
+// Boot the intro animation
+if (document.getElementById('term-body')) {
+  setTimeout(() => typeTerminal('intro'), 350);
+}
 
 // ============= VIEW TOGGLE (Landing ⇄ App) =============
 function enterApp() {
