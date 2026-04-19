@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Claude Code Power Stack — Top 100 Tools & Resources (2026)</title>
+<style>
+  :root {
+    --bg: #0b0d10;
+    --panel: #13171c;
+    --panel-2: #1a1f26;
+    --border: #242b33;
+    --text: #e6edf3;
+    --muted: #8b98a5;
+    --accent: #d97757;
+    --accent-2: #f5b342;
+    --green: #3fb950;
+    --blue: #58a6ff;
+    --purple: #bc8cff;
+    --red: #f85149;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+  }
+  a { color: var(--blue); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code {
+    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+    background: #0d1117;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.88em;
+    color: var(--accent-2);
+    border: 1px solid var(--border);
+  }
+  pre {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    overflow-x: auto;
+    font-size: 0.85em;
+    color: #e6edf3;
+  }
+  pre code { background: transparent; border: none; padding: 0; color: inherit; }
+
+  header {
+    padding: 48px 32px 24px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, #141820 0%, var(--bg) 100%);
+  }
+  header .wrap { max-width: 1200px; margin: 0 auto; }
+  header h1 {
+    font-size: 2.4rem;
+    margin: 0 0 8px;
+    letter-spacing: -0.02em;
+  }
+  header .subtitle {
+    color: var(--muted);
+    font-size: 1.05rem;
+    margin: 0;
+  }
+  header .meta {
+    margin-top: 18px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  header .meta span { background: var(--panel); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); }
+
+  nav.toc {
+    position: sticky;
+    top: 0;
+    background: rgba(11,13,16,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 32px;
+    z-index: 10;
+  }
+  nav.toc .wrap { max-width: 1200px; margin: 0 auto; display: flex; gap: 18px; flex-wrap: wrap; font-size: 0.88rem; }
+  nav.toc a { color: var(--muted); }
+  nav.toc a:hover { color: var(--accent); text-decoration: none; }
+
+  main { max-width: 1200px; margin: 0 auto; padding: 32px; }
+
+  section { margin-bottom: 48px; }
+  section h2 {
+    font-size: 1.6rem;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+    border-left: 3px solid var(--accent);
+    padding-left: 12px;
+  }
+  section .section-lede { color: var(--muted); margin: 0 0 20px; padding-left: 15px; }
+
+  .top10-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .tool-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 22px;
+    transition: border-color 0.15s;
+  }
+  .tool-card:hover { border-color: #3a4550; }
+  .tool-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .tool-rank {
+    background: var(--accent);
+    color: #1a0f08;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+  }
+  .tool-name { font-size: 1.2rem; font-weight: 600; margin: 0; }
+  .tool-tag {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    background: var(--panel-2);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .tool-desc { color: var(--muted); margin: 0 0 14px; font-size: 0.95rem; }
+  .tool-install h4 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    margin: 12px 0 6px;
+  }
+
+  .category-block {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 14px;
+  }
+  .category-title {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .category-title h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--accent-2);
+  }
+  .category-title .count { font-size: 0.8rem; color: var(--muted); }
+  .tool-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .tool-list li {
+    padding: 8px 10px;
+    border-radius: 5px;
+    font-size: 0.93rem;
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+  }
+  .tool-list li:hover { background: var(--panel-2); }
+  .tool-list .num {
+    color: var(--muted);
+    font-family: "JetBrains Mono", Consolas, monospace;
+    font-size: 0.82rem;
+    min-width: 28px;
+  }
+  .tool-list .name { font-weight: 600; color: var(--text); }
+  .tool-list .blurb { color: var(--muted); }
+
+  .notes {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-2);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 18px 0;
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+  .notes strong { color: var(--text); }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 32px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+
+  @media (min-width: 900px) {
+    .top10-grid { grid-template-columns: repeat(2, 1fr); }
+    .tool-list { grid-template-columns: 1fr 1fr; }
+  }
+  @media (min-width: 1400px) {
+    .tool-list { grid-template-columns: 1fr 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Claude Code Power Stack</h1>
+    <p class="subtitle">Top 100 tools, MCPs, skills, and workflow resources — with install guides for the 10 that matter most.</p>
+    <div class="meta">
+      <span>Compiled 2026-04-19</span>
+      <span>For Jack (Windows 11 + Mac)</span>
+      <span>100+ tools · 10 deep-install guides · 8 categories</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="wrap">
+    <a href="#top10">Top 10 (with installs)</a>
+    <a href="#official-mcp">Official MCPs</a>
+    <a href="#3p-mcp">3rd-party MCPs</a>
+    <a href="#skills">Skills</a>
+    <a href="#agents">Subagents</a>
+    <a href="#hooks">Hooks</a>
+    <a href="#companions">Companion AI</a>
+    <a href="#knowledge">Knowledge & Research</a>
+    <a href="#dashboards">Dashboards & Marketplaces</a>
+    <a href="#strategy">Stack Strategy</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ========== TOP 10 ========== -->
+<section id="top10">
+  <h2>Top 10 Most Impactful — With Install Guides</h2>
+  <p class="section-lede">If you install only ten things, make them these. Ordered by real-world leverage, not novelty.</p>
+
+  <div class="top10-grid">
+
+    <!-- 1 -->
+    <div class="tool-card">
+      <div class="tool-head">
+        <span class="tool-rank">#1</span>
+        <h3 class="tool-name">GitHub MCP Server</h3>
+        <span class="tool-tag">Official</span>
+      </div>
+      <p class="tool-desc">51 tools for repos, issues, PRs, Actions, releases. The single highest-leverage MCP — #1 most-used across every 2026 dev survey (28k+ stars). Pairs natively with Claude Code's file access.</p>
+      <div class="tool-install">
+        <h4>Install (remote, OAuth — recommended)</h4>
+        <pre><code>claude mcp add --transport http github https://api.githubcopilot.com/mcp/</code></pre>
+        <h4>Install (local, token)</h4>
+        <pre><code>claude mcp add github -- docker run -i --rm \
+  -e GITHUB_PERSONAL_ACCESS_TOKEN=ghp_xxx \
+  ghcr.io/github/github-mcp-server</code></pre>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="tool-card">
+      <div class="tool-head">
+        <span class="tool-rank">#2</span>
+        <h3 class="tool-name">Filesystem MCP</h3>
+        <span class="tool-tag">Official · Free</span>
+      </div>
+      <p class="tool-desc">Gives Claude sandboxed read/write across any folders you allow — beyond the current working directory. The cheapest, most immediate productivity bump.</p>
+      <div class="tool-install">
+        <h4>Install</h4>
+        <pre><code>claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem \
+  "C:/Users/johnd/Personal" \
+  "C:/Users/johnd/Downloads"</code></pre>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="tool-card">
+      <div class="tool-head">
+        <span class="tool-rank">#3</span>
+        <h3 class="tool-name">Playwright MCP</h3>
+        <span class="tool-tag">Microsoft</span>
+      </div>
+      <p class="tool-desc">Accessibility-tree browser automation — no screenshot guessing. Lets Claude test web apps, scrape authed pages, fill forms. Gold standard for browser work.</p>
+      <div class="tool-install">
+        <h4>Install</h4>
+        <pre><code>claude mcp add playwright -- npx -y @playwright/mcp@latest
+npx playwright install chromium</code></pre>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="tool-card">
+      <div class="tool-head">
+        <span class="tool-rank">#4</span>
+        <h3 class="tool-name">Context7 MCP</h3>
+        <span class="tool-tag">Upstash</span>
+      </div>
+      <p class="tool-desc">Fixes the #1 Claude Code failure mode: outdated library knowledge. Injects live, version-pinned docs for 10k+ libraries on demand. Add <code>use context7</code> to any prompt.</p>
+      <div class="tool-install">
+        <h4>Install (remote)</h4>
+        <pre><code>claude mcp add --transport http context7 https://mcp.context7.com/mcp</code></pre>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="tool-card">
+      <div class="tool-head">
+        <span class="tool-rank">#5</span>
+        <h3 class="tool-name">Sentry MCP</h3>
+        <span class="tool-tag">Remote · OAuth</span>
+      </div>
+      <p class="tool-desc">Error-tracking directly in the loop. Ask Claude to pull the top 5 unresolved errors, triage root cause via Seer AI, then patch. Zero-install remote server.</p>
+      <div class="tool-install">
+        <h4>Install</h4>
+        <pre><code>claude mcp add --transport http sentry https://mcp.sentry.dev/mcp</code></pre>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="tool-card">
+      <div class="tool-head">
+        <span class="tool-rank">#6</span>
+        <h3 class="tool-name">Superpowers (obra)</h3>
+        <span class="tool-tag">Skill Framework</span>
+      </div>
+      <p class="tool-desc">The largest community skill library. A composable SDLC framework: brainstorm → worktree → plan → TDD execute → review → merge, all as chained skills.</p>
+      <div class="tool-install">
+        <h4>Install</h4>
+        <pre><code>cd ~/.claude/plugins
+git clone https://github.com/obra/superpowers.git
+# then /plugin enable superpowers inside Claude Code</code></pre>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="tool-card">
+      <div class="tool-head">
+        <span class="tool-rank">#7</span>
+        <h3 class="tool-name">wshobson/agents</h3>
+        <span class="tool-tag">100+ Subagents</span>
+      </div>
+      <p class="tool-desc">Production-ready subagents for orchestration: backend-architect, database-architect, security-auditor, test-automator, deployment-engineer, etc. Drop in as a plugin.</p>
+      <div class="tool-install">
+        <h4>Install</h4>
+        <pre><code>mkdir -p ~/.claude/agents
+git clone https://github.com/wshobson/agents ~/.claude/agents/wshobson
+# subagents auto-discover on next Claude Code start</code></pre>
+      </div>
+    </div>
+
+    <!-- 8 -->
+    <div class="tool-card">
+      <div class="tool-head">
+        <span class="tool-rank">#8</span>
+        <h3 class="tool-name">Notion MCP</h3>
+        <span class="tool-tag">Official Remote</span>
+      </div>
+      <p class="tool-desc">18 tools for pages, databases, search. Turns Notion into Claude's long-term memory — dump meeting notes, research, specs and let Claude query them mid-task.</p>
+      <div class="tool-install">
+        <h4>Install</h4>
+        <pre><code>claude mcp add --transport http notion https://mcp.notion.com/mcp
+# OAuth flow opens automatically on first use</code></pre>
+      </div>
+    </div>
+
+    <!-- 9 -->
+    <div class="tool-card">
+      <div class="tool-head">
+        <span class="tool-rank">#9</span>
+        <h3 class="tool-name">n8n-mcp (czlonkowski)</h3>
+        <span class="tool-tag">Automation Bridge</span>
+      </div>
+      <p class="tool-desc">Lets Claude Code build n8n workflows from plain English (1,500+ node knowledge). The cleanest answer to "replace my Zapier stack." 90–100% workflow completion in one session.</p>
+      <div class="tool-install">
+        <h4>Install</h4>
+        <pre><code>claude mcp add n8n -- npx -y n8n-mcp
+# docs: https://github.com/czlonkowski/n8n-mcp</code></pre>
+      </div>
+    </div>
+
+    <!-- 10 -->
+    <div class="tool-card">
+      <div class="tool-head">
+        <span class="tool-rank">#10</span>
+        <h3 class="tool-name">NotebookLM + Claude Code Combo</h3>
+        <span class="tool-tag">Workflow</span>
+      </div>
+      <p class="tool-desc">Not a tool — a pattern. NotebookLM for grounded research across PDFs, videos, docs. Export key findings → paste into Claude Code as <code>.claude/context/</code> files. Blind-spot coverage.</p>
+      <div class="tool-install">
+        <h4>Setup</h4>
+        <pre><code># 1. notebooklm.google.com — create notebook, add sources
+# 2. Use "Briefing doc" or "Study guide" to distill
+# 3. Copy output to ./docs/research-brief.md in your repo
+# 4. Claude Code auto-reads via CLAUDE.md context include</code></pre>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="notes">
+    <strong>Install locations.</strong> MCPs added with <code>claude mcp add</code> default to user scope — available in every project. Add <code>--scope project</code> to pin an MCP to a single repo (writes to <code>.mcp.json</code>). Add <code>--scope local</code> for machine-only config not committed to git.
+  </div>
+</section>
+
+<!-- ========== OFFICIAL MCP ========== -->
+<section id="official-mcp">
+  <h2>Official & First-Party MCP Servers</h2>
+  <p class="section-lede">Maintained by Anthropic, the service vendor, or through official partnership. Prefer these over community forks.</p>
+  <div class="category-block">
+    <div class="category-title"><h3>Reference & Core</h3><span class="count">14 tools</span></div>
+    <ol class="tool-list" start="1">
+      <li><span class="num">1</span><span><span class="name">GitHub MCP</span> — <span class="blurb">Repos, issues, PRs, Actions (covered above).</span></span></li>
+      <li><span class="num">2</span><span><span class="name">Filesystem MCP</span> — <span class="blurb">Sandboxed file I/O.</span></span></li>
+      <li><span class="num">3</span><span><span class="name">Playwright MCP</span> — <span class="blurb">Browser automation (Microsoft).</span></span></li>
+      <li><span class="num">4</span><span><span class="name">Sentry MCP</span> — <span class="blurb">Error tracking + Seer root cause.</span></span></li>
+      <li><span class="num">5</span><span><span class="name">Notion MCP</span> — <span class="blurb">Pages, databases, search.</span></span></li>
+      <li><span class="num">6</span><span><span class="name">Linear MCP</span> — <span class="blurb">Issues, projects, cycles (<code>mcp.linear.app</code>).</span></span></li>
+      <li><span class="num">7</span><span><span class="name">Atlassian MCP</span> — <span class="blurb">Jira + Confluence.</span></span></li>
+      <li><span class="num">8</span><span><span class="name">Slack MCP</span> — <span class="blurb">Messages, channel history, search.</span></span></li>
+      <li><span class="num">9</span><span><span class="name">Postgres MCP</span> — <span class="blurb">Read-only SQL + schema inspect.</span></span></li>
+      <li><span class="num">10</span><span><span class="name">SQLite MCP</span> — <span class="blurb">Local DB queries & migrations.</span></span></li>
+      <li><span class="num">11</span><span><span class="name">Google Drive MCP</span> — <span class="blurb">Search + read Drive files.</span></span></li>
+      <li><span class="num">12</span><span><span class="name">Google Calendar MCP</span> — <span class="blurb">Events, scheduling (already in your stack).</span></span></li>
+      <li><span class="num">13</span><span><span class="name">Stripe MCP</span> — <span class="blurb">Customers, subs, payments.</span></span></li>
+      <li><span class="num">14</span><span><span class="name">Cloudflare MCP</span> — <span class="blurb">Workers, KV, DNS, R2.</span></span></li>
+    </ol>
+  </div>
+  <div class="category-block">
+    <div class="category-title"><h3>New in 2026 Official Expansion</h3><span class="count">10 tools</span></div>
+    <ol class="tool-list" start="15">
+      <li><span class="num">15</span><span><span class="name">Amplitude MCP</span> — <span class="blurb">Product analytics.</span></span></li>
+      <li><span class="num">16</span><span><span class="name">Asana MCP</span> — <span class="blurb">Tasks, projects.</span></span></li>
+      <li><span class="num">17</span><span><span class="name">Box MCP</span> — <span class="blurb">Enterprise file search.</span></span></li>
+      <li><span class="num">18</span><span><span class="name">Clay MCP</span> — <span class="blurb">GTM data enrichment.</span></span></li>
+      <li><span class="num">19</span><span><span class="name">Hex MCP</span> — <span class="blurb">Data notebooks & SQL.</span></span></li>
+      <li><span class="num">20</span><span><span class="name">Salesforce MCP</span> — <span class="blurb">CRM records.</span></span></li>
+      <li><span class="num">21</span><span><span class="name">Figma MCP</span> — <span class="blurb">Design tokens, components.</span></span></li>
+      <li><span class="num">22</span><span><span class="name">Vercel MCP</span> — <span class="blurb">Deployments, logs, envs.</span></span></li>
+      <li><span class="num">23</span><span><span class="name">AWS MCP</span> — <span class="blurb">S3, Lambda, DynamoDB, CloudWatch.</span></span></li>
+      <li><span class="num">24</span><span><span class="name">Supabase MCP</span> — <span class="blurb">Postgres + auth + storage.</span></span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== 3RD PARTY MCP ========== -->
+<section id="3p-mcp">
+  <h2>Community & Third-Party MCPs</h2>
+  <p class="section-lede">High-quality unofficial servers that plug known gaps. Vet stars + last-commit before installing.</p>
+  <div class="category-block">
+    <div class="category-title"><h3>Must-Have Community Servers</h3><span class="count">16 tools</span></div>
+    <ol class="tool-list" start="25">
+      <li><span class="num">25</span><span><span class="name">Context7</span> — <span class="blurb">Live library docs (covered above).</span></span></li>
+      <li><span class="num">26</span><span><span class="name">n8n-mcp</span> — <span class="blurb">Builds n8n workflows.</span></span></li>
+      <li><span class="num">27</span><span><span class="name">Brave Search MCP</span> — <span class="blurb">Web search without Google hoops.</span></span></li>
+      <li><span class="num">28</span><span><span class="name">Perplexity MCP</span> — <span class="blurb">Sourced web answers.</span></span></li>
+      <li><span class="num">29</span><span><span class="name">Firecrawl MCP</span> — <span class="blurb">LLM-ready site scraping.</span></span></li>
+      <li><span class="num">30</span><span><span class="name">Exa MCP</span> — <span class="blurb">Semantic web search for agents.</span></span></li>
+      <li><span class="num">31</span><span><span class="name">Tavily MCP</span> — <span class="blurb">Search optimized for RAG.</span></span></li>
+      <li><span class="num">32</span><span><span class="name">Apify MCP</span> — <span class="blurb">5,000+ pre-built scrapers.</span></span></li>
+      <li><span class="num">33</span><span><span class="name">Zapier MCP</span> — <span class="blurb">8,000+ app actions.</span></span></li>
+      <li><span class="num">34</span><span><span class="name">Make.com MCP</span> — <span class="blurb">Scenario triggers.</span></span></li>
+      <li><span class="num">35</span><span><span class="name">Composio MCP</span> — <span class="blurb">250+ SaaS integrations in one server.</span></span></li>
+      <li><span class="num">36</span><span><span class="name">Obsidian MCP</span> — <span class="blurb">Vault read/write for note-takers.</span></span></li>
+      <li><span class="num">37</span><span><span class="name">Apple Shortcuts MCP</span> — <span class="blurb">Trigger macOS Shortcuts.</span></span></li>
+      <li><span class="num">38</span><span><span class="name">Gmail MCP</span> — <span class="blurb">Read/send/search mail.</span></span></li>
+      <li><span class="num">39</span><span><span class="name">Spotify MCP</span> — <span class="blurb">Playback, playlists, recs.</span></span></li>
+      <li><span class="num">40</span><span><span class="name">YouTube Transcript MCP</span> — <span class="blurb">Pull transcripts for summarization.</span></span></li>
+    </ol>
+  </div>
+  <div class="category-block">
+    <div class="category-title"><h3>Specialist & DevOps MCPs</h3><span class="count">14 tools</span></div>
+    <ol class="tool-list" start="41">
+      <li><span class="num">41</span><span><span class="name">Docker MCP</span> — <span class="blurb">Containers, compose, logs.</span></span></li>
+      <li><span class="num">42</span><span><span class="name">Kubernetes MCP</span> — <span class="blurb">kubectl wrapper for agents.</span></span></li>
+      <li><span class="num">43</span><span><span class="name">Terraform MCP</span> — <span class="blurb">Plan/apply with review gates.</span></span></li>
+      <li><span class="num">44</span><span><span class="name">Grafana MCP</span> — <span class="blurb">Query dashboards & alerts.</span></span></li>
+      <li><span class="num">45</span><span><span class="name">Datadog MCP</span> — <span class="blurb">Metrics, logs, APM traces.</span></span></li>
+      <li><span class="num">46</span><span><span class="name">PagerDuty MCP</span> — <span class="blurb">Incident triage from CLI.</span></span></li>
+      <li><span class="num">47</span><span><span class="name">MongoDB MCP</span> — <span class="blurb">Collections, aggregation.</span></span></li>
+      <li><span class="num">48</span><span><span class="name">Redis MCP</span> — <span class="blurb">Cache inspection & ops.</span></span></li>
+      <li><span class="num">49</span><span><span class="name">Plaid MCP</span> — <span class="blurb">Banking data (matches your finance stack).</span></span></li>
+      <li><span class="num">50</span><span><span class="name">Coinbase MCP</span> — <span class="blurb">Prices, portfolio (matches your finance stack).</span></span></li>
+      <li><span class="num">51</span><span><span class="name">Alpaca MCP</span> — <span class="blurb">Broker trading API.</span></span></li>
+      <li><span class="num">52</span><span><span class="name">HubSpot MCP</span> — <span class="blurb">CRM contacts, deals, tickets.</span></span></li>
+      <li><span class="num">53</span><span><span class="name">Intercom MCP</span> — <span class="blurb">Support conversations.</span></span></li>
+      <li><span class="num">54</span><span><span class="name">Puppeteer MCP</span> — <span class="blurb">Lighter-weight Playwright alt.</span></span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== SKILLS ========== -->
+<section id="skills">
+  <h2>Skills & Skill Packs</h2>
+  <p class="section-lede">Markdown-based capability modules that load on demand. Lower overhead than MCPs, portable across Claude Code, Cursor, Codex CLI.</p>
+  <div class="category-block">
+    <div class="category-title"><h3>Essential Skill Collections</h3><span class="count">14 tools</span></div>
+    <ol class="tool-list" start="55">
+      <li><span class="num">55</span><span><span class="name">Anthropic Official Skills</span> — <span class="blurb">pdf, xlsx, docx, pptx, skill-creator (already in your stack).</span></span></li>
+      <li><span class="num">56</span><span><span class="name">Superpowers (obra)</span> — <span class="blurb">Covered above.</span></span></li>
+      <li><span class="num">57</span><span><span class="name">VoltAgent/awesome-agent-skills</span> — <span class="blurb">1,000+ curated skills directory.</span></span></li>
+      <li><span class="num">58</span><span><span class="name">alirezarezvani/claude-skills</span> — <span class="blurb">232+ engineering/marketing/product skills.</span></span></li>
+      <li><span class="num">59</span><span><span class="name">travisvn/awesome-claude-skills</span> — <span class="blurb">Curated skill index with installers.</span></span></li>
+      <li><span class="num">60</span><span><span class="name">ComposioHQ/awesome-claude-skills</span> — <span class="blurb">Cross-surface skill compilations.</span></span></li>
+      <li><span class="num">61</span><span><span class="name">Claude Scientific Skills</span> — <span class="blurb">Research/engineering workflows.</span></span></li>
+      <li><span class="num">62</span><span><span class="name">Trail of Bits Security Skills</span> — <span class="blurb">Code auditing, vuln detection.</span></span></li>
+      <li><span class="num">63</span><span><span class="name">next-skills</span> — <span class="blurb">Next.js patterns (app router, server actions).</span></span></li>
+      <li><span class="num">64</span><span><span class="name">Fullstack Dev Skills</span> — <span class="blurb">65+ stack-specific skills.</span></span></li>
+      <li><span class="num">65</span><span><span class="name">translate-book</span> — <span class="blurb">Parallel subagent book translation.</span></span></li>
+      <li><span class="num">66</span><span><span class="name">manim_skill</span> — <span class="blurb">3Blue1Brown-style math animations.</span></span></li>
+      <li><span class="num">67</span><span><span class="name">napkin</span> — <span class="blurb">Persistent memory of past mistakes.</span></span></li>
+      <li><span class="num">68</span><span><span class="name">antigravity-awesome-skills</span> — <span class="blurb">1,400+ skills via npm installer.</span></span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== SUBAGENTS ========== -->
+<section id="agents">
+  <h2>Subagents & Orchestrators</h2>
+  <p class="section-lede">Specialist agents Claude hands work off to. Great for parallel review, security, infra — domains where a narrower system prompt beats the main loop.</p>
+  <div class="category-block">
+    <div class="category-title"><h3>Subagent Libraries</h3><span class="count">12 tools</span></div>
+    <ol class="tool-list" start="69">
+      <li><span class="num">69</span><span><span class="name">wshobson/agents</span> — <span class="blurb">Covered above.</span></span></li>
+      <li><span class="num">70</span><span><span class="name">claude-code-subagents</span> — <span class="blurb">100+ production subagents.</span></span></li>
+      <li><span class="num">71</span><span><span class="name">AgentSys (avifenesh)</span> — <span class="blurb">PR mgmt, perf investigation, drift.</span></span></li>
+      <li><span class="num">72</span><span><span class="name">ContextKit (Cihat Gündüz)</span> — <span class="blurb">4-phase planning + quality agents.</span></span></li>
+      <li><span class="num">73</span><span><span class="name">Claude Squad</span> — <span class="blurb">Parallel agents in isolated workspaces.</span></span></li>
+      <li><span class="num">74</span><span><span class="name">Auto-Claude</span> — <span class="blurb">Autonomous multi-agent framework.</span></span></li>
+      <li><span class="num">75</span><span><span class="name">Ralph Orchestrator</span> — <span class="blurb">Task-completion loop controller.</span></span></li>
+      <li><span class="num">76</span><span><span class="name">shinpr/claude-code-workflows</span> — <span class="blurb">Production dev workflows, specialized agents.</span></span></li>
+      <li><span class="num">77</span><span><span class="name">code-reviewer (built-in)</span> — <span class="blurb">Native subagent for PR review.</span></span></li>
+      <li><span class="num">78</span><span><span class="name">security-auditor</span> — <span class="blurb">OWASP/credential scan specialist.</span></span></li>
+      <li><span class="num">79</span><span><span class="name">test-automator</span> — <span class="blurb">pytest/vitest scaffolding.</span></span></li>
+      <li><span class="num">80</span><span><span class="name">deployment-engineer</span> — <span class="blurb">CI/CD + rollout agents.</span></span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== HOOKS ========== -->
+<section id="hooks">
+  <h2>Hooks & Automation</h2>
+  <p class="section-lede">Shell commands that fire on lifecycle events. Deterministic guardrails — the piece LLMs can't skip.</p>
+  <div class="category-block">
+    <div class="category-title"><h3>Hook Patterns & Collections</h3><span class="count">10 tools</span></div>
+    <ol class="tool-list" start="81">
+      <li><span class="num">81</span><span><span class="name">TDD Guard</span> — <span class="blurb">Blocks non-TDD file writes.</span></span></li>
+      <li><span class="num">82</span><span><span class="name">Dippy</span> — <span class="blurb">Auto-approves safe bash reads.</span></span></li>
+      <li><span class="num">83</span><span><span class="name">TypeScript Quality Hooks</span> — <span class="blurb">Live tsc + eslint gating.</span></span></li>
+      <li><span class="num">84</span><span><span class="name">Prettier-on-PostToolUse</span> — <span class="blurb">Auto-format after every edit.</span></span></li>
+      <li><span class="num">85</span><span><span class="name">Env-file Shield</span> — <span class="blurb">Block edits to .env / secrets.</span></span></li>
+      <li><span class="num">86</span><span><span class="name">Stop-on-Red-Test</span> — <span class="blurb">Halt session if tests fail.</span></span></li>
+      <li><span class="num">87</span><span><span class="name">less-permission-prompts</span> — <span class="blurb">Auto-allowlist from transcripts (in your stack).</span></span></li>
+      <li><span class="num">88</span><span><span class="name">Commit-on-Stop</span> — <span class="blurb">Auto-snapshot work at session end.</span></span></li>
+      <li><span class="num">89</span><span><span class="name">SubagentStop Slack notify</span> — <span class="blurb">Ping when long agent finishes.</span></span></li>
+      <li><span class="num">90</span><span><span class="name">PreCompact Transcript Archive</span> — <span class="blurb">Save full convo before compaction.</span></span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== COMPANIONS ========== -->
+<section id="companions">
+  <h2>Companion AI Tools</h2>
+  <p class="section-lede">Work alongside Claude Code — not replacements. Pair terminal agent (deep work) with inline AI (autocomplete).</p>
+  <div class="category-block">
+    <div class="category-title"><h3>Editors & Inline Agents</h3><span class="count">6 tools</span></div>
+    <ol class="tool-list" start="91">
+      <li><span class="num">91</span><span><span class="name">Cursor</span> — <span class="blurb">Best all-round AI editor; Composer for multi-file.</span></span></li>
+      <li><span class="num">92</span><span><span class="name">Windsurf</span> — <span class="blurb">Cascade context tracking; gentler than Cursor.</span></span></li>
+      <li><span class="num">93</span><span><span class="name">Cline</span> — <span class="blurb">Open-source VS Code agent; pairs with DeepSeek for cheap.</span></span></li>
+      <li><span class="num">94</span><span><span class="name">Aider</span> — <span class="blurb">Terminal git-aware pair-programmer.</span></span></li>
+      <li><span class="num">95</span><span><span class="name">Codex CLI</span> — <span class="blurb">OpenAI's Claude Code competitor; reuses your skills folder.</span></span></li>
+      <li><span class="num">96</span><span><span class="name">Gemini CLI</span> — <span class="blurb">Google terminal agent; shares skill format.</span></span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== KNOWLEDGE ========== -->
+<section id="knowledge">
+  <h2>Knowledge & Research Layer</h2>
+  <p class="section-lede">Claude Code is weak at deep, sourced research. These fill the gap.</p>
+  <div class="category-block">
+    <div class="category-title"><h3>Research & Knowledge</h3><span class="count">4 tools</span></div>
+    <ol class="tool-list" start="97">
+      <li><span class="num">97</span><span><span class="name">NotebookLM</span> — <span class="blurb">Grounded multi-source research; audio briefings.</span></span></li>
+      <li><span class="num">98</span><span><span class="name">Perplexity Spaces</span> — <span class="blurb">Shared research workspaces with sources.</span></span></li>
+      <li><span class="num">99</span><span><span class="name">Obsidian + Claude</span> — <span class="blurb">Local markdown vault as second brain.</span></span></li>
+      <li><span class="num">100</span><span><span class="name">Readwise Reader</span> — <span class="blurb">Save everything; export to NotebookLM.</span></span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== DASHBOARDS ========== -->
+<section id="dashboards">
+  <h2>Dashboards, Marketplaces & Monitoring</h2>
+  <p class="section-lede">Bonus tier — tooling to watch, discover, and manage everything above.</p>
+  <div class="category-block">
+    <div class="category-title"><h3>Ecosystem Tools</h3><span class="count">8 tools</span></div>
+    <ol class="tool-list" start="1">
+      <li><span class="num">★</span><span><span class="name">buildwithclaude.com</span> — <span class="blurb">Plugin marketplace; 500+ extensions.</span></span></li>
+      <li><span class="num">★</span><span><span class="name">registry.modelcontextprotocol.io</span> — <span class="blurb">Official MCP registry.</span></span></li>
+      <li><span class="num">★</span><span><span class="name">glama.ai/mcp/servers</span> — <span class="blurb">21k+ MCP server directory.</span></span></li>
+      <li><span class="num">★</span><span><span class="name">hesreallyhim/awesome-claude-code</span> — <span class="blurb">The canonical awesome-list.</span></span></li>
+      <li><span class="num">★</span><span><span class="name">ccflare / better-ccflare</span> — <span class="blurb">Usage/cost dashboards.</span></span></li>
+      <li><span class="num">★</span><span><span class="name">ccxray</span> — <span class="blurb">HTTP proxy for request inspection.</span></span></li>
+      <li><span class="num">★</span><span><span class="name">claudekit</span> — <span class="blurb">CLI toolkit, checkpointing, subagents.</span></span></li>
+      <li><span class="num">★</span><span><span class="name">Cowork</span> — <span class="blurb">Team/plugin management (in your stack).</span></span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========== STRATEGY ========== -->
+<section id="strategy">
+  <h2>Recommended Stack Strategy for You</h2>
+  <p class="section-lede">Given your profile — Python primary, Windows + Mac, finance/health/client projects, existing Coinbase/Plaid/Wealthsimple integrations:</p>
+
+  <div class="category-block">
+    <div class="category-title"><h3>Phase 1 — This Week (high-leverage, zero-friction)</h3></div>
+    <p style="color:var(--muted);margin:0 0 10px;">Install in order: <code>GitHub MCP</code> → <code>Filesystem MCP</code> → <code>Context7</code> → <code>Sentry MCP</code> → <code>Notion MCP</code>. All are remote or <code>npx</code> — under 15 minutes total.</p>
+  </div>
+
+  <div class="category-block">
+    <div class="category-title"><h3>Phase 2 — Next (domain-specific power-ups)</h3></div>
+    <p style="color:var(--muted);margin:0 0 10px;">For your finance panel: add <code>Plaid MCP</code> + <code>Coinbase MCP</code> so Claude can debug live data. For Jarvis/projects: add <code>Playwright MCP</code> + <code>n8n-mcp</code>. Install <code>wshobson/agents</code> to get parallel specialists.</p>
+  </div>
+
+  <div class="category-block">
+    <div class="category-title"><h3>Phase 3 — Workflow Polish</h3></div>
+    <p style="color:var(--muted);margin:0 0 10px;">Adopt <code>Superpowers</code> skill framework for larger features. Add a Prettier/Black PostToolUse hook. Wire Claude Code <code>Stop</code> event to a desktop notification on Windows via PowerShell. Start using NotebookLM for any domain research before coding.</p>
+  </div>
+
+  <div class="notes">
+    <strong>Avoid over-installing.</strong> Every MCP loaded = tokens eaten on startup + tool-choice confusion. Stick to the Top 10, add domain-specific servers only when actively working on that domain. Use <code>claude mcp list</code> and <code>claude mcp remove &lt;name&gt;</code> regularly.
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Claude Code Power Stack · Compiled 2026-04-19 · Save this page or bookmark <code>active/projects/claude-code-toolkit/index.html</code>
+</footer>
+
+</body>
+</html>
