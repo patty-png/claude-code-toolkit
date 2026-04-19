@@ -302,21 +302,25 @@
 
   /* -------- TOP 5 cards (grid) -------- */
   .top5 {
-    padding: 0 32px;
-    max-width: 1200px;
+    padding: 0 24px;
+    max-width: 1280px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 12px;
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
+  @media (min-width: 520px)  { .top5 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 780px)  { .top5 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (min-width: 1000px) { .top5 { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; } }
+
   .pick {
     background: var(--paper);
     border: 1px solid var(--rule);
     border-radius: var(--radius);
-    padding: 16px 18px;
+    padding: 14px 14px 14px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 7px;
     transition: border-color 0.15s, transform 0.1s;
     min-width: 0;
   }
@@ -324,13 +328,13 @@
   .pick-meta {
     display: flex;
     align-items: baseline;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
   }
   .pick-num {
     font-family: 'Fraunces', serif;
     font-style: italic;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     font-weight: 400;
     line-height: 1;
     color: var(--accent);
@@ -338,7 +342,7 @@
   }
   .pick-name {
     font-family: 'Fraunces', serif;
-    font-size: 1.25rem;
+    font-size: 1.08rem;
     font-weight: 500;
     letter-spacing: -0.01em;
     line-height: 1.15;
@@ -348,19 +352,20 @@
   .pick-name a:hover { color: var(--accent); }
   .pick-tag {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.68rem;
+    font-size: 0.62rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     color: var(--muted);
-    padding: 2px 7px;
+    padding: 2px 6px;
     background: var(--paper-2);
     border-radius: 3px;
+    white-space: nowrap;
   }
   .pick-desc {
     color: var(--ink-2);
     margin: 0;
-    font-size: 0.92rem;
-    line-height: 1.5;
+    font-size: 0.84rem;
+    line-height: 1.45;
     flex: 1;
   }
   .pick-install-label {
@@ -373,24 +378,25 @@
   }
 
   /* Disclosure toggle on Top 5 picks */
-  .pick-install-toggle { margin-top: 6px; }
+  .pick-install-toggle { margin-top: 4px; }
   .pick-install-toggle > summary {
     list-style: none;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 0.86rem;
+    font-size: 0.78rem;
     font-weight: 500;
     color: var(--accent);
-    padding: 6px 12px;
+    padding: 5px 10px;
     border: 1px solid var(--rule);
     border-radius: var(--radius);
     background: var(--paper-2);
     transition: all 0.15s;
     width: fit-content;
     user-select: none;
+    white-space: nowrap;
   }
   .pick-install-toggle > summary::-webkit-details-marker { display: none; }
   .pick-install-toggle > summary::marker { content: ''; }
