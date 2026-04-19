@@ -300,57 +300,72 @@
     line-height: 1.55;
   }
 
-  /* -------- TOP 5 cards -------- */
+  /* -------- TOP 5 cards (grid) -------- */
   .top5 {
     padding: 0 32px;
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 0;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
   }
   .pick {
-    padding: 22px 0;
-    border-top: 1px solid var(--rule);
-    display: grid;
-    grid-template-columns: 56px 1fr;
-    gap: 22px;
-    align-items: start;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color 0.15s, transform 0.1s;
+    min-width: 0;
   }
-  .pick:last-child { border-bottom: 1px solid var(--rule); }
+  .pick:hover { border-color: var(--ink-2); }
+  .pick-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
   .pick-num {
     font-family: 'Fraunces', serif;
-    font-size: 2.4rem;
-    font-weight: 300;
+    font-style: italic;
+    font-size: 1.3rem;
+    font-weight: 400;
     line-height: 1;
     color: var(--accent);
-    font-variation-settings: "opsz" 144;
+    font-variation-settings: "opsz" 60;
   }
-  .pick-body { min-width: 0; }
-  .pick-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 6px; }
   .pick-name {
     font-family: 'Fraunces', serif;
-    font-size: 1.6rem;
+    font-size: 1.25rem;
     font-weight: 500;
     letter-spacing: -0.01em;
-    color: var(--ink);
+    line-height: 1.15;
+    margin: 0;
   }
   .pick-name a { color: var(--ink); border: none; }
   .pick-name a:hover { color: var(--accent); }
   .pick-tag {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: var(--muted);
-    padding: 3px 8px;
+    padding: 2px 7px;
     background: var(--paper-2);
     border-radius: 3px;
   }
-  .pick-desc { color: var(--ink-2); margin-bottom: 16px; font-size: 1rem; max-width: 680px; }
+  .pick-desc {
+    color: var(--ink-2);
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    flex: 1;
+  }
   .pick-install-label {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     color: var(--muted);
@@ -1004,7 +1019,7 @@
   <div class="section-head">
     <div class="section-num">01 — The shortlist</div>
     <h2 class="serif">The five you should <em>install first.</em></h2>
-    <p class="section-lede">Ranked by real-world leverage. Each card has one install command. Click the name to see the project page. Browse the full 234 below.</p>
+    <p class="section-lede">Ranked by real-world leverage. Click the name for the project page, <strong>Show install guide</strong> for the command. Browse the full <span id="top5-total">284</span> below.</p>
   </div>
   <div class="top5" id="top5-list"></div>
 </section>
@@ -1663,22 +1678,20 @@ if (localStorage.getItem(OLD_SAVED_KEY)) {
 function renderTop5() {
   const picks = TOP5_IDS.map(id => TOOLS.find(t => t.id === id));
   $('top5-list').innerHTML = picks.map((t, i) => `
-    <div class="pick">
-      <div class="pick-num">${String(i + 1).padStart(2, '0')}</div>
-      <div class="pick-body">
-        <div class="pick-head">
-          <span class="pick-name"><a href="${t.url}" target="_blank" rel="noopener">${esc(t.name)}</a></span>
-          <span class="pick-tag">${esc(t.tag)}</span>
-        </div>
-        <p class="pick-desc">${esc(t.blurb)}</p>
-        ${t.install ? `
-          <details class="pick-install-toggle">
-            <summary><span class="summary-label"></span></summary>
-            <pre><button class="copy-btn" data-copy="${escAttr(t.install)}">Copy</button><code>${esc(t.install)}</code></pre>
-          </details>
-        ` : ''}
+    <article class="pick">
+      <div class="pick-meta">
+        <span class="pick-num">${String(i + 1).padStart(2, '0')}</span>
+        <span class="pick-tag">${esc(t.tag)}</span>
       </div>
-    </div>
+      <h3 class="pick-name"><a href="${t.url}" target="_blank" rel="noopener">${esc(t.name)}</a></h3>
+      <p class="pick-desc">${esc(t.blurb)}</p>
+      ${t.install ? `
+        <details class="pick-install-toggle">
+          <summary><span class="summary-label"></span></summary>
+          <pre><button class="copy-btn" data-copy="${escAttr(t.install)}">Copy</button><code>${esc(t.install)}</code></pre>
+        </details>
+      ` : ''}
+    </article>
   `).join('');
 }
 
@@ -2489,6 +2502,8 @@ if (!isApplePlatform) {
 // Landing metadata count reflects real tool total (minus chip 'all'/'saved')
 const lmCount = document.getElementById('lm-count');
 if (lmCount) lmCount.textContent = TOOLS.length;
+const top5Total = document.getElementById('top5-total');
+if (top5Total) top5Total.textContent = TOOLS.length;
 // Update category count too — primary chips minus 'all' and 'saved'
 const catCountEl = document.querySelector('.landing-meta span:nth-child(3) strong');
 if (catCountEl) catCountEl.textContent = CATS.filter(c => c.id !== 'all' && c.id !== 'saved').length;
