@@ -926,6 +926,11 @@ function highlight(text, q) {
 // ============= RENDER: DIRECTORY =============
 function renderDirectory() {
   const q = query.trim();
+
+  // Top 5 only shows on the "all" tab with no active search
+  const top5 = $('top5');
+  if (top5) top5.style.display = (activeCat === 'all' && !q) ? '' : 'none';
+
   const scored = TOOLS.map(t => ({ t, s: scoreTool(t, q) }))
     .filter(x => x.s > 0)
     .filter(x => activeCat === 'all' || CAT_MAP[x.t.cat] === activeCat);
