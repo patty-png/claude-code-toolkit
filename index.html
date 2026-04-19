@@ -357,6 +357,40 @@
     margin-bottom: 6px;
   }
 
+  /* Disclosure toggle on Top 5 picks */
+  .pick-install-toggle { margin-top: 6px; }
+  .pick-install-toggle > summary {
+    list-style: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.86rem;
+    font-weight: 500;
+    color: var(--accent);
+    padding: 6px 12px;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--paper-2);
+    transition: all 0.15s;
+    width: fit-content;
+    user-select: none;
+  }
+  .pick-install-toggle > summary::-webkit-details-marker { display: none; }
+  .pick-install-toggle > summary::marker { content: ''; }
+  .pick-install-toggle > summary::before {
+    content: '▸';
+    font-size: 0.72rem;
+    transition: transform 0.15s;
+    display: inline-block;
+  }
+  .pick-install-toggle > summary:hover { background: var(--paper-3); border-color: var(--accent); }
+  .pick-install-toggle[open] > summary { margin-bottom: 10px; }
+  .pick-install-toggle[open] > summary::before { transform: rotate(90deg); }
+  .pick-install-toggle[open] > summary > .summary-label::after { content: 'Hide install guide'; }
+  .pick-install-toggle:not([open]) > summary > .summary-label::after { content: 'Show install guide'; }
+
   /* -------- DIRECTORY ------- */
   .directory { padding: 0 32px; max-width: 1200px; margin: 0 auto; }
   .dir-group { margin-bottom: 48px; }
@@ -1638,8 +1672,10 @@ function renderTop5() {
         </div>
         <p class="pick-desc">${esc(t.blurb)}</p>
         ${t.install ? `
-          <div class="pick-install-label">Install</div>
-          <pre><button class="copy-btn" data-copy="${escAttr(t.install)}">Copy</button><code>${esc(t.install)}</code></pre>
+          <details class="pick-install-toggle">
+            <summary><span class="summary-label"></span></summary>
+            <pre><button class="copy-btn" data-copy="${escAttr(t.install)}">Copy</button><code>${esc(t.install)}</code></pre>
+          </details>
         ` : ''}
       </div>
     </div>
