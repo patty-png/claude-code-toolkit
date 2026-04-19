@@ -36,7 +36,19 @@
   a:hover { border-bottom-color: var(--accent); }
   code, pre, kbd { font-family: 'JetBrains Mono', ui-monospace, monospace; }
   code { font-size: 0.85em; background: var(--paper-3); padding: 1px 6px; border-radius: 3px; color: var(--ink-2); }
-  pre { background: var(--ink); color: #f5efe6; padding: 14px 18px; border-radius: var(--radius); overflow-x: auto; font-size: 0.84rem; line-height: 1.65; position: relative; }
+  pre {
+    background: var(--ink);
+    color: #f5efe6;
+    padding: 10px 12px;
+    border-radius: var(--radius);
+    font-size: 0.72rem;
+    line-height: 1.5;
+    position: relative;
+    margin: 6px 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
   pre code { background: transparent; padding: 0; color: inherit; font-size: inherit; }
   button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
 
@@ -412,20 +424,11 @@
   .pick-install-toggle[open] > summary > .summary-label::after { content: 'Hide install guide'; }
   .pick-install-toggle:not([open]) > summary > .summary-label::after { content: 'Show install guide'; }
 
-  /* Tighter install preview inside the narrow Top 5 cards */
+  /* Slightly tighter in the narrow Top 5 cards */
   .pick-install-toggle pre {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     line-height: 1.45;
-    padding: 10px 12px;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
-  .pick-install-toggle pre .copy-btn {
-    top: 6px;
-    right: 6px;
-    font-size: 0.62rem;
-    padding: 2px 7px;
+    padding: 8px 10px;
   }
 
   /* -------- DIRECTORY ------- */
@@ -889,12 +892,12 @@
   /* Copy button */
   .copy-btn {
     position: absolute;
-    top: 10px;
-    right: 12px;
+    top: 5px;
+    right: 6px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
+    font-size: 0.62rem;
     color: #d4c7b3;
-    padding: 3px 10px;
+    padding: 2px 7px;
     border: 1px solid #3a322a;
     border-radius: 3px;
     background: transparent;
