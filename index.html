@@ -3,449 +3,638 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Claude Code Power Stack v3 — Interactive Tool Directory</title>
+<title>Claude Code Power Stack — A Curated Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0b0d10;
-    --panel: #13171c;
-    --panel-2: #1a1f26;
-    --panel-3: #222932;
-    --border: #242b33;
-    --border-hover: #3a4550;
-    --text: #e6edf3;
-    --muted: #8b98a5;
-    --accent: #d97757;
-    --accent-2: #f5b342;
-    --green: #3fb950;
-    --blue: #58a6ff;
-    --purple: #bc8cff;
-    --red: #f85149;
+    --paper: #f5efe6;
+    --paper-2: #ede5d8;
+    --paper-3: #e4d9c6;
+    --ink: #1e1915;
+    --ink-2: #3a322a;
+    --muted: #8a7e6f;
+    --rule: #d6c7ae;
+    --accent: #9a3412;       /* deep terracotta */
+    --accent-ink: #5e1e0a;
+    --highlight: #fef3c7;    /* warm yellow for search highlight */
+    --ok: #3f6212;
+    --radius: 4px;
   }
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
     line-height: 1.55;
+    font-size: 17px;
+    -webkit-font-smoothing: antialiased;
   }
-  a { color: var(--blue); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-  code {
-    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
-    background: #0d1117;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.88em;
-    color: var(--accent-2);
-    border: 1px solid var(--border);
-  }
-  pre {
-    background: #0d1117;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 12px 14px;
-    overflow-x: auto;
-    font-size: 0.85em;
-    color: #e6edf3;
-    margin: 8px 0;
-  }
-  pre code { background: transparent; border: none; padding: 0; color: inherit; }
-  button { font-family: inherit; cursor: pointer; }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(154,52,18,0.25); transition: border-color 0.15s; }
+  a:hover { border-bottom-color: var(--accent); }
+  code, pre, kbd { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+  code { font-size: 0.85em; background: var(--paper-3); padding: 1px 6px; border-radius: 3px; color: var(--ink-2); }
+  pre { background: var(--ink); color: #f5efe6; padding: 14px 18px; border-radius: var(--radius); overflow-x: auto; font-size: 0.84rem; line-height: 1.65; position: relative; }
+  pre code { background: transparent; padding: 0; color: inherit; font-size: inherit; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
 
-  header {
-    padding: 40px 32px 20px;
-    border-bottom: 1px solid var(--border);
-    background: linear-gradient(180deg, #141820 0%, var(--bg) 100%);
-  }
-  header .wrap { max-width: 1280px; margin: 0 auto; }
-  header h1 { font-size: 2.2rem; margin: 0 0 6px; letter-spacing: -0.02em; }
-  header .subtitle { color: var(--muted); font-size: 1rem; margin: 0; max-width: 820px; }
-  header .version { display: inline-block; background: var(--accent); color: #1a0f08; font-weight: 700; padding: 2px 10px; border-radius: 4px; font-size: 0.75rem; letter-spacing: 0.05em; margin-right: 8px; vertical-align: middle; }
-  header .meta { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; font-size: 0.8rem; color: var(--muted); }
-  header .meta span { background: var(--panel); padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border); }
+  /* -------- LAYOUT -------- */
+  .container { max-width: 920px; margin: 0 auto; padding: 0 32px; }
+  .wide { max-width: 1200px; }
 
-  /* Search + Filter Bar */
-  .controls {
+  /* -------- HERO -------- */
+  header.hero {
+    padding: 80px 32px 60px;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 24px; right: 32px;
+    font-family: 'Fraunces', serif;
+    font-size: 7rem;
+    font-weight: 300;
+    color: rgba(154,52,18,0.08);
+    line-height: 1;
+    font-style: italic;
+    pointer-events: none;
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .eyebrow span::before { content: '·'; margin-right: 14px; color: var(--rule); }
+  .eyebrow span:first-child::before { display: none; }
+  h1.display {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 24px;
+    font-variation-settings: "opsz" 144, "SOFT" 30;
+  }
+  h1.display em {
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 300;
+  }
+  .hero .lede {
+    font-size: 1.22rem;
+    line-height: 1.5;
+    color: var(--ink-2);
+    max-width: 620px;
+    margin-bottom: 36px;
+  }
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 24px;
+    border-radius: var(--radius);
+    font-weight: 500;
+    font-size: 0.98rem;
+    border-bottom: none;
+    transition: transform 0.1s, background 0.15s;
+  }
+  .hero-cta:hover { background: var(--accent-ink); transform: translateY(-1px); border-bottom: none; }
+  .hero-cta .arrow { font-family: 'Fraunces', serif; font-size: 1.2rem; }
+
+  /* -------- SEARCH BAR (sticky) -------- */
+  .searchbar {
     position: sticky;
     top: 0;
-    z-index: 20;
-    background: rgba(11,13,16,0.96);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    padding: 14px 32px;
+    z-index: 50;
+    background: rgba(245,239,230,0.96);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid var(--rule);
+    padding: 16px 32px;
   }
-  .controls .wrap { max-width: 1280px; margin: 0 auto; }
-  .search-row { display: flex; gap: 12px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
-  .search-input {
+  .searchbar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .search-field {
     flex: 1;
-    min-width: 240px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    color: var(--text);
+    min-width: 280px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--paper);
+    border: 1.5px solid var(--rule);
+    border-radius: var(--radius);
     padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-family: inherit;
-    outline: none;
     transition: border-color 0.15s;
   }
-  .search-input:focus { border-color: var(--accent); }
-  .search-input::placeholder { color: var(--muted); }
-  .result-count { font-size: 0.85rem; color: var(--muted); white-space: nowrap; }
-  .clear-btn {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 9px 12px;
-    border-radius: 6px;
-    font-size: 0.85rem;
+  .search-field:focus-within { border-color: var(--accent); }
+  .search-field .icon { font-family: 'Fraunces', serif; font-size: 1.1rem; color: var(--muted); font-style: italic; }
+  .search-field input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 1rem;
+    color: var(--ink);
   }
-  .clear-btn:hover { background: var(--panel-2); color: var(--text); }
-
-  .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
-  .chip {
-    background: var(--panel);
-    border: 1px solid var(--border);
+  .search-field input::placeholder { color: var(--muted); }
+  .kbd-hint {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
     color: var(--muted);
-    padding: 5px 12px;
-    border-radius: 999px;
-    font-size: 0.82rem;
+    border: 1px solid var(--rule);
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: var(--paper-2);
+  }
+  .chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .chip {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.86rem;
+    padding: 8px 14px;
+    border-radius: var(--radius);
+    border: 1.5px solid var(--rule);
+    background: var(--paper);
+    color: var(--ink-2);
     transition: all 0.15s;
+    font-weight: 500;
     white-space: nowrap;
   }
-  .chip:hover { background: var(--panel-2); color: var(--text); border-color: var(--border-hover); }
-  .chip.active { background: var(--accent); color: #1a0f08; border-color: var(--accent); font-weight: 600; }
-  .chip .n { opacity: 0.65; margin-left: 4px; font-size: 0.78rem; }
-  .chip.active .n { opacity: 0.85; }
+  .chip:hover { border-color: var(--ink); color: var(--ink); }
+  .chip.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .chip .n { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; opacity: 0.6; margin-left: 5px; }
 
-  main { max-width: 1280px; margin: 0 auto; padding: 28px 32px; }
+  /* -------- SECTIONS -------- */
+  main { padding: 64px 0 80px; }
+  section { margin-bottom: 72px; }
+  .section-head { margin-bottom: 32px; padding: 0 32px; max-width: 1200px; margin-left: auto; margin-right: auto; }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  h2.serif {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 12px;
+    font-variation-settings: "opsz" 60;
+  }
+  h2.serif em { font-style: italic; color: var(--accent); }
+  .section-lede {
+    font-size: 1.05rem;
+    color: var(--ink-2);
+    max-width: 640px;
+    line-height: 1.55;
+  }
 
-  .stats-row {
+  /* -------- TOP 5 cards -------- */
+  .top5 {
+    padding: 0 32px;
+    max-width: 1200px;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 10px;
-    margin: 0 0 24px;
+    grid-template-columns: 1fr;
+    gap: 0;
   }
-  .stat { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 12px; text-align: center; }
-  .stat .n { font-size: 1.6rem; font-weight: 700; color: var(--accent); display: block; }
-  .stat .l { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
-
-  section { margin-bottom: 40px; }
-  section h2 {
-    font-size: 1.5rem;
-    margin: 0 0 6px;
+  .pick {
+    padding: 32px 0;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .pick:last-child { border-bottom: 1px solid var(--rule); }
+  .pick-num {
+    font-family: 'Fraunces', serif;
+    font-size: 2.4rem;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--accent);
+    font-variation-settings: "opsz" 144;
+  }
+  .pick-body { min-width: 0; }
+  .pick-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 6px; }
+  .pick-name {
+    font-family: 'Fraunces', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
     letter-spacing: -0.01em;
-    border-left: 3px solid var(--accent);
-    padding-left: 12px;
+    color: var(--ink);
   }
-  section .section-lede { color: var(--muted); margin: 0 0 18px; padding-left: 15px; max-width: 880px; font-size: 0.95rem; }
-
-  /* Top 10 cards — clickable */
-  .top10-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
-  .tool-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 18px 20px;
-    transition: border-color 0.15s, transform 0.1s;
-    position: relative;
-  }
-  .tool-card:hover { border-color: var(--border-hover); }
-  .tool-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
-  .tool-rank { background: var(--accent); color: #1a0f08; font-weight: 700; padding: 2px 9px; border-radius: 6px; font-size: 0.82rem; }
-  .tool-name { font-size: 1.15rem; font-weight: 600; margin: 0; }
-  .tool-name a { color: var(--text); border-bottom: 1px dotted transparent; }
-  .tool-name a:hover { color: var(--accent-2); border-bottom-color: var(--accent-2); text-decoration: none; }
-  .tool-tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); background: var(--panel-2); padding: 2px 7px; border-radius: 4px; border: 1px solid var(--border); }
-  .tool-desc { color: var(--muted); margin: 0 0 10px; font-size: 0.92rem; }
-  .tool-install h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin: 10px 0 4px; }
-  .copy-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: var(--panel-3);
-    border: 1px solid var(--border);
+  .pick-name a { color: var(--ink); border: none; }
+  .pick-name a:hover { color: var(--accent); }
+  .pick-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     color: var(--muted);
     padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 0.72rem;
-    opacity: 0;
-    transition: opacity 0.15s;
-  }
-  pre:hover .copy-btn { opacity: 1; }
-  .copy-btn:hover { background: var(--accent); color: #1a0f08; border-color: var(--accent); }
-  .copy-btn.copied { background: var(--green); color: #0a1a0d; border-color: var(--green); }
-  pre { position: relative; }
-
-  /* Interactive grid */
-  .group-section { margin-bottom: 36px; }
-  .group-title {
-    font-size: 1.3rem;
-    margin: 0 0 4px;
-    border-left: 3px solid var(--accent-2);
-    padding-left: 12px;
-    color: var(--text);
-  }
-  .group-sub { color: var(--muted); font-size: 0.88rem; padding-left: 15px; margin: 0 0 14px; }
-
-  .tool-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 10px;
-  }
-  .mini-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 14px;
-    cursor: pointer;
-    transition: all 0.15s;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    position: relative;
-  }
-  .mini-card:hover {
-    background: var(--panel-2);
-    border-color: var(--accent);
-    transform: translateY(-1px);
-  }
-  .mini-card .mc-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
-  .mini-card .mc-num {
-    font-family: "JetBrains Mono", Consolas, monospace;
-    font-size: 0.72rem;
-    color: var(--muted);
-    background: var(--panel-2);
-    padding: 1px 6px;
+    background: var(--paper-2);
     border-radius: 3px;
   }
-  .mini-card .mc-name { font-weight: 600; font-size: 0.93rem; color: var(--text); flex: 1; }
-  .mini-card .mc-tag { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
-  .mini-card .mc-blurb { color: var(--muted); font-size: 0.85rem; margin: 2px 0 0; }
-  .mini-card .mc-link {
-    position: absolute;
-    top: 8px;
-    right: 10px;
+  .pick-desc { color: var(--ink-2); margin-bottom: 16px; font-size: 1rem; max-width: 680px; }
+  .pick-install-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
     color: var(--muted);
-    opacity: 0;
-    transition: opacity 0.15s;
-    font-size: 0.85rem;
+    margin-bottom: 6px;
   }
-  .mini-card:hover .mc-link { opacity: 1; color: var(--accent-2); }
 
-  /* Modal */
-  .modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.65);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-    padding: 20px;
-    backdrop-filter: blur(4px);
+  /* -------- DIRECTORY ------- */
+  .directory { padding: 0 32px; max-width: 1200px; margin: 0 auto; }
+  .dir-group { margin-bottom: 48px; }
+  .dir-group-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    padding-bottom: 12px;
+    border-bottom: 1.5px solid var(--ink);
   }
-  .modal-backdrop.open { display: flex; }
-  .modal {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    max-width: 640px;
-    width: 100%;
-    max-height: 88vh;
-    overflow-y: auto;
-    padding: 24px 26px;
+  .dir-group-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.35rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .dir-group-count { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--muted); }
+  .dir-group-sub { color: var(--muted); font-size: 0.92rem; margin-top: 10px; margin-bottom: 18px; max-width: 680px; }
+
+  .dir-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 0;
+    border-left: 1px solid var(--rule);
+    border-top: 1px solid var(--rule);
+  }
+  .dir-card {
+    padding: 16px 18px;
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    cursor: pointer;
+    transition: background 0.12s;
+    background: var(--paper);
     position: relative;
   }
-  .modal-close {
+  .dir-card:hover { background: var(--paper-2); }
+  .dir-card.open { background: var(--paper-2); }
+  .dir-card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+  }
+  .dir-card-name {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.98rem;
+    color: var(--ink);
+    margin-bottom: 2px;
+    line-height: 1.3;
+  }
+  .dir-card-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .dir-card-blurb {
+    font-size: 0.88rem;
+    color: var(--ink-2);
+    line-height: 1.45;
+  }
+  .dir-card-expand {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--rule);
+    display: none;
+  }
+  .dir-card.open .dir-card-expand { display: block; }
+  .dir-card-install { font-size: 0.82rem; }
+  .dir-card-links { margin-top: 10px; display: flex; gap: 14px; flex-wrap: wrap; font-size: 0.82rem; }
+  .dir-card-links a { font-family: 'IBM Plex Sans', sans-serif; font-weight: 500; }
+
+  /* Search result highlight */
+  mark { background: var(--highlight); color: var(--ink); padding: 0 2px; border-radius: 2px; }
+
+  /* Copy button */
+  .copy-btn {
     position: absolute;
-    top: 14px;
-    right: 16px;
+    top: 10px;
+    right: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: #d4c7b3;
+    padding: 3px 10px;
+    border: 1px solid #3a322a;
+    border-radius: 3px;
     background: transparent;
-    border: none;
-    color: var(--muted);
-    font-size: 1.4rem;
-    line-height: 1;
-    padding: 4px 8px;
-    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0;
+    transition: opacity 0.15s, background 0.15s;
   }
-  .modal-close:hover { background: var(--panel-2); color: var(--text); }
-  .modal h3 { margin: 0 0 4px; font-size: 1.3rem; }
-  .modal .m-tag { display: inline-block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); background: var(--panel-2); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); margin-right: 6px; }
-  .modal .m-desc { color: var(--muted); margin: 14px 0 10px; font-size: 0.95rem; }
-  .modal h4 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin: 16px 0 6px; }
-  .modal .m-links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
-  .modal .m-links a {
-    background: var(--panel-2);
-    border: 1px solid var(--border);
-    padding: 7px 12px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    color: var(--text);
-  }
-  .modal .m-links a:hover { background: var(--accent); color: #1a0f08; border-color: var(--accent); text-decoration: none; }
+  pre:hover .copy-btn { opacity: 1; }
+  .copy-btn:hover { background: #3a322a; }
+  .copy-btn.copied { background: #3f6212; border-color: #3f6212; color: #f5efe6; opacity: 1; }
 
-  .empty-state {
+  /* -------- ROADMAP -------- */
+  .roadmap { padding: 0 32px; max-width: 1200px; margin: 0 auto; }
+  .phase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 0;
+    border-top: 1.5px solid var(--ink);
+    border-left: 1px solid var(--rule);
+  }
+  .phase {
+    padding: 24px 22px;
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+  }
+  .phase-num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .phase-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .phase-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+  .phase-body { font-size: 0.92rem; color: var(--ink-2); line-height: 1.55; }
+  .phase-body code { font-size: 0.82rem; }
+
+  /* -------- EMPTY STATE -------- */
+  .empty {
+    padding: 64px 32px;
     text-align: center;
-    padding: 40px 20px;
-    color: var(--muted);
-    font-size: 0.95rem;
-    border: 1px dashed var(--border);
-    border-radius: 10px;
-    margin: 20px 0;
-  }
-
-  .notes {
-    background: var(--panel-2);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--accent-2);
-    border-radius: 6px;
-    padding: 14px 18px;
-    margin: 16px 0;
-    font-size: 0.9rem;
     color: var(--muted);
   }
-  .notes strong { color: var(--text); }
+  .empty-icon {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 3rem;
+    color: var(--rule);
+    margin-bottom: 12px;
+  }
 
-  footer { border-top: 1px solid var(--border); padding: 20px 32px; text-align: center; color: var(--muted); font-size: 0.85rem; }
+  /* -------- FOOTER -------- */
+  footer {
+    border-top: 1.5px solid var(--ink);
+    padding: 40px 32px;
+    margin-top: 80px;
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  .foot-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
 
-  @media (min-width: 900px) {
-    .top10-grid { grid-template-columns: repeat(2, 1fr); }
+  /* -------- RESPONSIVE -------- */
+  @media (max-width: 640px) {
+    .pick { grid-template-columns: 48px 1fr; gap: 16px; padding: 24px 0; }
+    .pick-num { font-size: 2rem; }
+    .pick-name { font-size: 1.3rem; }
+    header.hero { padding: 56px 24px 44px; }
+    .container, .wide, .section-head, .top5, .directory, .roadmap, .searchbar, .searchbar-inner { padding-left: 20px; padding-right: 20px; }
+    .searchbar-inner { gap: 10px; }
+    .chips { width: 100%; }
   }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="wrap">
-    <h1><span class="version">v3</span>Claude Code Power Stack</h1>
-    <p class="subtitle">Interactive directory of 234 tools. Click any card for install commands and official links. Search and filter to drill in.</p>
-    <div class="meta">
-      <span>Compiled 2026-04-19</span>
-      <span>For Jack (Windows 11 + Mac)</span>
-      <span>Click cards to expand · Ctrl/⌘+K to search</span>
+<!-- ============== HERO ============== -->
+<header class="hero">
+  <div class="container wide">
+    <div class="eyebrow">
+      <span>A curated guide</span>
+      <span>April 2026</span>
+      <span>234 tools reviewed</span>
     </div>
+    <h1 class="display">The Claude Code<br>Power <em>Stack.</em></h1>
+    <p class="lede">A working directory of the MCPs, skills, agents, and workflow tools that actually move the needle — and the ten that matter most. Search, filter, or browse.</p>
+    <a href="#top5" class="hero-cta">Start with the top 5 <span class="arrow">→</span></a>
   </div>
 </header>
 
-<div class="controls">
-  <div class="wrap">
-    <div class="search-row">
-      <input id="search" class="search-input" type="text" placeholder="Search 234 tools — try 'github', 'postgres', 'mcp', 'browser'…" autocomplete="off" />
-      <span class="result-count" id="count">234 tools</span>
-      <button class="clear-btn" id="clear-btn">Clear</button>
+<!-- ============== SEARCH + FILTER ============== -->
+<div class="searchbar">
+  <div class="searchbar-inner">
+    <div class="search-field">
+      <span class="icon">⌕</span>
+      <input id="search" type="text" placeholder="Search — try 'browser', 'postgres', 'hooks'…" autocomplete="off" />
+      <kbd class="kbd-hint">⌘K</kbd>
     </div>
-    <div class="filter-chips" id="chips"></div>
+    <div class="chips" id="chips"></div>
   </div>
 </div>
 
 <main>
 
-<div class="stats-row">
-  <div class="stat"><span class="n">234</span><span class="l">Tools indexed</span></div>
-  <div class="stat"><span class="n">16</span><span class="l">Categories</span></div>
-  <div class="stat"><span class="n">10</span><span class="l">Install guides</span></div>
-  <div class="stat"><span class="n">70</span><span class="l">MCP servers</span></div>
-  <div class="stat"><span class="n">40+</span><span class="l">Skills & plugins</span></div>
-</div>
-
-<!-- ========== TOP 10 ========== -->
-<section id="top10">
-  <h2>Top 10 Most Impactful — With Install Guides</h2>
-  <p class="section-lede">The ten tools that produce the biggest day-one productivity jump. Click any title to open the project page. Hover <code>&lt;pre&gt;</code> blocks to copy the install command.</p>
-  <div class="top10-grid" id="top10-grid"></div>
-  <div class="notes"><strong>Install tip:</strong> MCPs added with <code>claude mcp add</code> default to user scope. Add <code>--scope project</code> to pin to one repo (writes <code>.mcp.json</code>). <code>--scope local</code> = machine-only.</div>
+<!-- ============== TOP 5 ============== -->
+<section id="top5">
+  <div class="section-head">
+    <div class="section-num">01 — The shortlist</div>
+    <h2 class="serif">The five you should <em>install first.</em></h2>
+    <p class="section-lede">Ranked by real-world leverage. Each card has one install command. Click the name to see the project page. Browse the full 234 below.</p>
+  </div>
+  <div class="top5" id="top5-list"></div>
 </section>
 
-<!-- ========== INTERACTIVE GRID ========== -->
+<!-- ============== DIRECTORY ============== -->
 <section id="directory">
-  <h2>Full Directory — Click to Expand</h2>
-  <p class="section-lede">Filtered by chips and search. Click any card for install command + official docs.</p>
-  <div id="groups"></div>
-  <div id="empty" class="empty-state" style="display:none">No tools match. Try a different search or clear the filter.</div>
+  <div class="section-head">
+    <div class="section-num">02 — The full directory</div>
+    <h2 class="serif">Two hundred and thirty-four, <em>categorised.</em></h2>
+    <p class="section-lede">Click any card for install instructions and official docs. Search ranks results; category chips filter the view.</p>
+  </div>
+  <div class="directory" id="directory-body"></div>
+  <div class="empty" id="empty" style="display:none">
+    <div class="empty-icon">∅</div>
+    <div>No matches. Try a shorter search or clear the filter.</div>
+  </div>
 </section>
 
-<!-- ========== STRATEGY ========== -->
-<section id="strategy">
-  <h2>Stack Strategy</h2>
-  <p class="section-lede">Phased rollout tailored to your setup — Python primary, Windows + Mac, finance/health/client projects.</p>
-  <div class="notes"><strong>Phase 1 — This Week (15 min).</strong> Install: <code>GitHub MCP</code> → <code>Filesystem MCP</code> → <code>Context7</code> → <code>Sentry MCP</code> → <code>ccusage</code>. All remote or npx.</div>
-  <div class="notes"><strong>Phase 2 — Domain.</strong> Finance panel: <code>Plaid MCP</code> + <code>Coinbase MCP</code> + <code>Postgres MCP</code>. Add <code>cc-statusline</code> for live token cost. Use NotebookLM for research briefs.</div>
-  <div class="notes"><strong>Phase 3 — Scale.</strong> <code>wshobson/agents</code> for orchestration. <code>Superpowers</code> for big features. <code>Langfuse</code> when shipping agent code. <code>Ollama</code> + <code>Continue.dev</code> for offline.</div>
-  <div class="notes"><strong>Phase 4 — Polish.</strong> Black PostToolUse hook. Stop-on-Red-Test hook. Windows desktop notification on <code>Stop</code>. <code>Oh My Posh</code> unified prompt across Mac + PC.</div>
+<!-- ============== ROADMAP ============== -->
+<section id="roadmap">
+  <div class="section-head">
+    <div class="section-num">03 — Your rollout</div>
+    <h2 class="serif">Four phases, <em>two weeks to full stack.</em></h2>
+    <p class="section-lede">Tailored to your setup — Python primary, Windows + Mac, finance/health/client projects. Work through them in order, audit quarterly.</p>
+  </div>
+  <div class="roadmap">
+    <div class="phase-grid">
+      <div class="phase">
+        <div class="phase-num">I</div>
+        <div class="phase-title">Core five</div>
+        <div class="phase-time">Day one · 15 min</div>
+        <div class="phase-body">
+          <code>GitHub MCP</code> → <code>Filesystem MCP</code> → <code>Context7</code> → <code>Sentry MCP</code> → <code>ccusage</code>. All remote or npx. Zero config, immediate leverage.
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">II</div>
+        <div class="phase-title">Domain fit</div>
+        <div class="phase-time">Week one</div>
+        <div class="phase-body">
+          Finance: <code>Plaid MCP</code>, <code>Coinbase MCP</code>, <code>Postgres MCP</code>. Add <code>cc-statusline</code> for live cost. Start project weeks in NotebookLM, export brief to <code>./docs/</code>.
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">III</div>
+        <div class="phase-title">Scale</div>
+        <div class="phase-time">Week two</div>
+        <div class="phase-body">
+          <code>wshobson/agents</code> for orchestration. <code>Superpowers</code> for big features. <code>Langfuse</code> when shipping agent code. <code>Ollama</code> + <code>Continue.dev</code> for offline.
+        </div>
+      </div>
+      <div class="phase">
+        <div class="phase-num">IV</div>
+        <div class="phase-title">Polish</div>
+        <div class="phase-time">Ongoing</div>
+        <div class="phase-body">
+          Black on PostToolUse. Stop-on-Red-Test. Windows desktop notify on <code>Stop</code>. <code>Oh My Posh</code> unified Mac+PC prompt.
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 </main>
 
-<!-- Modal -->
-<div class="modal-backdrop" id="modal-backdrop">
-  <div class="modal" id="modal">
-    <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
-    <div id="modal-body"></div>
+<footer>
+  <div class="foot-inner">
+    <div>Claude Code Power Stack · Compiled 2026-04-19 · For Jack</div>
+    <div>Source: <a href="https://github.com/patty-png/claude-code-toolkit">github.com/patty-png/claude-code-toolkit</a></div>
   </div>
-</div>
-
-<footer>Claude Code Power Stack v3 · Interactive · 234 tools · <code>active/projects/claude-code-toolkit/index.html</code></footer>
+</footer>
 
 <script>
-// ==================== DATA ====================
-const CATEGORIES = [
-  { id: 'all', label: 'All' },
-  { id: 'official-mcp', label: 'Official MCPs' },
-  { id: 'community-mcp', label: 'Community MCPs' },
-  { id: 'db-mcp', label: 'Database MCPs' },
-  { id: 'browser-mcp', label: 'Browser MCPs' },
-  { id: 'devops-mcp', label: 'DevOps MCPs' },
-  { id: 'skill', label: 'Skills' },
-  { id: 'subagent', label: 'Subagents' },
-  { id: 'framework', label: 'Agent Frameworks' },
-  { id: 'hook', label: 'Hooks' },
-  { id: 'obs', label: 'Observability' },
-  { id: 'usage', label: 'Usage Tracking' },
-  { id: 'companion', label: 'AI Editors' },
-  { id: 'local', label: 'Local LLMs' },
-  { id: 'terminal', label: 'Terminal' },
-  { id: 'knowledge', label: 'Knowledge' },
-  { id: 'marketplace', label: 'Marketplaces' },
+// ============= DATA =============
+// (inherits tool catalog from v3; simplified category map)
+const CATS = [
+  { id: 'all',    label: 'All' },
+  { id: 'mcp',    label: 'MCPs' },
+  { id: 'skill',  label: 'Skills' },
+  { id: 'agent',  label: 'Agents' },
+  { id: 'auto',   label: 'Hooks & Obs' },
+  { id: 'tool',   label: 'Editors & Tools' },
+  { id: 'res',    label: 'Research' },
 ];
 
-const GROUPS = {
-  'official-mcp': { title: 'Official & First-Party MCP Servers', sub: 'Maintained by Anthropic, the vendor, or via official partnership.' },
-  'community-mcp': { title: 'Community & Third-Party MCPs', sub: 'Vetted picks from the 12,000+ MCPs in public registries.' },
-  'db-mcp': { title: 'Database & Vector Store MCPs', sub: 'Query production schemas. Read-only by default on the Postgres reference.' },
-  'browser-mcp': { title: 'Browser & Computer-Use MCPs', sub: 'Give Claude eyes and hands. Pick one primary to avoid confusion.' },
-  'devops-mcp': { title: 'DevOps & Infra MCPs', sub: 'Containers, IaC, monitoring, CI/CD.' },
-  'skill': { title: 'Skills & Skill Packs', sub: 'Markdown capability modules. Lower overhead than MCPs, portable across agents.' },
-  'subagent': { title: 'Subagents & Orchestrators', sub: 'Specialists Claude hands work off to.' },
-  'framework': { title: 'Agent SDKs & Frameworks', sub: 'For building your own agents outside Claude Code.' },
-  'hook': { title: 'Hooks & Lifecycle Automation', sub: 'Shell commands on lifecycle events. Deterministic guardrails.' },
-  'obs': { title: 'Observability, Evals & Tracing', sub: 'See what agents, skills, and MCPs are actually doing.' },
-  'usage': { title: 'Usage, Cost & Status Line Tools', sub: 'Cost and rate-limit visibility.' },
-  'companion': { title: 'Companion AI IDEs & Agents', sub: 'Pair Claude Code (terminal) with an editor-based autocomplete.' },
-  'local': { title: 'Local LLM Runners', sub: 'Offline / private / free — pair with Cline or Continue.dev.' },
-  'terminal': { title: 'Terminal & Shell Enhancements', sub: 'Claude Code lives here. Faster shell = faster everything.' },
-  'knowledge': { title: 'Knowledge, Research & PKM', sub: 'Fill Claude Code\'s sourced-research gap.' },
-  'marketplace': { title: 'Marketplaces, Registries & Directories', sub: 'Discover faster than blog posts can publish.' },
+// map from v3 detailed categories to simple ones
+const CAT_MAP = {
+  'official-mcp':'mcp', 'community-mcp':'mcp', 'db-mcp':'mcp', 'browser-mcp':'mcp', 'devops-mcp':'mcp',
+  'skill':'skill',
+  'subagent':'agent', 'framework':'agent',
+  'hook':'auto', 'obs':'auto', 'usage':'auto',
+  'companion':'tool', 'local':'tool', 'terminal':'tool',
+  'knowledge':'res', 'marketplace':'res',
 };
 
-// Each tool: {id, name, cat, tag, blurb, url, install?}
+// Display groups (used inside filtered views)
+const GROUPS = {
+  mcp: [
+    { id:'official-mcp', title:'Official & first-party MCPs', sub:'Maintained by Anthropic, the vendor, or via official partnership.' },
+    { id:'community-mcp', title:'Community MCPs', sub:'Vetted picks from the 12,000+ MCPs in public registries.' },
+    { id:'db-mcp', title:'Database & vector MCPs', sub:'Query real schemas. Read-only on the Postgres reference; vector MCPs enable RAG-as-a-tool.' },
+    { id:'browser-mcp', title:'Browser & computer-use MCPs', sub:'Give Claude eyes and hands. Pick one primary to avoid confusion.' },
+    { id:'devops-mcp', title:'DevOps & infrastructure MCPs', sub:'Containers, IaC, monitoring, CI/CD.' },
+  ],
+  skill: [
+    { id:'skill', title:'Skills & skill packs', sub:'Markdown capability modules. Lower overhead than MCPs, portable across agents.' },
+  ],
+  agent: [
+    { id:'subagent', title:'Subagents & orchestrators', sub:'Specialists Claude hands work off to.' },
+    { id:'framework', title:'Agent SDKs & frameworks', sub:'For building your own agents outside Claude Code.' },
+  ],
+  auto: [
+    { id:'hook', title:'Hooks & lifecycle automation', sub:'Shell commands on lifecycle events. Deterministic guardrails.' },
+    { id:'obs', title:'Observability, evals & tracing', sub:'See what agents, skills, and MCPs are actually doing.' },
+    { id:'usage', title:'Usage & cost tools', sub:'Cost and rate-limit visibility.' },
+  ],
+  tool: [
+    { id:'companion', title:'AI editors & companion agents', sub:'Pair Claude Code (terminal) with an editor-based autocomplete.' },
+    { id:'local', title:'Local LLM runners', sub:'Offline / private / free alternatives.' },
+    { id:'terminal', title:'Terminal & shell', sub:'Claude Code lives here. Faster shell = faster everything.' },
+  ],
+  res: [
+    { id:'knowledge', title:'Knowledge, research & PKM', sub:'Fill Claude Code\'s sourced-research gap.' },
+    { id:'marketplace', title:'Marketplaces & directories', sub:'Discover faster than blog posts can publish.' },
+  ],
+};
+
 const TOOLS = [
-  // ========== Top 10 hero (also render in dir) ==========
   { id:1, name:'GitHub MCP', cat:'official-mcp', tag:'Official', blurb:'51 tools for repos, issues, PRs, Actions. #1 most-used MCP (28k+ stars).', url:'https://github.com/github/github-mcp-server', install:'claude mcp add --transport http github https://api.githubcopilot.com/mcp/' },
   { id:2, name:'Filesystem MCP', cat:'official-mcp', tag:'Official', blurb:'Sandboxed read/write across any folders you allow.', url:'https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem', install:'claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem "C:/Users/johnd/Personal"' },
-  { id:3, name:'Playwright MCP', cat:'browser-mcp', tag:'Microsoft', blurb:'Accessibility-tree browser automation — no screenshot guessing.', url:'https://github.com/microsoft/playwright-mcp', install:'claude mcp add playwright -- npx -y @playwright/mcp@latest\nnpx playwright install chromium' },
+  { id:3, name:'Playwright MCP', cat:'browser-mcp', tag:'Microsoft', blurb:'Accessibility-tree browser automation — no screenshot guessing.', url:'https://github.com/microsoft/playwright-mcp', install:'claude mcp add playwright -- npx -y @playwright/mcp@latest' },
   { id:4, name:'Sentry MCP', cat:'official-mcp', tag:'Remote · OAuth', blurb:'Error tracking + Seer root cause. Zero-install remote server.', url:'https://mcp.sentry.dev/', install:'claude mcp add --transport http sentry https://mcp.sentry.dev/mcp' },
   { id:5, name:'Notion MCP', cat:'official-mcp', tag:'Official Remote', blurb:'18 tools for pages, databases, search, comments.', url:'https://developers.notion.com/docs/mcp', install:'claude mcp add --transport http notion https://mcp.notion.com/mcp' },
   { id:6, name:'Linear MCP', cat:'official-mcp', tag:'Official Remote', blurb:'23+ tools for issues, projects, initiatives, milestones.', url:'https://linear.app/changelog/2025-mcp', install:'claude mcp add --transport http linear https://mcp.linear.app/sse' },
   { id:7, name:'Atlassian MCP', cat:'official-mcp', tag:'Official', blurb:'Jira + Confluence — search tickets with JQL, update statuses.', url:'https://www.atlassian.com/blog/announcements/remote-mcp-server', install:'claude mcp add --transport http atlassian https://mcp.atlassian.com/v1/sse' },
   { id:8, name:'Slack MCP', cat:'official-mcp', tag:'Official', blurb:'Messages, channel history, search.', url:'https://github.com/modelcontextprotocol/servers/tree/main/src/slack', install:'claude mcp add slack -- npx -y @modelcontextprotocol/server-slack' },
   { id:9, name:'Postgres MCP', cat:'db-mcp', tag:'Reference', blurb:'Read-only SQL + schema inspect. The reference implementation.', url:'https://github.com/modelcontextprotocol/servers/tree/main/src/postgres', install:'claude mcp add postgres -- npx -y @modelcontextprotocol/server-postgres "postgresql://user:pass@host/db"' },
-  { id:10, name:'SQLite MCP', cat:'db-mcp', tag:'Reference', blurb:'Local DB queries + migrations.', url:'https://github.com/modelcontextprotocol/servers/tree/main/src/sqlite', install:'claude mcp add sqlite -- npx -y @modelcontextprotocol/server-sqlite ./mydb.sqlite' },
-  { id:11, name:'Google Drive MCP', cat:'official-mcp', tag:'Official', blurb:'Search + read Drive files.', url:'https://github.com/modelcontextprotocol/servers/tree/main/src/gdrive', install:'claude mcp add gdrive -- npx -y @modelcontextprotocol/server-gdrive' },
+  { id:10, name:'SQLite MCP', cat:'db-mcp', tag:'Reference', blurb:'Local DB queries + migrations.', url:'https://github.com/modelcontextprotocol/servers/tree/main/src/sqlite' },
+  { id:11, name:'Google Drive MCP', cat:'official-mcp', tag:'Official', blurb:'Search + read Drive files.', url:'https://github.com/modelcontextprotocol/servers/tree/main/src/gdrive' },
   { id:12, name:'Google Calendar MCP', cat:'official-mcp', tag:'In Your Stack', blurb:'Events, scheduling, free-busy.', url:'https://github.com/nspady/google-calendar-mcp' },
-  { id:13, name:'Gmail MCP', cat:'official-mcp', tag:'Community Top', blurb:'Read/send/search mail.', url:'https://github.com/GongRzhe/Gmail-MCP-Server', install:'claude mcp add gmail -- npx -y @gongrzhe/server-gmail-autoauth-mcp' },
+  { id:13, name:'Gmail MCP', cat:'official-mcp', tag:'Community Top', blurb:'Read/send/search mail.', url:'https://github.com/GongRzhe/Gmail-MCP-Server' },
   { id:14, name:'Stripe MCP', cat:'official-mcp', tag:'Official', blurb:'Customers, subscriptions, payments.', url:'https://github.com/stripe/agent-toolkit/tree/main/modelcontextprotocol' },
   { id:15, name:'Cloudflare MCP', cat:'official-mcp', tag:'Official', blurb:'Workers, KV, DNS, R2.', url:'https://github.com/cloudflare/mcp-server-cloudflare' },
   { id:16, name:'Vercel MCP', cat:'official-mcp', tag:'Official', blurb:'Deployments, logs, envs.', url:'https://vercel.com/docs/mcp' },
@@ -463,10 +652,8 @@ const TOOLS = [
   { id:28, name:'PagerDuty MCP', cat:'official-mcp', tag:'Official', blurb:'Incident triage from CLI.', url:'https://github.com/PagerDuty/pagerduty-mcp-server' },
   { id:29, name:'Datadog MCP', cat:'official-mcp', tag:'Official', blurb:'Metrics, logs, APM traces.', url:'https://docs.datadoghq.com/bits_ai/' },
   { id:30, name:'Apollo MCP', cat:'official-mcp', tag:'In Your Stack', blurb:'Lead enrichment — apollo.io APIs.', url:'https://mcp.apollo.io/' },
-
-  // Community MCP — Search & Research
   { id:31, name:'Context7 MCP', cat:'community-mcp', tag:'Upstash', blurb:'Live library docs for 10k+ libs. Fixes outdated API hallucinations.', url:'https://github.com/upstash/context7', install:'claude mcp add --transport http context7 https://mcp.context7.com/mcp' },
-  { id:32, name:'Brave Search MCP', cat:'community-mcp', tag:'Reference', blurb:'Web search without Google hoops.', url:'https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search', install:'claude mcp add brave -- npx -y @modelcontextprotocol/server-brave-search' },
+  { id:32, name:'Brave Search MCP', cat:'community-mcp', tag:'Reference', blurb:'Web search without Google hoops.', url:'https://github.com/modelcontextprotocol/servers/tree/main/src/brave-search' },
   { id:33, name:'Perplexity MCP', cat:'community-mcp', tag:'Community', blurb:'Sourced web answers.', url:'https://github.com/ppl-ai/modelcontextprotocol' },
   { id:34, name:'Exa MCP', cat:'community-mcp', tag:'Exa', blurb:'Semantic web search for agents.', url:'https://github.com/exa-labs/exa-mcp-server' },
   { id:35, name:'Tavily MCP', cat:'community-mcp', tag:'Tavily', blurb:'Search optimized for RAG.', url:'https://github.com/tavily-ai/tavily-mcp' },
@@ -475,8 +662,6 @@ const TOOLS = [
   { id:38, name:'DeepWiki MCP', cat:'community-mcp', tag:'Devin', blurb:'AI-generated wiki per GitHub repo.', url:'https://docs.devin.ai/work-with-devin/deepwiki-mcp' },
   { id:39, name:'arxiv MCP', cat:'community-mcp', tag:'Research', blurb:'Scientific paper search.', url:'https://github.com/blazickjp/arxiv-mcp-server' },
   { id:40, name:'YouTube Transcript MCP', cat:'community-mcp', tag:'Community', blurb:'Pull transcripts for summarization.', url:'https://github.com/kimtaeyoon83/mcp-server-youtube-transcript' },
-
-  // Integration Hubs
   { id:41, name:'n8n-mcp', cat:'community-mcp', tag:'Automation', blurb:'Builds n8n workflows end-to-end from plain English (1,505 nodes).', url:'https://github.com/czlonkowski/n8n-mcp', install:'claude mcp add n8n -- npx -y n8n-mcp' },
   { id:42, name:'Zapier MCP', cat:'community-mcp', tag:'Zapier', blurb:'8,000+ app actions through MCP.', url:'https://zapier.com/mcp' },
   { id:43, name:'Make.com MCP', cat:'community-mcp', tag:'Make', blurb:'Scenario triggers via MCP.', url:'https://www.make.com/en/help/tools/mcp-server' },
@@ -487,8 +672,6 @@ const TOOLS = [
   { id:48, name:'IFTTT MCP', cat:'community-mcp', tag:'Community', blurb:'Consumer app triggers.', url:'https://ifttt.com/' },
   { id:49, name:'Trigger.dev MCP', cat:'community-mcp', tag:'Trigger.dev', blurb:'Background jobs for devs.', url:'https://trigger.dev/' },
   { id:50, name:'Inngest MCP', cat:'community-mcp', tag:'Inngest', blurb:'Durable function workflows.', url:'https://www.inngest.com/' },
-
-  // Personal Productivity
   { id:51, name:'Obsidian MCP', cat:'community-mcp', tag:'Community', blurb:'Vault read/write.', url:'https://github.com/MarkusPfundstein/mcp-obsidian' },
   { id:52, name:'Logseq MCP', cat:'community-mcp', tag:'Community', blurb:'Block-based PKM.', url:'https://github.com/dailydaniel/logseq-mcp' },
   { id:53, name:'Apple Shortcuts MCP', cat:'community-mcp', tag:'macOS', blurb:'Trigger macOS Shortcuts.', url:'https://github.com/recursechamber/apple-shortcuts-mcp' },
@@ -499,18 +682,14 @@ const TOOLS = [
   { id:58, name:'Things MCP', cat:'community-mcp', tag:'macOS', blurb:'Mac task manager.', url:'https://github.com/hald/things-mcp' },
   { id:59, name:'Apple Notes/Reminders MCP', cat:'community-mcp', tag:'macOS', blurb:'Native Apple apps.', url:'https://github.com/sirmews/apple-notes-mcp' },
   { id:60, name:'Discord MCP', cat:'community-mcp', tag:'Community', blurb:'Server messages + channels.', url:'https://github.com/v-3/discordmcp' },
-
-  // Finance
-  { id:61, name:'Plaid MCP', cat:'community-mcp', tag:'Fits Your Stack', blurb:'Banking + transaction data. (You already have Plaid integrated.)', url:'https://github.com/plaid/plaid-mcp' },
-  { id:62, name:'Coinbase MCP', cat:'community-mcp', tag:'Fits Your Stack', blurb:'Prices, portfolio, trades. (You already have Coinbase integrated.)', url:'https://github.com/coinbase/coinbase-mcp' },
+  { id:61, name:'Plaid MCP', cat:'community-mcp', tag:'Fits Your Stack', blurb:'Banking + transaction data.', url:'https://github.com/plaid/plaid-mcp' },
+  { id:62, name:'Coinbase MCP', cat:'community-mcp', tag:'Fits Your Stack', blurb:'Prices, portfolio, trades.', url:'https://github.com/coinbase/coinbase-mcp' },
   { id:63, name:'Alpaca MCP', cat:'community-mcp', tag:'Broker', blurb:'Broker trading API.', url:'https://github.com/alpacahq/alpaca-mcp-server' },
   { id:64, name:'Questrade MCP', cat:'community-mcp', tag:'Canadian Broker', blurb:'Canadian broker integration.', url:'https://www.questrade.com/api' },
   { id:65, name:'Yahoo Finance MCP', cat:'community-mcp', tag:'Market Data', blurb:'Quotes, fundamentals, news.', url:'https://github.com/narumiruna/yfinance-mcp' },
   { id:66, name:'CoinGecko MCP', cat:'community-mcp', tag:'Crypto', blurb:'Crypto market data.', url:'https://github.com/coingecko/coingecko-mcp' },
   { id:67, name:'Polygon.io MCP', cat:'community-mcp', tag:'Market Data', blurb:'Real-time stock feeds.', url:'https://polygon.io/blog/mcp-server' },
   { id:68, name:'Ramp MCP', cat:'community-mcp', tag:'Expenses', blurb:'Corporate cards & expenses.', url:'https://ramp.com/developers' },
-
-  // DB
   { id:69, name:'MySQL MCP', cat:'db-mcp', tag:'Community', blurb:'Queries + schema inspect.', url:'https://github.com/designcomputer/mysql_mcp_server' },
   { id:70, name:'MongoDB MCP', cat:'db-mcp', tag:'Official', blurb:'Collections + aggregation.', url:'https://github.com/mongodb-js/mongodb-mcp-server' },
   { id:71, name:'Redis MCP', cat:'db-mcp', tag:'Official', blurb:'Cache inspection & ops.', url:'https://github.com/redis/mcp-redis' },
@@ -518,25 +697,19 @@ const TOOLS = [
   { id:73, name:'Snowflake MCP', cat:'db-mcp', tag:'Snowflake', blurb:'Enterprise warehouse queries.', url:'https://github.com/Snowflake-Labs/mcp' },
   { id:74, name:'DuckDB MCP', cat:'db-mcp', tag:'DuckDB', blurb:'Local analytics engine.', url:'https://github.com/motherduckdb/mcp-server-motherduck' },
   { id:75, name:'ClickHouse MCP', cat:'db-mcp', tag:'ClickHouse', blurb:'OLAP columnar DB.', url:'https://github.com/ClickHouse/mcp-clickhouse' },
-
-  // Vector
   { id:76, name:'Chroma MCP', cat:'db-mcp', tag:'Vector', blurb:'Leading open-source vector DB.', url:'https://github.com/chroma-core/chroma-mcp' },
   { id:77, name:'Pinecone MCP', cat:'db-mcp', tag:'Vector', blurb:'Hosted, low-latency similarity search.', url:'https://github.com/pinecone-io/pinecone-mcp' },
   { id:78, name:'Weaviate MCP', cat:'db-mcp', tag:'Vector', blurb:'Built-in hybrid search.', url:'https://github.com/weaviate/mcp-server-weaviate' },
   { id:79, name:'Qdrant MCP', cat:'db-mcp', tag:'Vector', blurb:'Rust-powered, self-hostable.', url:'https://github.com/qdrant/mcp-server-qdrant' },
   { id:80, name:'Milvus MCP', cat:'db-mcp', tag:'Vector', blurb:'Enterprise-scale vector DB.', url:'https://github.com/zilliztech/mcp-server-milvus' },
   { id:81, name:'pgvector MCP', cat:'db-mcp', tag:'Vector', blurb:'Postgres extension — simplest RAG path.', url:'https://github.com/pgvector/pgvector' },
-
-  // Browser
   { id:82, name:'Chrome DevTools MCP', cat:'browser-mcp', tag:'Google', blurb:'Network, console, performance profiling.', url:'https://github.com/ChromeDevTools/chrome-devtools-mcp' },
   { id:83, name:'Puppeteer MCP', cat:'browser-mcp', tag:'Reference', blurb:'Lighter-weight Playwright alt.', url:'https://github.com/modelcontextprotocol/servers/tree/main/src/puppeteer' },
   { id:84, name:'Browser MCP (browsermcp.io)', cat:'browser-mcp', tag:'Community', blurb:'VS Code / Cursor / Claude bridge.', url:'https://browsermcp.io/' },
-  { id:85, name:'mcp-chrome (hangwin)', cat:'browser-mcp', tag:'Extension', blurb:'Chrome extension — uses YOUR logged-in session.', url:'https://github.com/hangwin/mcp-chrome' },
+  { id:85, name:'mcp-chrome', cat:'browser-mcp', tag:'Extension', blurb:'Chrome extension — uses YOUR logged-in session.', url:'https://github.com/hangwin/mcp-chrome' },
   { id:86, name:'Claude in Chrome', cat:'browser-mcp', tag:'Official Beta', blurb:'Official beta Chrome extension.', url:'https://code.claude.com/docs/en/chrome' },
   { id:87, name:'Claude Preview', cat:'browser-mcp', tag:'In Your Stack', blurb:'Screenshot + inspect local dev servers.', url:'https://docs.claude.com/en/docs/claude-code/preview' },
   { id:88, name:'Windows-MCP', cat:'browser-mcp', tag:'In Your Stack', blurb:'OS-level automation for Windows.', url:'https://github.com/CursorTouch/Windows-MCP' },
-
-  // DevOps
   { id:89, name:'Docker MCP', cat:'devops-mcp', tag:'Official', blurb:'Containers, compose, logs.', url:'https://github.com/docker/mcp-servers' },
   { id:90, name:'Kubernetes MCP', cat:'devops-mcp', tag:'Community', blurb:'kubectl wrapper for agents.', url:'https://github.com/Flux159/mcp-server-kubernetes' },
   { id:91, name:'Terraform MCP', cat:'devops-mcp', tag:'HashiCorp', blurb:'Plan/apply with review gates.', url:'https://github.com/hashicorp/terraform-mcp-server' },
@@ -547,22 +720,18 @@ const TOOLS = [
   { id:96, name:'CircleCI MCP', cat:'devops-mcp', tag:'CircleCI', blurb:'Pipeline control from chat.', url:'https://github.com/CircleCI-Public/mcp-server-circleci' },
   { id:97, name:'Railway MCP', cat:'devops-mcp', tag:'Community', blurb:'Simple PaaS deploys.', url:'https://github.com/jason-tan-swe/railway-mcp' },
   { id:98, name:'Render MCP', cat:'devops-mcp', tag:'Render', blurb:'Deploy control & logs.', url:'https://render.com/docs/mcp' },
-
-  // Anthropic Skills
   { id:99, name:'pdf skill', cat:'skill', tag:'Anthropic', blurb:'Extract, merge, split, rotate, OCR, fill forms.', url:'https://github.com/anthropics/skills' },
   { id:100, name:'xlsx skill', cat:'skill', tag:'Anthropic', blurb:'Read/edit/create spreadsheets.', url:'https://github.com/anthropics/skills' },
   { id:101, name:'docx skill', cat:'skill', tag:'Anthropic', blurb:'Word docs with TOC, headers, tracked changes.', url:'https://github.com/anthropics/skills' },
   { id:102, name:'pptx skill', cat:'skill', tag:'Anthropic', blurb:'Slide decks, templates, speaker notes.', url:'https://github.com/anthropics/skills' },
   { id:103, name:'skill-creator', cat:'skill', tag:'Anthropic', blurb:'Build/improve/eval new skills.', url:'https://github.com/anthropics/skills' },
-  { id:104, name:'frontend-design skill', cat:'skill', tag:'Anthropic', blurb:'Forces deliberate aesthetic choices first.', url:'https://github.com/anthropics/skills' },
+  { id:104, name:'frontend-design skill', cat:'skill', tag:'Anthropic', blurb:'Forces deliberate aesthetic choices first.', url:'https://github.com/anthropics/skills/tree/main/skills/frontend-design' },
   { id:105, name:'webapp-testing skill', cat:'skill', tag:'Anthropic', blurb:'Browser QA via Playwright.', url:'https://github.com/anthropics/skills' },
   { id:106, name:'simplify skill', cat:'skill', tag:'In Your Stack', blurb:'Review + fix for reuse/quality.', url:'https://github.com/anthropics/skills' },
   { id:107, name:'consolidate-memory skill', cat:'skill', tag:'Anthropic', blurb:'Merge/prune memory files.', url:'https://github.com/anthropics/skills' },
   { id:108, name:'github-name-finder', cat:'skill', tag:'Anthropic', blurb:'Batch-check GitHub handle availability.', url:'https://github.com/anthropics/skills' },
   { id:109, name:'schedule skill', cat:'skill', tag:'Anthropic', blurb:'Cron-backed scheduled agents.', url:'https://github.com/anthropics/skills' },
   { id:110, name:'setup-cowork', cat:'skill', tag:'Anthropic', blurb:'Guided Cowork plugin install.', url:'https://github.com/anthropics/skills' },
-
-  // Community Skills
   { id:111, name:'Superpowers (obra)', cat:'skill', tag:'Framework', blurb:'Largest community skill library. Full SDLC framework: brainstorm → plan → TDD → review.', url:'https://github.com/obra/superpowers', install:'cd ~/.claude/plugins && git clone https://github.com/obra/superpowers.git' },
   { id:112, name:'VoltAgent/awesome-agent-skills', cat:'skill', tag:'Directory', blurb:'1,000+ curated skills from Anthropic, Google Labs, Vercel, Stripe, Cloudflare.', url:'https://github.com/VoltAgent/awesome-agent-skills' },
   { id:113, name:'alirezarezvani/claude-skills', cat:'skill', tag:'Directory', blurb:'232+ engineering/marketing/product/compliance skills.', url:'https://github.com/alirezarezvani/claude-skills' },
@@ -573,8 +742,6 @@ const TOOLS = [
   { id:118, name:'Fullstack Dev Skills', cat:'skill', tag:'Community', blurb:'65+ stack-specific skills.', url:'https://github.com/VoltAgent/awesome-agent-skills' },
   { id:119, name:'antigravity-awesome-skills', cat:'skill', tag:'Installer', blurb:'1,400+ skills via npm installer.', url:'https://github.com/sickn33/antigravity-awesome-skills' },
   { id:120, name:'BehiSecc/awesome-claude-skills', cat:'skill', tag:'Security', blurb:'Security-focused curation.', url:'https://github.com/BehiSecc/awesome-claude-skills' },
-
-  // Niche Skills
   { id:121, name:'next-skills', cat:'skill', tag:'Next.js', blurb:'Next.js app router patterns.', url:'https://github.com/VoltAgent/awesome-agent-skills' },
   { id:122, name:'translate-book', cat:'skill', tag:'Translation', blurb:'Parallel subagent book translation.', url:'https://github.com/anthropics/skills' },
   { id:123, name:'manim_skill', cat:'skill', tag:'Animation', blurb:'3Blue1Brown-style math animations.', url:'https://github.com/anthropics/skills' },
@@ -583,9 +750,7 @@ const TOOLS = [
   { id:126, name:'twscrape skill', cat:'skill', tag:'In Your Stack', blurb:'Twitter/X async scraping.', url:'https://github.com/vladkens/twscrape' },
   { id:127, name:'codebase-health-check', cat:'skill', tag:'In Your Stack', blurb:'Multi-agent audit workflow.', url:'https://github.com/anthropics/skills' },
   { id:128, name:'claude-api skill', cat:'skill', tag:'In Your Stack', blurb:'SDK build/debug/optimize guide.', url:'https://github.com/anthropics/skills' },
-
-  // Subagents
-  { id:129, name:'wshobson/agents', cat:'subagent', tag:'100+ agents', blurb:'Production-ready: backend-architect, security-auditor, test-automator, deployment-engineer.', url:'https://github.com/wshobson/agents', install:'mkdir -p ~/.claude/agents && git clone https://github.com/wshobson/agents ~/.claude/agents/wshobson' },
+  { id:129, name:'wshobson/agents', cat:'subagent', tag:'100+ agents', blurb:'Production-ready: backend-architect, security-auditor, test-automator, deployment-engineer.', url:'https://github.com/wshobson/agents', install:'git clone https://github.com/wshobson/agents ~/.claude/agents/wshobson' },
   { id:130, name:'claude-code-subagents', cat:'subagent', tag:'Community', blurb:'100+ alternative subagent library.', url:'https://github.com/VoltAgent/awesome-claude-code-subagents' },
   { id:131, name:'AgentSys', cat:'subagent', tag:'Orchestration', blurb:'PR mgmt, perf investigation, drift detection by avifenesh.', url:'https://github.com/avifenesh/AgentSys' },
   { id:132, name:'Claude Squad', cat:'subagent', tag:'Parallel', blurb:'Parallel agents in isolated workspaces.', url:'https://github.com/smtg-ai/claude-squad' },
@@ -599,8 +764,6 @@ const TOOLS = [
   { id:140, name:'test-automator', cat:'subagent', tag:'wshobson', blurb:'pytest/vitest scaffolding.', url:'https://github.com/wshobson/agents' },
   { id:141, name:'deployment-engineer', cat:'subagent', tag:'wshobson', blurb:'CI/CD + rollout agents.', url:'https://github.com/wshobson/agents' },
   { id:142, name:'database-architect', cat:'subagent', tag:'wshobson', blurb:'Schema + migration specialist.', url:'https://github.com/wshobson/agents' },
-
-  // Frameworks
   { id:143, name:'Claude Agent SDK', cat:'framework', tag:'Anthropic', blurb:'Tool-use-first minimal loop. Pairs with sub-agents as tools.', url:'https://github.com/anthropics/claude-agent-sdk-python' },
   { id:144, name:'Vercel AI SDK (v6)', cat:'framework', tag:'Vercel', blurb:'TS streaming, models + tools, UI helpers.', url:'https://sdk.vercel.ai/' },
   { id:145, name:'Mastra', cat:'framework', tag:'TypeScript', blurb:'Full-stack TS framework — agents, workflows, memory, evals, MCP.', url:'https://mastra.ai/' },
@@ -613,8 +776,6 @@ const TOOLS = [
   { id:152, name:'Agno', cat:'framework', tag:'Python', blurb:'Lightweight Python agent lib.', url:'https://github.com/agno-agi/agno' },
   { id:153, name:'DSPy', cat:'framework', tag:'Stanford', blurb:'Programmatic prompt optimization.', url:'https://github.com/stanfordnlp/dspy' },
   { id:154, name:'TanStack AI', cat:'framework', tag:'React', blurb:'Framework-agnostic React hooks.', url:'https://tanstack.com/' },
-
-  // Hooks
   { id:155, name:'TDD Guard', cat:'hook', tag:'Hook', blurb:'Blocks non-TDD file writes.', url:'https://github.com/nizos/tdd-guard' },
   { id:156, name:'Dippy', cat:'hook', tag:'Hook', blurb:'Auto-approves safe bash reads.', url:'https://github.com/sheldonhull/dippy' },
   { id:157, name:'TypeScript Quality Hooks', cat:'hook', tag:'Hook', blurb:'Live tsc + eslint gating.', url:'https://github.com/hesreallyhim/awesome-claude-code' },
@@ -627,8 +788,6 @@ const TOOLS = [
   { id:164, name:'SubagentStop Slack notify', cat:'hook', tag:'Pattern', blurb:'Ping when long agent finishes.', url:'https://code.claude.com/docs/en/hooks' },
   { id:165, name:'PreCompact Transcript Archive', cat:'hook', tag:'Pattern', blurb:'Save full convo before compaction.', url:'https://code.claude.com/docs/en/hooks' },
   { id:166, name:'StopFailure hard-block', cat:'hook', tag:'Pattern', blurb:'Force-fail for policy violations.', url:'https://code.claude.com/docs/en/hooks' },
-
-  // Observability
   { id:167, name:'Langfuse', cat:'obs', tag:'Open-source', blurb:'Official Claude Agent SDK integration. Captures hooks system.', url:'https://langfuse.com/integrations/frameworks/claude-agent-sdk' },
   { id:168, name:'LangSmith', cat:'obs', tag:'LangChain', blurb:'Official Claude Code plugin for traces + evals.', url:'https://www.langchain.com/langsmith' },
   { id:169, name:'Helicone', cat:'obs', tag:'Open-source', blurb:'Gateway proxy + cost routing, one-line integration.', url:'https://www.helicone.ai/' },
@@ -639,16 +798,12 @@ const TOOLS = [
   { id:174, name:'Maxim AI', cat:'obs', tag:'Eval', blurb:'End-to-end eval + simulation.', url:'https://www.getmaxim.ai/' },
   { id:175, name:'Agenta', cat:'obs', tag:'Open-source', blurb:'Open-source prompt management.', url:'https://agenta.ai/' },
   { id:176, name:'W&B Weave', cat:'obs', tag:'W&B', blurb:'ML experiment tracking applied to LLMs.', url:'https://wandb.ai/site/weave' },
-
-  // Usage
-  { id:177, name:'ccusage', cat:'usage', tag:'CLI', blurb:'Cost/token analyzer on local JSONL. Daily/monthly/session reports. Free.', url:'https://github.com/ryoppippi/ccusage', install:'npm install -g ccusage\nccusage daily\nccusage session --live' },
+  { id:177, name:'ccusage', cat:'usage', tag:'CLI', blurb:'Cost/token analyzer on local JSONL. Daily/monthly/session reports. Free.', url:'https://github.com/ryoppippi/ccusage', install:'npm install -g ccusage && ccusage daily' },
   { id:178, name:'Claude-Code-Usage-Monitor', cat:'usage', tag:'Live Chart', blurb:'Real-time token chart + limit predictions.', url:'https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor' },
   { id:179, name:'cc-statusline', cat:'usage', tag:'Statusline', blurb:'Beautiful informative statusline with ccusage integration.', url:'https://github.com/chongdashu/cc-statusline' },
   { id:180, name:'claude-usage (phuryn)', cat:'usage', tag:'Dashboard', blurb:'Local dashboard with session history + progress bar.', url:'https://github.com/phuryn/claude-usage' },
   { id:181, name:'Claude Token Monitor (VSCode)', cat:'usage', tag:'VS Code', blurb:'Editor extension for token tracking.', url:'https://marketplace.visualstudio.com/items?itemName=Wilendar.claude-usage-monitor' },
   { id:182, name:'ccflare / better-ccflare', cat:'usage', tag:'Dashboard', blurb:'Usage dashboard with extensive metrics.', url:'https://github.com/snipeship/ccflare' },
-
-  // Companions
   { id:183, name:'Cursor', cat:'companion', tag:'Editor', blurb:'Best overall AI editor. Owns Supermaven. 72% acceptance rate.', url:'https://cursor.sh/' },
   { id:184, name:'Windsurf', cat:'companion', tag:'Editor', blurb:'Cascade context tracking, gentler than Cursor.', url:'https://codeium.com/windsurf' },
   { id:185, name:'GitHub Copilot', cat:'companion', tag:'Editor', blurb:'Default Sonnet 4 for paid tier. $10/mo.', url:'https://github.com/features/copilot' },
@@ -663,9 +818,7 @@ const TOOLS = [
   { id:194, name:'Zed', cat:'companion', tag:'Editor', blurb:'Rust editor with native AI.', url:'https://zed.dev/' },
   { id:195, name:'JetBrains AI Assistant', cat:'companion', tag:'JetBrains', blurb:'IntelliJ/PyCharm/WebStorm integration.', url:'https://www.jetbrains.com/ai/' },
   { id:196, name:'Replit Agent', cat:'companion', tag:'Cloud IDE', blurb:'Cloud IDE with full agent.', url:'https://replit.com/' },
-
-  // Local LLMs
-  { id:197, name:'Ollama', cat:'local', tag:'Default', blurb:'Default choice for local LLMs. 52M downloads/mo in Q1 2026.', url:'https://ollama.com/', install:'curl -fsSL https://ollama.com/install.sh | sh\nollama pull llama3.3' },
+  { id:197, name:'Ollama', cat:'local', tag:'Default', blurb:'Default choice for local LLMs. 52M downloads/mo in Q1 2026.', url:'https://ollama.com/' },
   { id:198, name:'LM Studio', cat:'local', tag:'GUI', blurb:'Best GUI. HuggingFace browser built in.', url:'https://lmstudio.ai/' },
   { id:199, name:'vLLM', cat:'local', tag:'Production', blurb:'Production-grade throughput.', url:'https://github.com/vllm-project/vllm' },
   { id:200, name:'Jan', cat:'local', tag:'Desktop', blurb:'Privacy-first desktop app.', url:'https://jan.ai/' },
@@ -673,18 +826,14 @@ const TOOLS = [
   { id:202, name:'text-generation-webui', cat:'local', tag:'Web UI', blurb:'Feature-rich web interface.', url:'https://github.com/oobabooga/text-generation-webui' },
   { id:203, name:'LocalAI', cat:'local', tag:'API Compat', blurb:'OpenAI-API-compatible local runtime.', url:'https://localai.io/' },
   { id:204, name:'llama.cpp', cat:'local', tag:'Engine', blurb:'Underlying inference engine powering most tools.', url:'https://github.com/ggerganov/llama.cpp' },
-
-  // Terminal
   { id:205, name:'Warp', cat:'terminal', tag:'AI Terminal', blurb:'AI Command Center. Cross-platform (Windows + Mac + Linux).', url:'https://www.warp.dev/' },
   { id:206, name:'Wezterm', cat:'terminal', tag:'Terminal', blurb:'Cross-platform, Lua-scriptable.', url:'https://wezfurlong.org/wezterm/' },
   { id:207, name:'iTerm2', cat:'terminal', tag:'macOS', blurb:'macOS classic.', url:'https://iterm2.com/' },
   { id:208, name:'Alacritty', cat:'terminal', tag:'GPU-fast', blurb:'GPU-fast minimal terminal.', url:'https://alacritty.org/' },
   { id:209, name:'Oh My Posh', cat:'terminal', tag:'Prompt', blurb:'Cross-shell prompt — PowerShell, Bash, Zsh, Fish.', url:'https://ohmyposh.dev/' },
   { id:210, name:'Starship', cat:'terminal', tag:'Prompt', blurb:'Rust prompt; 3–6x faster than Powerlevel10k.', url:'https://starship.rs/' },
-  { id:211, name:'zoxide', cat:'terminal', tag:'Utility', blurb:'Smart `cd` replacement. Jump by partial name.', url:'https://github.com/ajeetdsouza/zoxide' },
+  { id:211, name:'zoxide', cat:'terminal', tag:'Utility', blurb:'Smart cd replacement. Jump by partial name.', url:'https://github.com/ajeetdsouza/zoxide' },
   { id:212, name:'fzf', cat:'terminal', tag:'Utility', blurb:'Fuzzy finder — pair with Claude for file picks.', url:'https://github.com/junegunn/fzf' },
-
-  // Knowledge
   { id:213, name:'NotebookLM', cat:'knowledge', tag:'Google', blurb:'Grounded multi-source research. Audio briefings.', url:'https://notebooklm.google.com/' },
   { id:214, name:'Perplexity Spaces', cat:'knowledge', tag:'Perplexity', blurb:'Shared sourced research workspaces.', url:'https://www.perplexity.ai/spaces' },
   { id:215, name:'Obsidian', cat:'knowledge', tag:'Local', blurb:'Local markdown vault. Plain-text, portable.', url:'https://obsidian.md/' },
@@ -695,8 +844,6 @@ const TOOLS = [
   { id:220, name:'Pocket', cat:'knowledge', tag:'Mozilla', blurb:'Lightweight read-later (now Mozilla).', url:'https://getpocket.com/' },
   { id:221, name:'Heptabase', cat:'knowledge', tag:'Visual', blurb:'Visual whiteboard PKM.', url:'https://heptabase.com/' },
   { id:222, name:'Capacities', cat:'knowledge', tag:'Object-based', blurb:'Object-based notes.', url:'https://capacities.io/' },
-
-  // Marketplaces
   { id:223, name:'buildwithclaude.com', cat:'marketplace', tag:'Plugins', blurb:'500+ plugins, skills, subagents, commands, hooks.', url:'https://buildwithclaude.com/' },
   { id:224, name:'Official MCP Registry', cat:'marketplace', tag:'Registry', blurb:'Anthropic-hosted official MCP registry.', url:'https://registry.modelcontextprotocol.io/' },
   { id:225, name:'Glama.ai MCP Servers', cat:'marketplace', tag:'Directory', blurb:'21,740+ MCP servers indexed.', url:'https://glama.ai/mcp/servers' },
@@ -711,148 +858,170 @@ const TOOLS = [
   { id:234, name:'mcp-awesome.com', cat:'marketplace', tag:'Directory', blurb:'1,200+ quality-verified servers.', url:'https://mcp-awesome.com/' },
 ];
 
-// IDs of the Top 10 hero picks
-const TOP10_IDS = [1, 2, 3, 31, 4, 111, 129, 177, 41, 213];
+const TOP5_IDS = [1, 2, 31, 4, 177]; // GitHub, Filesystem, Context7, Sentry, ccusage
 
-// ==================== RENDERING ====================
+// ============= STATE =============
 const $ = (id) => document.getElementById(id);
-let activeCategory = 'all';
-let searchQuery = '';
+let activeCat = 'all';
+let query = '';
 
-function renderTop10() {
-  const order = TOP10_IDS.map(id => TOOLS.find(t => t.id === id));
-  const grid = $('top10-grid');
-  grid.innerHTML = order.map((t, i) => `
-    <div class="tool-card">
-      <div class="tool-head">
-        <span class="tool-rank">#${i + 1}</span>
-        <h3 class="tool-name"><a href="${t.url}" target="_blank" rel="noopener">${escapeHtml(t.name)}</a></h3>
-        <span class="tool-tag">${escapeHtml(t.tag)}</span>
+// ============= RENDER: TOP 5 =============
+function renderTop5() {
+  const picks = TOP5_IDS.map(id => TOOLS.find(t => t.id === id));
+  $('top5-list').innerHTML = picks.map((t, i) => `
+    <div class="pick">
+      <div class="pick-num">${String(i + 1).padStart(2, '0')}</div>
+      <div class="pick-body">
+        <div class="pick-head">
+          <span class="pick-name"><a href="${t.url}" target="_blank" rel="noopener">${esc(t.name)}</a></span>
+          <span class="pick-tag">${esc(t.tag)}</span>
+        </div>
+        <p class="pick-desc">${esc(t.blurb)}</p>
+        ${t.install ? `
+          <div class="pick-install-label">Install</div>
+          <pre><button class="copy-btn" data-copy="${escAttr(t.install)}">Copy</button><code>${esc(t.install)}</code></pre>
+        ` : ''}
       </div>
-      <p class="tool-desc">${escapeHtml(t.blurb)}</p>
-      ${t.install ? `
-        <div class="tool-install">
-          <h4>Install</h4>
-          <pre><button class="copy-btn" data-copy="${escapeAttr(t.install)}">Copy</button><code>${escapeHtml(t.install)}</code></pre>
-        </div>` : ''}
     </div>
   `).join('');
 }
 
+// ============= RENDER: CHIPS =============
 function renderChips() {
-  const counts = {};
-  TOOLS.forEach(t => counts[t.cat] = (counts[t.cat] || 0) + 1);
-  const totalCount = TOOLS.length;
-  $('chips').innerHTML = CATEGORIES.map(c => {
-    const n = c.id === 'all' ? totalCount : (counts[c.id] || 0);
-    return `<button class="chip${c.id === activeCategory ? ' active' : ''}" data-cat="${c.id}">${escapeHtml(c.label)}<span class="n">${n}</span></button>`;
-  }).join('');
+  const counts = { all: TOOLS.length };
+  TOOLS.forEach(t => {
+    const c = CAT_MAP[t.cat];
+    counts[c] = (counts[c] || 0) + 1;
+  });
+  $('chips').innerHTML = CATS.map(c =>
+    `<button class="chip ${c.id === activeCat ? 'active' : ''}" data-cat="${c.id}">${esc(c.label)}<span class="n">${counts[c.id] || 0}</span></button>`
+  ).join('');
 }
 
-function renderGroups() {
-  const filtered = TOOLS.filter(t => {
-    if (activeCategory !== 'all' && t.cat !== activeCategory) return false;
-    if (!searchQuery) return true;
-    const q = searchQuery.toLowerCase();
-    return t.name.toLowerCase().includes(q) || t.blurb.toLowerCase().includes(q) || t.tag.toLowerCase().includes(q);
-  });
+// ============= SEARCH RANKING =============
+function scoreTool(t, q) {
+  if (!q) return 1;
+  q = q.toLowerCase();
+  const name = t.name.toLowerCase();
+  const blurb = t.blurb.toLowerCase();
+  const tag = t.tag.toLowerCase();
+  if (name === q) return 1000;
+  if (name.startsWith(q)) return 500;
+  // word-start matches in name
+  const words = name.split(/[^a-z0-9]+/);
+  if (words.some(w => w.startsWith(q))) return 300;
+  if (name.includes(q)) return 200;
+  if (tag.includes(q)) return 80;
+  if (blurb.includes(q)) return 40;
+  return 0;
+}
 
-  $('count').textContent = `${filtered.length} tool${filtered.length === 1 ? '' : 's'}`;
-  $('empty').style.display = filtered.length === 0 ? 'block' : 'none';
+function highlight(text, q) {
+  if (!q) return esc(text);
+  const escaped = esc(text);
+  const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'ig');
+  return escaped.replace(re, '<mark>$1</mark>');
+}
 
-  // Group by category, preserve CATEGORIES order
-  const groupedHtml = CATEGORIES.filter(c => c.id !== 'all').map(c => {
-    const items = filtered.filter(t => t.cat === c.id);
-    if (items.length === 0) return '';
-    const meta = GROUPS[c.id];
-    return `
-      <div class="group-section">
-        <h3 class="group-title">${escapeHtml(meta.title)} <span style="color:var(--muted);font-size:0.78rem;font-weight:400;margin-left:6px;">${items.length}</span></h3>
-        <p class="group-sub">${escapeHtml(meta.sub)}</p>
-        <div class="tool-grid">
-          ${items.map(t => `
-            <div class="mini-card" data-id="${t.id}">
-              <div class="mc-head">
-                <span class="mc-num">#${t.id}</span>
-                <span class="mc-name">${escapeHtml(t.name)}</span>
-                <span class="mc-link">↗</span>
-              </div>
-              <div class="mc-tag">${escapeHtml(t.tag)}</div>
-              <p class="mc-blurb">${escapeHtml(t.blurb)}</p>
-            </div>
-          `).join('')}
+// ============= RENDER: DIRECTORY =============
+function renderDirectory() {
+  const q = query.trim();
+  const scored = TOOLS.map(t => ({ t, s: scoreTool(t, q) }))
+    .filter(x => x.s > 0)
+    .filter(x => activeCat === 'all' || CAT_MAP[x.t.cat] === activeCat);
+
+  if (scored.length === 0) {
+    $('directory-body').innerHTML = '';
+    $('empty').style.display = 'block';
+    return;
+  }
+  $('empty').style.display = 'none';
+
+  let html = '';
+
+  if (q) {
+    // Ranked search — flat list ordered by score
+    scored.sort((a, b) => b.s - a.s || a.t.id - b.t.id);
+    html = `
+      <div class="dir-group">
+        <div class="dir-group-head">
+          <h3 class="dir-group-title">Results for "${esc(q)}"</h3>
+          <span class="dir-group-count">${scored.length} match${scored.length === 1 ? '' : 'es'}</span>
+        </div>
+        <div class="dir-group-sub">Ranked by relevance: exact name → name match → tag → description.</div>
+        <div class="dir-grid">
+          ${scored.map(({ t }) => cardHtml(t, q)).join('')}
         </div>
       </div>
     `;
-  }).join('');
-  $('groups').innerHTML = groupedHtml;
+  } else {
+    // Grouped by category within active filter
+    const cats = activeCat === 'all' ? Object.keys(GROUPS) : [activeCat];
+    cats.forEach(primary => {
+      GROUPS[primary].forEach(sub => {
+        const items = scored.filter(x => x.t.cat === sub.id).map(x => x.t);
+        if (items.length === 0) return;
+        html += `
+          <div class="dir-group">
+            <div class="dir-group-head">
+              <h3 class="dir-group-title">${esc(sub.title)}</h3>
+              <span class="dir-group-count">${items.length}</span>
+            </div>
+            <div class="dir-group-sub">${esc(sub.sub)}</div>
+            <div class="dir-grid">
+              ${items.map(t => cardHtml(t, '')).join('')}
+            </div>
+          </div>
+        `;
+      });
+    });
+  }
+
+  $('directory-body').innerHTML = html;
 }
 
-function openModal(id) {
-  const t = TOOLS.find(x => x.id === id);
-  if (!t) return;
-  const mcpName = slugifyMcp(t.name);
+function cardHtml(t, q) {
   const installSnippet = t.install || inferInstall(t);
-  const shortUrl = t.url.replace(/^https?:\/\//, '').replace(/\/$/, '');
-  $('modal-body').innerHTML = `
-    <h3>${escapeHtml(t.name)}</h3>
-    <span class="m-tag">${escapeHtml(t.tag)}</span>
-    <span class="m-tag">${escapeHtml(CATEGORIES.find(c => c.id === t.cat)?.label || t.cat)}</span>
-    <span class="m-tag">#${t.id}</span>
-    <p class="m-desc">${escapeHtml(t.blurb)}</p>
-    <h4>Install / Usage</h4>
-    <pre><button class="copy-btn" data-copy="${escapeAttr(installSnippet)}">Copy</button><code>${escapeHtml(installSnippet)}</code></pre>
-    <h4>Links</h4>
-    <div class="m-links">
-      <a href="${t.url}" target="_blank" rel="noopener">Official site / repo →</a>
-      <a href="https://www.google.com/search?q=${encodeURIComponent(t.name + ' claude code install')}" target="_blank" rel="noopener">Search installs</a>
-      <a href="https://github.com/search?q=${encodeURIComponent(t.name)}&type=repositories" target="_blank" rel="noopener">GitHub search</a>
+  return `
+    <div class="dir-card" data-id="${t.id}">
+      <div class="dir-card-num">#${String(t.id).padStart(3, '0')}</div>
+      <div class="dir-card-name">${highlight(t.name, q)}</div>
+      <div class="dir-card-tag">${esc(t.tag)}</div>
+      <div class="dir-card-blurb">${highlight(t.blurb, q)}</div>
+      <div class="dir-card-expand">
+        <div class="pick-install-label">Install / usage</div>
+        <pre><button class="copy-btn" data-copy="${escAttr(installSnippet)}">Copy</button><code>${esc(installSnippet)}</code></pre>
+        <div class="dir-card-links">
+          <a href="${t.url}" target="_blank" rel="noopener">Official →</a>
+          <a href="https://github.com/search?q=${encodeURIComponent(t.name)}&type=repositories" target="_blank" rel="noopener">GitHub search</a>
+          <a href="https://www.google.com/search?q=${encodeURIComponent(t.name + ' claude code install')}" target="_blank" rel="noopener">Install guide search</a>
+        </div>
+      </div>
     </div>
-    <p style="color:var(--muted);font-size:0.82rem;margin-top:14px;">Link: <a href="${t.url}" target="_blank" rel="noopener">${escapeHtml(shortUrl)}</a></p>
   `;
-  $('modal-backdrop').classList.add('open');
 }
-
-function closeModal() { $('modal-backdrop').classList.remove('open'); }
 
 function inferInstall(t) {
-  if (t.cat === 'official-mcp' || t.cat === 'community-mcp' || t.cat === 'db-mcp' || t.cat === 'browser-mcp' || t.cat === 'devops-mcp') {
-    const slug = slugifyMcp(t.name);
-    return `# Remote (if supported):\nclaude mcp add --transport http ${slug} <SERVER_URL>\n\n# Or npx:\nclaude mcp add ${slug} -- npx -y <package>\n\n# Check the official repo for exact command:\n# ${t.url}`;
+  if (['official-mcp', 'community-mcp', 'db-mcp', 'browser-mcp', 'devops-mcp'].includes(t.cat)) {
+    return `# See repo for exact install. Remote if supported:\nclaude mcp add --transport http <name> <SERVER_URL>\n# Or npx:\nclaude mcp add <name> -- npx -y <package>\n# Docs: ${t.url}`;
   }
-  if (t.cat === 'skill') return `# Drop into ~/.claude/skills/\ngit clone ${t.url} ~/.claude/skills/${slugifyMcp(t.name)}\n# Or follow install instructions in the repo README.`;
-  if (t.cat === 'subagent') return `# Drop into ~/.claude/agents/\ngit clone ${t.url} ~/.claude/agents/${slugifyMcp(t.name)}`;
-  if (t.cat === 'hook') return `# Configure in ~/.claude/settings.json under "hooks":\n# See Claude Code hooks docs: https://code.claude.com/docs/en/hooks\n# Reference implementation: ${t.url}`;
-  if (t.cat === 'framework') return `# See official docs for install:\n# ${t.url}`;
-  if (t.cat === 'local') return `# See install guide on official site:\n# ${t.url}`;
-  if (t.cat === 'companion' || t.cat === 'terminal' || t.cat === 'knowledge' || t.cat === 'marketplace' || t.cat === 'usage' || t.cat === 'obs') return `# Visit official site for install / signup:\n# ${t.url}`;
-  return `# See: ${t.url}`;
+  if (t.cat === 'skill') return `# Drop into ~/.claude/skills/\ngit clone ${t.url} ~/.claude/skills/<folder>`;
+  if (t.cat === 'subagent') return `git clone ${t.url} ~/.claude/agents/<folder>`;
+  if (t.cat === 'hook') return `# Configure in ~/.claude/settings.json "hooks"\n# Docs: https://code.claude.com/docs/en/hooks`;
+  return `# See official site:\n${t.url}`;
 }
 
-function slugifyMcp(name) {
-  return name.toLowerCase().replace(/mcp$/i, '').replace(/\(.*?\)/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').replace(/-server$/, '').slice(0, 24);
-}
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+function escAttr(s) { return String(s).replace(/"/g, '&quot;').replace(/\n/g, '&#10;'); }
 
-function escapeHtml(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
-function escapeAttr(s) { return String(s).replace(/"/g, '&quot;').replace(/\n/g, '&#10;'); }
-
-// ==================== EVENTS ====================
+// ============= EVENTS =============
 document.addEventListener('click', (e) => {
   const chip = e.target.closest('.chip');
   if (chip) {
-    activeCategory = chip.dataset.cat;
+    activeCat = chip.dataset.cat;
     renderChips();
-    renderGroups();
-    window.scrollTo({ top: document.getElementById('directory').offsetTop - 140, behavior: 'smooth' });
-    return;
-  }
-  const card = e.target.closest('.mini-card');
-  if (card) {
-    openModal(Number(card.dataset.id));
-    return;
-  }
-  if (e.target.id === 'modal-close' || e.target.id === 'modal-backdrop') {
-    closeModal();
+    renderDirectory();
+    document.getElementById('directory').scrollIntoView({ behavior: 'smooth', block: 'start' });
     return;
   }
   const copyBtn = e.target.closest('.copy-btn');
@@ -861,25 +1030,24 @@ document.addEventListener('click', (e) => {
     e.stopPropagation();
     navigator.clipboard.writeText(copyBtn.dataset.copy).then(() => {
       copyBtn.classList.add('copied');
-      copyBtn.textContent = 'Copied!';
-      setTimeout(() => { copyBtn.classList.remove('copied'); copyBtn.textContent = 'Copy'; }, 1400);
+      const old = copyBtn.textContent;
+      copyBtn.textContent = 'Copied';
+      setTimeout(() => { copyBtn.classList.remove('copied'); copyBtn.textContent = old; }, 1400);
     });
+    return;
+  }
+  const card = e.target.closest('.dir-card');
+  if (card) {
+    card.classList.toggle('open');
     return;
   }
 });
 
+let debounceTimer;
 $('search').addEventListener('input', (e) => {
-  searchQuery = e.target.value.trim();
-  renderGroups();
-});
-
-$('clear-btn').addEventListener('click', () => {
-  $('search').value = '';
-  searchQuery = '';
-  activeCategory = 'all';
-  renderChips();
-  renderGroups();
-  $('search').focus();
+  query = e.target.value;
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(renderDirectory, 120);
 });
 
 document.addEventListener('keydown', (e) => {
@@ -888,16 +1056,18 @@ document.addEventListener('keydown', (e) => {
     $('search').focus();
     $('search').select();
   }
-  if (e.key === 'Escape') {
-    if ($('modal-backdrop').classList.contains('open')) closeModal();
-    else if (document.activeElement === $('search')) $('search').blur();
+  if (e.key === 'Escape' && document.activeElement === $('search')) {
+    $('search').value = '';
+    query = '';
+    renderDirectory();
+    $('search').blur();
   }
 });
 
 // Boot
-renderTop10();
+renderTop5();
 renderChips();
-renderGroups();
+renderDirectory();
 </script>
 
 </body>
