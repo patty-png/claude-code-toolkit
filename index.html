@@ -407,10 +407,26 @@
     display: inline-block;
   }
   .pick-install-toggle > summary:hover { background: var(--paper-3); border-color: var(--accent); }
-  .pick-install-toggle[open] > summary { margin-bottom: 10px; }
+  .pick-install-toggle[open] > summary { margin-bottom: 8px; }
   .pick-install-toggle[open] > summary::before { transform: rotate(90deg); }
   .pick-install-toggle[open] > summary > .summary-label::after { content: 'Hide install guide'; }
   .pick-install-toggle:not([open]) > summary > .summary-label::after { content: 'Show install guide'; }
+
+  /* Tighter install preview inside the narrow Top 5 cards */
+  .pick-install-toggle pre {
+    font-size: 0.7rem;
+    line-height: 1.45;
+    padding: 10px 12px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+  .pick-install-toggle pre .copy-btn {
+    top: 6px;
+    right: 6px;
+    font-size: 0.62rem;
+    padding: 2px 7px;
+  }
 
   /* -------- DIRECTORY ------- */
   .directory { padding: 0 32px; max-width: 1200px; margin: 0 auto; }
