@@ -65,121 +65,276 @@
   .container { max-width: 920px; margin: 0 auto; padding: 0 32px; }
   .wide { max-width: 1200px; }
 
-  /* -------- LANDING (interactive terminal stage) -------- */
+  /* -------- LANDING v2 — flowing command deck -------- */
   .view-landing {
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 24px 32px;
     position: relative;
     overflow: hidden;
-    background: radial-gradient(ellipse at 50% 40%, #f7f3ea 0%, #f0eee6 55%, #e8e4d8 100%);
+    background: var(--paper);
+    padding: clamp(18px, 2.4vw, 28px) clamp(18px, 3vw, 40px) clamp(40px, 6vw, 72px);
+    display: flex; flex-direction: column;
   }
+  /* ambient flowing blobs */
+  .view-landing::before,
+  .view-landing::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.55;
+    pointer-events: none;
+    z-index: 0;
+    animation: drift 22s ease-in-out infinite alternate;
+  }
+  .view-landing::before {
+    width: 52vw; height: 52vw;
+    top: -18vw; left: -12vw;
+    background: radial-gradient(circle, #f2d6c4 0%, rgba(242,214,196,0) 70%);
+  }
+  .view-landing::after {
+    width: 46vw; height: 46vw;
+    bottom: -18vw; right: -14vw;
+    background: radial-gradient(circle, #ddd6c5 0%, rgba(221,214,197,0) 70%);
+    animation-duration: 28s;
+  }
+  @keyframes drift {
+    0%   { transform: translate(0,0) scale(1); }
+    100% { transform: translate(4vw, 3vw) scale(1.08); }
+  }
+
   .landing-header {
+    position: relative; z-index: 3;
     display: flex; align-items: center; justify-content: space-between;
-    max-width: 1200px; margin: 0 auto; width: 100%;
+    max-width: 1240px; margin: 0 auto 8px; width: 100%;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--muted);
   }
-  .landing-header .brand { display: flex; align-items: center; gap: 10px; font-weight: 500; color: var(--ink); }
+  .landing-header .brand { display: flex; align-items: center; gap: 12px; font-weight: 500; color: var(--ink); font-size: 0.78rem; }
   .landing-header .brand-mark {
     display: inline-flex; align-items: center; justify-content: center;
-    width: 26px; height: 26px;
+    width: 30px; height: 30px;
     background: var(--ink); color: var(--accent);
-    border-radius: 5px; font-family: 'JetBrains Mono', monospace;
-    font-size: 0.85rem; font-weight: 700;
-    letter-spacing: 0;
-    text-transform: none;
+    border-radius: 7px; font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem; font-weight: 700;
+    letter-spacing: 0; text-transform: none;
   }
-  .landing-header-meta { display: flex; gap: 22px; }
-  .landing-header-meta span strong {
-    color: var(--accent);
-    font-family: 'Fraunces', serif; font-style: italic; font-weight: 500;
-    font-size: 1.3em; letter-spacing: 0; text-transform: none;
-    margin-right: 4px; vertical-align: -1px;
-  }
+  .landing-header-meta { display: flex; gap: 26px; }
+  .landing-header-meta a { color: var(--muted); border: none; transition: color 0.15s; }
+  .landing-header-meta a:hover { color: var(--ink); }
 
-  .landing-stage-wrap {
+  /* hero grid */
+  .landing-hero {
+    position: relative; z-index: 2;
     flex: 1;
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 80px);
     align-items: center;
-    justify-content: center;
-    padding: 8px 0;
-    min-height: 0;
+    max-width: 1240px; margin: 0 auto; width: 100%;
+    padding: clamp(24px, 4vw, 56px) 0;
   }
-  .landing-stage {
-    position: relative;
-    width: min(500px, 86vw, 56vh);
-    aspect-ratio: 1 / 1;
-  }
-  .landing-stage .connections {
-    position: absolute; inset: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 0;
-  }
-  .landing-stage .connections .line {
-    stroke: var(--accent); stroke-width: 0.25; fill: none;
-    opacity: 0.28;
-    stroke-dasharray: 1 1.5;
-    transition: opacity 0.25s, stroke-width 0.25s;
-  }
-  .landing-stage .connections .line.active {
-    opacity: 0.95; stroke-width: 0.5;
-    stroke-dasharray: none;
+  @media (max-width: 880px) {
+    .landing-hero { grid-template-columns: 1fr; gap: 36px; }
   }
 
+  /* LEFT — editorial copy */
+  .hero-copy { max-width: 560px; }
+  .hero-kicker {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent-ink);
+    background: rgba(204,120,92,0.1);
+    padding: 6px 12px; border-radius: 999px;
+    margin-bottom: 22px;
+  }
+  .hero-kicker .pulse {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+    box-shadow: 0 0 0 0 rgba(204,120,92,0.5);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(204,120,92,0.55); }
+    70%  { box-shadow: 0 0 0 10px rgba(204,120,92,0); }
+    100% { box-shadow: 0 0 0 0 rgba(204,120,92,0); }
+  }
+  .hero-copy h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: clamp(2.4rem, 5.2vw, 4rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    color: var(--ink);
+  }
+  .hero-copy h1 em {
+    font-style: italic; color: var(--accent); font-weight: 500;
+  }
+  .hero-copy .lede {
+    color: var(--ink-2);
+    font-size: clamp(1rem, 1.3vw, 1.12rem);
+    line-height: 1.55;
+    max-width: 500px;
+    margin-bottom: 28px;
+  }
+  .hero-stats {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    margin-bottom: 32px;
+  }
+  .hero-stat {
+    display: inline-flex; align-items: baseline; gap: 6px;
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--rule);
+    padding: 8px 14px; border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+  .hero-stat strong {
+    font-family: 'Fraunces', serif; font-style: italic; font-weight: 500;
+    color: var(--accent); font-size: 1.05rem;
+  }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .hero-ghost {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem; letter-spacing: 0.05em;
+    color: var(--ink-2);
+    padding: 12px 18px; border-radius: 8px;
+    border: 1px solid var(--rule);
+    background: transparent;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .hero-ghost:hover { background: rgba(255,255,255,0.6); border-color: var(--ink-2); }
+
+  /* RIGHT — stack card + inline terminal */
+  .hero-visual { position: relative; min-width: 0; }
+  .stack-card {
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    padding: 8px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.8) inset,
+      0 24px 60px -24px rgba(20,20,19,0.18),
+      0 8px 20px -12px rgba(20,20,19,0.1);
+  }
+  .stack-card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px dashed var(--rule);
+  }
+  .stack-card-head .hint { color: var(--accent-ink); }
+  .stack-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    padding: 12px;
+  }
+  @media (max-width: 520px) { .stack-list { grid-template-columns: 1fr; } }
+
+  .node {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: left; width: 100%;
+    color: var(--ink);
+    transition: background 0.18s, border-color 0.18s, transform 0.18s;
+  }
+  .node:hover {
+    background: rgba(255,255,255,0.8);
+    border-color: var(--rule);
+    transform: translateX(2px);
+  }
+  .node.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+  .node-icon {
+    width: 36px; height: 36px; flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--paper-2);
+    color: var(--accent);
+    border-radius: 9px;
+    transition: background 0.18s, color 0.18s;
+  }
+  .node-icon svg { width: 18px; height: 18px; }
+  .node.active .node-icon { background: var(--accent); color: #fff; }
+  .node-text { display: flex; flex-direction: column; min-width: 0; }
+  .node-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: inherit;
+  }
+  .node-desc {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .node.active .node-desc { color: rgba(240,238,230,0.6); }
+
+  /* connection SVG — hidden, kept so JS line toggles don't error */
+  .connections { display: none; }
+
+  /* inline terminal below stack */
   .terminal {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: min(58%, 320px);
+    margin-top: 12px;
     background: var(--term-bg);
-    border-radius: 10px;
-    box-shadow: 0 16px 48px -12px rgba(20,20,19,0.35), 0 4px 12px -4px rgba(20,20,19,0.2);
-    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 12px;
+    box-shadow:
+      0 20px 50px -20px rgba(20,20,19,0.4),
+      0 1px 0 rgba(255,255,255,0.03) inset;
+    border: 1px solid rgba(255,255,255,0.05);
     overflow: hidden;
-    z-index: 2;
   }
   .terminal-bar {
     display: flex; align-items: center; gap: 6px;
-    padding: 8px 12px;
+    padding: 10px 14px;
     background: #222120;
     border-bottom: 1px solid var(--term-line);
   }
-  .terminal-bar .dot {
-    width: 9px; height: 9px; border-radius: 50%;
-    background: #3a3633;
-  }
+  .terminal-bar .dot { width: 10px; height: 10px; border-radius: 50%; background: #3a3633; }
   .terminal-bar .dot.red { background: #e86f5a; }
   .terminal-bar .dot.yellow { background: #e8c670; }
   .terminal-bar .dot.green { background: #7fa85a; }
   .terminal-bar .term-title {
     margin-left: auto;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.65rem;
+    font-size: 0.68rem;
     color: var(--term-dim);
     letter-spacing: 0.08em;
   }
   .terminal-body {
-    padding: 12px 14px 14px;
-    min-height: 150px;
+    padding: 16px 18px;
+    min-height: 140px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.74rem;
-    line-height: 1.5;
+    font-size: 0.78rem;
+    line-height: 1.6;
     color: var(--term-text);
     white-space: pre-wrap;
     word-break: break-word;
   }
   .terminal-body .t-prompt { color: var(--term-accent); font-weight: 600; }
-  .terminal-body .t-cmd { color: var(--term-text); }
-  .terminal-body .t-arrow { color: var(--term-dim); }
-  .terminal-body .t-ok { color: var(--term-green); }
-  .terminal-body .t-warn { color: var(--term-yellow); }
-  .terminal-body .t-dim { color: var(--term-dim); }
+  .terminal-body .t-cmd    { color: var(--term-text); }
+  .terminal-body .t-arrow  { color: var(--term-dim); }
+  .terminal-body .t-ok     { color: var(--term-green); }
+  .terminal-body .t-warn   { color: var(--term-yellow); }
+  .terminal-body .t-dim    { color: var(--term-dim); }
   .terminal-body .t-accent { color: var(--term-accent); }
   .terminal-body .cursor {
     display: inline-block;
@@ -191,97 +346,10 @@
   }
   @keyframes blink { 50% { opacity: 0; } }
 
-  .orbit {
-    position: absolute; inset: 0;
-    z-index: 1;
-  }
-  .node {
-    position: absolute;
-    top: calc(50% + sin(var(--a)) * var(--r));
-    left: calc(50% + cos(var(--a)) * var(--r));
-    transform: translate(-50%, -50%);
-    width: 84px; height: 84px;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 4px;
-    background: var(--ink);
-    color: var(--paper);
-    border: 1px solid var(--ink-2);
-    border-radius: 14px;
-    cursor: pointer;
-    transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
-    box-shadow: 0 6px 18px -6px rgba(20,20,19,0.3);
-    padding: 8px;
-  }
-  .node:hover {
-    transform: translate(-50%, -50%) scale(1.06);
-    box-shadow: 0 10px 24px -8px rgba(204,120,92,0.4);
-    border-color: var(--accent);
-  }
-  .node.active {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: #fff;
-    box-shadow: 0 10px 28px -8px rgba(204,120,92,0.55);
-  }
-  .node-icon {
-    width: 28px; height: 28px;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--accent);
-    transition: color 0.2s;
-  }
-  .node.active .node-icon { color: #fff; }
-  .node-icon svg { width: 100%; height: 100%; }
-  .node-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.62rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    font-weight: 600;
-  }
-
-  .landing-cta-wrap {
-    max-width: 640px;
-    margin: 0 auto;
-    text-align: center;
-    position: relative;
-    z-index: 2;
-  }
-  .landing-cta-wrap h1.display {
-    font-size: clamp(1.7rem, 3.6vw, 2.4rem);
-    line-height: 1.05;
-    margin-bottom: 8px;
-  }
-  .landing-cta-wrap .lede {
-    max-width: 520px;
-    margin: 0 auto 14px;
-    color: var(--ink-2);
-    font-size: 0.95rem;
-    line-height: 1.5;
-  }
-  .landing-hint {
-    margin-top: 10px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .landing-hint::before {
-    content: '↑'; margin-right: 8px; color: var(--accent);
-  }
-
-  @media (max-width: 720px) {
-    .terminal { width: 62%; }
-    .node { width: 78px; height: 78px; }
-    .node-icon { width: 22px; height: 22px; }
-    .node-label { font-size: 0.56rem; }
-    .landing-cta-wrap h1.display { font-size: 1.75rem; }
-  }
   @media (max-width: 480px) {
     .landing-header-meta { display: none; }
-    .terminal-body { font-size: 0.68rem; min-height: 140px; }
-    .terminal { width: 70%; }
+    .terminal-body { font-size: 0.72rem; }
+    .hero-copy h1 { font-size: 2.2rem; }
   }
 
   /* App view — revealed when user clicks into directory */
@@ -1169,66 +1237,111 @@
       <span>Claude Code Toolkit</span>
     </div>
     <div class="landing-header-meta">
-      <span><strong id="lm-count">284</strong> tools</span>
-      <span><strong id="lm-cats">9</strong> categories</span>
+      <a href="#" id="nav-explore">Explore</a>
+      <a href="https://github.com/patty-png/claude-code-toolkit" target="_blank" rel="noopener">GitHub</a>
     </div>
   </div>
 
-  <div class="landing-stage-wrap">
-    <div class="landing-stage" id="landing-stage">
-      <svg class="connections" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-        <line class="line" data-for="mcp"      x1="50" y1="50" x2="50"   y2="6"></line>
-        <line class="line" data-for="skills"   x1="50" y1="50" x2="88.1" y2="28"></line>
-        <line class="line" data-for="subagents" x1="50" y1="50" x2="88.1" y2="72"></line>
-        <line class="line" data-for="hooks"    x1="50" y1="50" x2="50"   y2="94"></line>
-        <line class="line" data-for="plugins"  x1="50" y1="50" x2="11.9" y2="72"></line>
-        <line class="line" data-for="claudemd" x1="50" y1="50" x2="11.9" y2="28"></line>
+  <div class="landing-hero" id="landing-stage">
+    <!-- LEFT: editorial -->
+    <div class="hero-copy">
+      <div class="hero-kicker"><span class="pulse"></span> A curated command deck</div>
+      <h1>Every Claude Code tool, <em>in one place.</em></h1>
+      <p class="lede">
+        A searchable directory of MCPs, skills, subagents, hooks, plugins, and SaaS integrations — with install commands on every card and a built-in project manager to track your stack.
+      </p>
+      <div class="hero-stats">
+        <span class="hero-stat"><strong id="lm-count">284</strong> tools</span>
+        <span class="hero-stat"><strong id="lm-cats">9</strong> categories</span>
+        <span class="hero-stat"><strong>0</strong> dependencies</span>
+      </div>
+      <div class="hero-actions">
+        <button class="hero-cta" id="enter-app" type="button">Explore the stack <span class="arrow">→</span></button>
+        <a class="hero-ghost" href="https://github.com/patty-png/claude-code-toolkit" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.75 5.48.75 11.75c0 4.95 3.2 9.14 7.64 10.62.56.1.77-.24.77-.54v-2.1c-3.11.68-3.76-1.33-3.76-1.33-.5-1.3-1.24-1.65-1.24-1.65-1.02-.7.08-.68.08-.68 1.13.08 1.72 1.16 1.72 1.16 1 1.72 2.63 1.22 3.27.93.1-.73.4-1.22.72-1.5-2.48-.28-5.09-1.24-5.09-5.52 0-1.22.44-2.22 1.16-3.01-.12-.28-.5-1.43.11-2.98 0 0 .94-.3 3.08 1.15.9-.25 1.86-.37 2.82-.38.96.01 1.93.13 2.82.38 2.14-1.45 3.08-1.15 3.08-1.15.61 1.55.23 2.7.11 2.98.72.79 1.16 1.79 1.16 3.01 0 4.29-2.61 5.24-5.1 5.51.4.35.76 1.03.76 2.08v3.08c0 .3.2.65.78.54 4.43-1.48 7.63-5.67 7.63-10.62C23.25 5.48 18.27.5 12 .5z"/></svg>
+          View on GitHub
+        </a>
+      </div>
+    </div>
+
+    <!-- RIGHT: interactive stack card -->
+    <div class="hero-visual">
+      <!-- kept for existing JS line toggles; now hidden -->
+      <svg class="connections" viewBox="0 0 100 100" aria-hidden="true">
+        <line class="line" data-for="mcp"></line>
+        <line class="line" data-for="skills"></line>
+        <line class="line" data-for="subagents"></line>
+        <line class="line" data-for="hooks"></line>
+        <line class="line" data-for="plugins"></line>
+        <line class="line" data-for="claudemd"></line>
       </svg>
 
-      <div class="orbit">
-        <button class="node" data-feature="mcp" style="--a: -90deg; --r: 44%;" type="button" aria-label="MCP demo">
-          <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"/><rect x="7" y="7" width="10" height="10" rx="2"/></svg></span>
-          <span class="node-label">MCP</span>
-        </button>
-        <button class="node" data-feature="skills" style="--a: -30deg; --r: 44%;" type="button" aria-label="Skills demo">
-          <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></span>
-          <span class="node-label">Skills</span>
-        </button>
-        <button class="node" data-feature="subagents" style="--a: 30deg; --r: 44%;" type="button" aria-label="Subagents demo">
-          <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="4" r="1.8"/><circle cx="12" cy="20" r="1.8"/><circle cx="4" cy="12" r="1.8"/><circle cx="20" cy="12" r="1.8"/><path d="M12 10V6M12 18v-4M10 12H6M18 12h-4"/></svg></span>
-          <span class="node-label">Subagents</span>
-        </button>
-        <button class="node" data-feature="hooks" style="--a: 90deg; --r: 44%;" type="button" aria-label="Hooks demo">
-          <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v6a4 4 0 0 0 8 0V6a3 3 0 0 0-6 0"/><path d="M12 13v8"/></svg></span>
-          <span class="node-label">Hooks</span>
-        </button>
-        <button class="node" data-feature="plugins" style="--a: 150deg; --r: 44%;" type="button" aria-label="Plugins demo">
-          <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6H3v4a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4v-4h-6V2z"/></svg></span>
-          <span class="node-label">Plugins</span>
-        </button>
-        <button class="node" data-feature="claudemd" style="--a: 210deg; --r: 44%;" type="button" aria-label="CLAUDE.md demo">
-          <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></span>
-          <span class="node-label">CLAUDE.md</span>
-        </button>
-      </div>
-
-      <div class="terminal" id="landing-terminal">
-        <div class="terminal-bar">
-          <span class="dot red"></span>
-          <span class="dot yellow"></span>
-          <span class="dot green"></span>
-          <span class="term-title">claude-code</span>
+      <div class="stack-card">
+        <div class="stack-card-head">
+          <span>Building blocks</span>
+          <span class="hint">↓ click to preview</span>
         </div>
-        <div class="terminal-body" id="term-body" aria-live="polite"></div>
+        <div class="stack-list">
+          <button class="node" data-feature="mcp" type="button" aria-label="MCP demo">
+            <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4"/><rect x="7" y="7" width="10" height="10" rx="2"/></svg></span>
+            <span class="node-text">
+              <span class="node-label">MCP</span>
+              <span class="node-desc">External tools &amp; data</span>
+            </span>
+          </button>
+
+          <button class="node" data-feature="skills" type="button" aria-label="Skills demo">
+            <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></span>
+            <span class="node-text">
+              <span class="node-label">Skills</span>
+              <span class="node-desc">Reusable instruction sets</span>
+            </span>
+          </button>
+
+          <button class="node" data-feature="subagents" type="button" aria-label="Subagents demo">
+            <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="4" r="1.8"/><circle cx="12" cy="20" r="1.8"/><circle cx="4" cy="12" r="1.8"/><circle cx="20" cy="12" r="1.8"/><path d="M12 10V6M12 18v-4M10 12H6M18 12h-4"/></svg></span>
+            <span class="node-text">
+              <span class="node-label">Subagents</span>
+              <span class="node-desc">Parallel specialists</span>
+            </span>
+          </button>
+
+          <button class="node" data-feature="hooks" type="button" aria-label="Hooks demo">
+            <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v6a4 4 0 0 0 8 0V6a3 3 0 0 0-6 0"/><path d="M12 13v8"/></svg></span>
+            <span class="node-text">
+              <span class="node-label">Hooks</span>
+              <span class="node-desc">Event automation</span>
+            </span>
+          </button>
+
+          <button class="node" data-feature="plugins" type="button" aria-label="Plugins demo">
+            <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v6H3v4a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4v-4h-6V2z"/></svg></span>
+            <span class="node-text">
+              <span class="node-label">Plugins</span>
+              <span class="node-desc">Bundle-and-share kits</span>
+            </span>
+          </button>
+
+          <button class="node" data-feature="claudemd" type="button" aria-label="CLAUDE.md demo">
+            <span class="node-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></span>
+            <span class="node-text">
+              <span class="node-label">CLAUDE.md</span>
+              <span class="node-desc">Project memory &amp; rules</span>
+            </span>
+          </button>
+        </div>
+
+        <div class="terminal" id="landing-terminal">
+          <div class="terminal-bar">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span class="term-title">claude-code</span>
+          </div>
+          <div class="terminal-body" id="term-body" aria-live="polite"></div>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="landing-cta-wrap">
-    <h1 class="display">Your Claude Code <em>command deck.</em></h1>
-    <p class="lede">284 curated MCPs, skills, agents, and SaaS integrations — searchable, with one-line install commands. Save your stack, track credentials per project.</p>
-    <button class="hero-cta" id="enter-app" type="button">Explore the stack <span class="arrow">→</span></button>
-    <div class="landing-hint">Click any node above to see it in action</div>
   </div>
 </div>
 
